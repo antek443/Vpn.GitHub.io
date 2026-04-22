@@ -1,98 +1,181 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ZeentxPL VPN</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZeentxPL VPN | Bezpieczeństwo</title>
 
-<style>
-body {
-  margin: 0;
-  font-family: Arial;
-  text-align: center;
-  color: white;
-  background: linear-gradient(270deg, #1a1a2e, #16213e, #0f3460, #533483);
-  background-size: 400% 400%;
-  animation: bg 10s infinite;
-}
+    <style>
+        :root {
+            --primary: #ff4ecd;
+            --secondary: #00d2ff;
+            --bg-dark: #0f3460;
+        }
 
-@keyframes bg {
-  0% {background-position: 0%}
-  100% {background-position: 100%}
-}
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            text-align: center;
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            /* Dynamiczny gradient */
+            background: linear-gradient(-45deg, #1a1a2e, #16213e, #0f3460, #533483);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            overflow-x: hidden;
+        }
 
-.box {
-  margin: 30px auto;
-  padding: 20px;
-  width: 80%;
-  max-width: 500px;
-  background: rgba(0,0,0,0.4);
-  border-radius: 10px;
-  transition: 0.3s;
-}
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
 
-.box:hover {
-  transform: translateY(-10px);
-}
+        h1 {
+            font-size: 3rem;
+            text-shadow: 0 0 20px rgba(255, 78, 205, 0.6);
+            animation: float 3s ease-in-out infinite;
+        }
 
-button {
-  padding: 10px 20px;
-  margin: 5px;
-  border: none;
-  border-radius: 8px;
-  background: #ff4ecd;
-  color: white;
-  cursor: pointer;
-}
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
 
-button:hover {
-  transform: scale(1.1);
-}
-</style>
+        /* Styl Glassmorphism dla boksów */
+        .box {
+            margin: 20px;
+            padding: 30px;
+            width: 85%;
+            max-width: 450px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px); /* Rozmycie tła pod pudełkiem */
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .box:hover {
+            transform: scale(1.03);
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(255, 78, 205, 0.2);
+        }
+
+        button {
+            padding: 12px 25px;
+            margin: 8px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(45deg, var(--primary), #bc13fe);
+            color: white;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 4px 15px rgba(255, 78, 205, 0.4);
+        }
+
+        button:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 6px 20px rgba(255, 78, 205, 0.6);
+            filter: brightness(1.1);
+        }
+
+        button:active {
+            transform: scale(0.95);
+        }
+
+        #ip, #vpn {
+            font-family: 'Courier New', monospace;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 15px;
+            color: var(--secondary);
+            font-weight: bold;
+        }
+
+        /* Dekoracyjne kółka w tle */
+        .circle {
+            position: absolute;
+            z-index: -1;
+            background: radial-gradient(circle, rgba(255,78,205,0.1) 0%, rgba(0,0,0,0) 70%);
+            border-radius: 50%;
+            animation: move 20s linear infinite;
+        }
+
+        @keyframes move {
+            from { transform: translate(0, 0); }
+            to { transform: translate(100vw, 100vh); }
+        }
+    </style>
 </head>
 
 <body>
 
-<h1>🌍 ZeentxPL VPN</h1>
+    <div class="circle" style="width: 300px; height: 300px; top: 10%; left: 10%;"></div>
+    <div class="circle" style="width: 200px; height: 200px; bottom: 20%; right: 10%; animation-duration: 15s;"></div>
 
-<div class="box">
-  <h2>Twoje IP:</h2>
-  <p id="ip">Kliknij przycisk</p>
-  <button onclick="getIP()">Pobierz IP</button>
-</div>
+    <h1>🌍 ZeentxPL VPN</h1>
 
-<div class="box">
-  <h2>Wybierz kraj:</h2>
-  <button onclick="vpn('USA')">USA</button>
-  <button onclick="vpn('Niemcy')">Niemcy</button>
-  <button onclick="vpn('Japonia')">Japonia</button>
-  <p id="vpn">---</p>
-</div>
+    <div class="box">
+        <h2 style="margin-top:0">🛡️ Twój Adres IP</h2>
+        <p id="ip">Status: Oczekiwanie...</p>
+        <button onclick="getIP()">Sprawdź IP</button>
+    </div>
 
-<script>
-function getIP() {
-  fetch('https://api.ipify.org?format=json')
-  .then(res => res.json())
-  .then(data => {
-    document.getElementById('ip').innerText = data.ip;
-  })
-  .catch(() => {
-    document.getElementById('ip').innerText = "Błąd";
-  });
-}
+    <div class="box">
+        <h2>🌐 Wybierz Serwer</h2>
+        <div style="display: flex; justify-content: center; flex-wrap: wrap;">
+            <button onclick="vpn('USA')">🇺🇸 USA</button>
+            <button onclick="vpn('Niemcy')">🇩🇪 Niemcy</button>
+            <button onclick="vpn('Japonia')">🇯🇵 Japonia</button>
+        </div>
+        <p id="vpn">Połączenie: Brak</p>
+    </div>
 
-function fakeIP() {
-  return Math.floor(Math.random()*255)+"."+
-         Math.floor(Math.random()*255)+"."+
-         Math.floor(Math.random()*255)+"."+
-         Math.floor(Math.random()*255);
-}
+    <script>
+    function getIP() {
+        const ipDisplay = document.getElementById('ip');
+        ipDisplay.innerText = "Pobieranie...";
+        
+        fetch('https://api.ipify.org?format=json')
+        .then(res => res.json())
+        .then(data => {
+            ipDisplay.style.color = "#00ff88"; // Zielony kolor przy sukcesie
+            ipDisplay.innerText = data.ip;
+        })
+        .catch(() => {
+            ipDisplay.innerText = "Błąd połączenia";
+            ipDisplay.style.color = "#ff4e4e";
+        });
+    }
 
-function vpn(kraj) {
-  document.getElementById('vpn').innerText =
-    "VPN: " + kraj + " | IP: " + fakeIP();
-}
-</script>
+    function fakeIP() {
+        return Array.from({length: 4}, () => Math.floor(Math.random() * 256)).join('.');
+    }
+
+    function vpn(kraj) {
+        const vpnDisplay = document.getElementById('vpn');
+        vpnDisplay.style.opacity = "0"; // Efekt mrugnięcia przy zmianie
+        
+        setTimeout(() => {
+            vpnDisplay.innerHTML = `Łączenie z <strong>${kraj}</strong>...`;
+            
+            setTimeout(() => {
+                vpnDisplay.style.opacity = "1";
+                vpnDisplay.innerHTML = `✅ Połączono: ${kraj} <br> <small>Nowe IP: ${fakeIP()}</small>`;
+            }, 800);
+        }, 200);
+    }
+    </script>
 
 </body>
 </html>
