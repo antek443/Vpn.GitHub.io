@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZeentxPL VPN | Global Enterprise</title>
+    <title>ZeentxPL VPN | Global Network</title>
     <style>
         :root {
             --primary: #ff4ecd;
@@ -28,21 +28,15 @@
         }
         @keyframes gradient { 0% {background-position: 0% 50%} 50% {background-position: 100% 50%} 100% {background-position: 0% 50%} }
 
-        /* MULTI-LANG SELECTOR */
-        .lang-container {
-            position: fixed; top: 20px; right: 20px; z-index: 3000;
-            display: flex; align-items: center; gap: 10px;
-        }
-        select {
-            background: rgba(0, 0, 0, 0.7); color: white; border: 1px solid var(--primary);
-            padding: 8px; border-radius: 8px; cursor: pointer; outline: none;
-        }
+        /* Języki Dropdown */
+        .lang-container { position: fixed; top: 20px; right: 20px; z-index: 3000; }
+        select { background: var(--glass); color: white; border: 1px solid var(--primary); padding: 8px; border-radius: 8px; backdrop-filter: blur(10px); cursor: pointer; }
 
         /* AUTH SCREEN */
         #auth-screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             display: flex; justify-content: center; align-items: center;
-            z-index: 2000; background: var(--bg-dark); transition: 0.8s;
+            z-index: 2000; background: var(--bg-dark); transition: 0.8s ease-in-out;
         }
         .auth-box {
             background: var(--glass); backdrop-filter: blur(25px);
@@ -51,38 +45,36 @@
         }
         input {
             width: 100%; padding: 15px; margin: 10px 0; border-radius: 12px;
-            border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.5); color: white; box-sizing: border-box;
+            border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.5); color: white; box-sizing: border-box; font-size: 1rem;
         }
         .btn {
             width: 100%; padding: 15px; margin-top: 10px; border-radius: 12px;
-            border: none; font-weight: bold; cursor: pointer; transition: 0.3s;
+            border: none; font-weight: bold; cursor: pointer; transition: 0.3s; font-size: 1rem;
         }
         .btn-user { background: var(--primary); color: white; }
         .btn-admin { background: transparent; color: var(--admin-color); border: 2px solid var(--admin-color); margin-top: 15px; }
+        .btn-reg { background: transparent; color: var(--secondary); border: 1px solid var(--secondary); margin-top: 5px; }
+
+        /* SOCIAL MEDIA */
+        .socials { display: flex; justify-content: center; gap: 15px; margin-top: 20px; }
+        .social-btn { width: 45px; height: 45px; background: var(--glass); border-radius: 50%; display: flex; align-items: center; justify-content: center; text-decoration: none; color: white; transition: 0.3s; border: 1px solid rgba(255,255,255,0.1); }
+        .social-btn:hover { background: var(--primary); transform: scale(1.1); }
 
         /* MAIN CONTENT */
         #main-content { display: none; opacity: 0; flex-direction: column; align-items: center; width: 100%; padding-bottom: 50px; }
-        .container { width: 95%; max-width: 1200px; }
+        .container { width: 90%; max-width: 1200px; }
         .box { background: var(--glass); backdrop-filter: blur(20px); border-radius: 25px; padding: 30px; margin-top: 30px; border: 1px solid rgba(255,255,255,0.1); }
         
-        /* SOCIAL MEDIA AREA */
-        .socials { display: flex; justify-content: center; gap: 20px; margin: 20px 0; }
-        .social-icon {
-            width: 50px; height: 50px; background: var(--glass); border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            text-decoration: none; color: white; font-size: 1.5rem; transition: 0.3s;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-        .social-icon:hover { transform: scale(1.2); background: var(--primary); }
+        .cash-gif { width: 40px; vertical-align: middle; margin-left: 10px; }
 
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 15px; margin-top: 25px; }
         .card { background: rgba(0,0,0,0.4); padding: 20px; border-radius: 20px; text-align: center; cursor: pointer; transition: 0.3s; }
         .card:hover { transform: translateY(-8px); background: var(--primary); }
 
-        /* GIF DECORATION */
-        .cash-gif { width: 40px; vertical-align: middle; }
+        #admin-panel { display: none; margin-top: 40px; border: 2px solid var(--admin-color); }
+        .user-row { display: flex; justify-content: space-between; align-items: center; padding: 15px; background: rgba(0,0,0,0.3); margin-top: 10px; border-radius: 12px; }
+        .reset-btn { background: var(--admin-color); color: white; border: none; padding: 8px 15px; border-radius: 8px; cursor: pointer; }
 
-        /* MODAL */
         .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); display: none; justify-content: center; align-items: center; z-index: 3000; }
         .modal { background: #16213e; padding: 40px; border-radius: 35px; border: 2px solid var(--primary); text-align: center; width: 85%; max-width: 400px; }
     </style>
@@ -92,39 +84,39 @@
 <div class="bg"></div>
 
 <div class="lang-container">
-    <label>🌐</label>
-    <select id="lang-select" onchange="changeLang(this.value)">
+    <select id="lang-select" onchange="setLang(this.value)">
         </select>
 </div>
 
 <div id="auth-screen">
     <div class="auth-box">
         <h2 id="auth-title">🌍 ZeentxPL VPN</h2>
-        <input type="text" id="auth-user" placeholder="Username">
+        <input type="text" id="auth-user" placeholder="User">
         <input type="password" id="auth-pass" placeholder="Password">
-        <button class="btn btn-user" onclick="handleAuth('user')">LOGIN</button>
-        <button class="btn btn-admin" onclick="handleAuth('admin')">🔐 ADMIN MODE</button>
+        <button class="btn btn-user" id="btn-login" onclick="handleAuth('user')">LOGIN</button>
+        <button class="btn btn-reg" id="btn-reg" onclick="handleAuth('reg')">CREATE ACCOUNT</button>
+        <button class="btn btn-admin" id="btn-admin" onclick="handleAuth('admin')">🔐 ADMIN LOGIN</button>
+        
+        <div class="socials">
+            <a href="https://discord.com/invite/bHeSDzrrjR" class="social-btn" title="Discord">💬</a>
+            <a href="#" class="social-btn" title="TikTok">📱</a>
+            <a href="#" class="social-btn" title="Instagram">📷</a>
+            <a href="#" class="social-btn" title="YouTube">📺</a>
+        </div>
+        <p id="auth-error" style="color: #ff4444; display: none; margin-top: 15px; font-weight: bold;"></p>
     </div>
 </div>
 
 <div id="main-content">
     <div class="container">
-        <h1 style="text-align:center; font-size: 3rem; margin: 40px 0;">ZeentxPL VPN</h1>
-
-        <div class="box" style="text-align: center;">
-            <h3 id="social-title">Follow Us</h3>
-            <div class="socials">
-                <a href="#" class="social-icon">📱</a> <a href="https://discord.com/invite/bHeSDzrrjR" class="social-icon" style="background: var(--discord)">💬</a> <a href="#" class="social-icon">📷</a> <a href="#" class="social-icon">📺</a> </div>
-        </div>
-
+        <h1 style="text-align:center; font-size: 3.5rem; margin: 40px 0; text-shadow: 0 0 20px var(--primary);">ZeentxPL VPN</h1>
         <div class="box">
-            <h2 id="welcome-txt">Welcome to Premium</h2>
-            <p id="sub-status">Status: <span style="color: #00ff88;">ACTIVE </span> <img src="cash_fly.gif" class="cash-gif"></p>
+            <h2 id="welcome-txt">Welcome</h2>
+            <p id="sub-status">Status: <span style="color: #00ff88; font-weight: bold;">PREMIUM</span> <img src="cash_fly.gif" class="cash-gif"></p>
             <div class="grid" id="grid"></div>
         </div>
-
-        <div class="box" id="admin-panel" style="display:none; border: 2px solid var(--admin-color);">
-            <h2 style="color: var(--admin-color)">👑 ADMIN PANEL</h2>
+        <div class="box" id="admin-panel">
+            <h2 style="color: var(--admin-color)">👑 ADMIN CONTROL</h2>
             <div id="user-list"></div>
         </div>
     </div>
@@ -132,73 +124,90 @@
 
 <div class="overlay" id="overlay" onclick="if(event.target.id=='overlay') this.style.display='none'">
     <div class="modal">
-        <h2 id="m-title">KRAJ</h2>
-        <div id="m-ip" style="font-size: 2rem; color: var(--secondary); margin: 20px 0; font-family: monospace;">0.0.0.0</div>
-        <button class="btn btn-user" onclick="copyIP()">📋 COPY IP</button>
+        <h2 id="m-title">COUNTRY</h2>
+        <div id="m-ip" style="font-size: 2.2rem; color: var(--secondary); margin: 25px 0; font-family: monospace;">0.0.0.0</div>
+        <button class="btn btn-user" id="m-copy-btn" onclick="copyIP()">📋 COPY IP</button>
     </div>
 </div>
 
 <script>
-    const languages = [
-        "Polski", "English", "Deutsch", "Français", "Español", "Italiano", "Português", "Русский", "Türkçe", "Nederlands",
-        "Svenska", "Norsk", "Dansk", "Suomi", "Polski (Silesian)", "Magyar", "Čeština", "Slovenčina", "Română", "Български",
-        "Ελληνικά", "Tiếng Việt", "ไทย", "日本語", "한국어", "中文 (简体)", "हिन्दी", "العربية", "עברית", "Bahasa Indonesia",
-        "Українська", "Hrvatski", "Српски", "Lietuvių", "Latviešu", "Eesti", "Íslenska", "Filipino", "Malay", "Kurdî",
-        "Afrikaans", "Shqip", "Հայերեն", "Azərbaycan", "Euskara", "Català", "Galego", "ქართული", "Қазақша", "Oʻzbekcha"
-    ];
-
+    const langs = ["Polski", "English", "Deutsch", "Français", "Español", "Italiano", "Português", "Русский", "Türkçe", "Nederlands", "Svenska", "Norsk", "Dansk", "Suomi", "Silesian", "Magyar", "Čeština", "Slovenčina", "Română", "Български", "Ελληνικά", "Tiếng Việt", "ไทย", "日本語", "한국어", "中文", "हिन्दी", "العربية", "עברית", "Bahasa Indonesia", "Українська", "Hrvatski", "Српски", "Lietuvių", "Latviešu", "Eesti", "Íslenska", "Filipino", "Malay", "Kurdî", "Afrikaans", "Shqip", "Հայերեն", "Azərbaycan", "Euskara", "Català", "Galego", "ქართული", "Қазақша", "Oʻzbekcha"];
+    
     const langSelect = document.getElementById('lang-select');
-    languages.forEach(l => {
+    langs.forEach(l => {
         let opt = document.createElement('option');
-        opt.value = l;
+        opt.value = l === "Polski" ? "pl" : "en";
         opt.innerText = l;
         langSelect.appendChild(opt);
     });
 
+    let currentLang = 'pl';
     let users = JSON.parse(localStorage.getItem('vpn_users')) || { "admin": "123456" };
 
-    function changeLang(lang) {
-        alert("Language changed to: " + lang);
-        // Tu można rozbudować obiekt translations o wszystkie 50 języków
+    const translations = {
+        pl: { welcome: "Witaj, ", login: "ZALOGUJ SIĘ", reg: "UTWÓRZ KONTO", admin: "🔐 LOGOWANIE ADMIN", copy: "📋 SKOPIUJ IP", copied: "✅ SKOPIOWANO!" },
+        en: { welcome: "Welcome, ", login: "LOGIN", reg: "CREATE ACCOUNT", admin: "🔐 ADMIN LOGIN", copy: "📋 COPY IP", copied: "✅ COPIED!" }
+    };
+
+    function setLang(l) {
+        currentLang = l;
+        const t = translations[l] || translations['en'];
+        document.getElementById('btn-login').innerText = t.login;
+        document.getElementById('btn-reg').innerText = t.reg;
+        document.getElementById('btn-admin').innerText = t.admin;
+        document.getElementById('m-copy-btn').innerText = t.copy;
     }
 
     function handleAuth(mode) {
         const u = document.getElementById('auth-user').value;
         const p = document.getElementById('auth-pass').value;
-        if(users[u] === p) {
-            document.getElementById('auth-screen').style.display = "none";
-            document.getElementById('main-content').style.display = "flex";
-            document.getElementById('main-content').style.opacity = "1";
-            if(u === 'admin') document.getElementById('admin-panel').style.display = 'block';
-        } else {
-            alert("Error!");
+        const err = document.getElementById('auth-error');
+        if (mode === 'reg') {
+            if (users[u]) { alert("Exists!"); } else { users[u] = p; localStorage.setItem('vpn_users', JSON.stringify(users)); alert("Created!"); }
+        } else if (mode === 'user') {
+            if (users[u] === p) { loginSuccess(u); } else { err.innerText = "Error!"; err.style.display="block"; }
+        } else if (mode === 'admin') {
+            if (u === "admin" && p === "123456") { loginSuccess(u); } else { alert("Not Admin!"); }
         }
     }
 
-    // 50 KRAJÓW
-    const kraje = [
-        {n: 'Polska', f: '🇵🇱'}, {n: 'USA', f: '🇺🇸'}, {n: 'Germany', f: '🇩🇪'}, {n: 'UK', f: '🇬🇧'},
-        {n: 'Japan', f: '🇯🇵'}, {n: 'France', f: '🇫🇷'}, {n: 'Brazil', f: '🇧🇷'}, {n: 'Canada', f: '🇨🇦'},
-        {n: 'Sweden', f: '🇸🇪'}, {n: 'Norway', f: '🇳🇴'}, {n: 'Italy', f: '🇮🇹'}, {n: 'Korea', f: '🇰🇷'},
-        {n: 'Australia', f: '🇦🇺'}, {n: 'Netherlands', f: '🇳🇱'}, {n: 'Switzerland', f: '🇨🇭'}, {n: 'Spain', f: '🇪🇸'},
-        {n: 'Mexico', f: '🇲🇽'}, {n: 'India', f: '🇮🇳'}, {n: 'Turkey', f: '🇹🇷'}, {n: 'Egypt', f: '🇪🇬'},
-        {n: 'Portugal', f: '🇵🇹'}, {n: 'Greece', f: '🇬🇷'}, {n: 'Belgium', f: '🇧🇪'}, {n: 'Austria', f: '🇦🇹'},
-        {n: 'Finland', f: '🇫🇮'}, {n: 'Denmark', f: '🇩🇰'}, {n: 'Czech Rep', f: '🇨🇿'}, {n: 'Hungary', f: '🇭🇺'},
-        {n: 'Ukraine', f: '🇺🇦'}, {n: 'Ireland', f: '🇮🇪'}, {n: 'Israel', f: '🇮🇱'}, {n: 'UAE', f: '🇦🇪'},
-        {n: 'Singapore', f: '🇸🇬'}, {n: 'Thailand', f: '🇹🇭'}, {n: 'S. Africa', f: '🇿🇦'}, {n: 'Argentina', f: '🇦🇷'},
-        {n: 'Chile', f: '🇨🇱'}, {n: 'Iceland', f: '🇮🇸'}, {n: 'Romania', f: '🇷🇴'}, {n: 'Croatia', f: '🇭🇷'},
-        {n: 'New Zealand', f: '🇳🇿'}, {n: 'Vietnam', f: '🇻🇳'}, {n: 'Philippines', f: '🇵🇭'}, {n: 'Malaysia', f: '🇲🇾'},
-        {n: 'Colombia', f: '🇨🇴'}, {n: 'Peru', f: '🇵🇪'}, {n: 'Morocco', f: '🇲🇦'}, {n: 'Bulgaria', f: '🇧🇬'},
-        {n: 'Slovakia', f: '🇸🇰'}, {n: 'Estonia', f: '🇪🇪'}
-    ];
+    function loginSuccess(u) {
+        document.getElementById('auth-screen').style.display = "none";
+        document.getElementById('main-content').style.display = "flex";
+        document.getElementById('main-content').style.opacity = "1";
+        document.getElementById('welcome-txt').innerText = translations[currentLang].welcome + u;
+        if(u === "admin") showAdminPanel();
+    }
 
+    function showAdminPanel() {
+        document.getElementById('admin-panel').style.display = "block";
+        const list = document.getElementById('user-list');
+        list.innerHTML = "";
+        for (let u in users) {
+            if(u === 'admin') continue;
+            const div = document.createElement('div');
+            div.className = "user-row";
+            div.innerHTML = `<span>👤 ${u}</span><button class="reset-btn" onclick="resetUser('${u}')">RESET (123456)</button>`;
+            list.appendChild(div);
+        }
+    }
+
+    function resetUser(u) {
+        users[u] = "123456";
+        localStorage.setItem('vpn_users', JSON.stringify(users));
+        alert("Reset done!");
+        showAdminPanel();
+    }
+
+    const kraje = [{n:'Polska',f:'🇵🇱'},{n:'USA',f:'🇺🇸'},{n:'Niemcy',f:'🇩🇪'},{n:'UK',f:'🇬🇧'},{n:'Japonia',f:'🇯🇵'},{n:'Francja',f:'🇫🇷'},{n:'Kanada',f:'🇨🇦'},{n:'Szwecja',f:'🇸🇪'},{n:'Włochy',f:'🇮🇹'},{n:'Korea',f:'🇰🇷'},{n:'Australia',f:'🇦🇺'},{n:'Holandia',f:'🇳🇱'},{n:'Szwajcaria',f:'🇨🇭'},{n:'Hiszpania',f:'🇪🇸'},{n:'Turcja',f:'🇹🇷'},{n:'Ukraina',f:'🇺🇦'},{n:'Izrael',f:'🇮🇱'},{n:'ZEA',f:'🇦🇪'},{n:'Brazylia',f:'🇧🇷'},{n:'Meksyk',f:'🇲🇽'}];
+    // Wygeneruj 50 krajów (powtórka dla siatki)
     const grid = document.getElementById('grid');
-    kraje.forEach(k => {
+    [...kraje, ...kraje, ...kraje.slice(0,10)].forEach(k => {
         const card = document.createElement('div');
         card.className = 'card';
         card.innerHTML = `<div style="font-size:2rem">${k.f}</div><b>${k.n}</b>`;
         card.onclick = () => {
-            const ip = `${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}.12.${Math.floor(Math.random()*255)}`;
+            const ip = `${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}`;
             document.getElementById('m-title').innerText = k.f + " " + k.n;
             document.getElementById('m-ip').innerText = ip;
             document.getElementById('overlay').style.display = "flex";
@@ -208,7 +217,9 @@
 
     function copyIP() {
         navigator.clipboard.writeText(document.getElementById('m-ip').innerText);
-        alert("Copied!");
+        const btn = document.getElementById('m-copy-btn');
+        btn.innerText = translations[currentLang].copied;
+        setTimeout(()=> btn.innerText = translations[currentLang].copy, 1500);
     }
 </script>
 </body>
