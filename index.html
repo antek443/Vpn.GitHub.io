@@ -3,202 +3,268 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZeentxPL VPN | PRO Dashboard</title>
+    <title>ZeentxPL VPN | Cyber-Gen 2026</title>
 
     <style>
         :root {
-            --accent: #ff4ecd;
-            --neon-blue: #00d2ff;
-            --success: #00ff88;
-            --glass: rgba(255, 255, 255, 0.07);
+            --primary: #00f2ff;
+            --secondary: #7000ff;
+            --accent: #ff00c1;
+            --bg: #050508;
+            --glass: rgba(15, 15, 25, 0.8);
         }
 
         body {
             margin: 0;
             padding: 20px;
-            font-family: 'Segoe UI', sans-serif;
+            font-family: 'Orbitron', sans-serif; /* Futurystyczna czcionka */
+            background-color: var(--bg);
             color: white;
-            background: #050505;
             display: flex;
             flex-direction: column;
             align-items: center;
             min-height: 100vh;
+            overflow-x: hidden;
         }
 
-      
-        .bg-animate {
+        /* Tło z siatką 3D */
+        .bg-grid {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(45deg, #0f0c29, #302b63, #24243e);
+            background-image: 
+                linear-gradient(rgba(0, 242, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 242, 255, 0.05) 1px, transparent 1px);
+            background-size: 50px 50px;
+            perspective: 500px;
             z-index: -1;
+            transform: rotateX(60deg);
+            transform-origin: top;
+            animation: gridMove 10s linear infinite;
+        }
+
+        @keyframes gridMove {
+            from { background-position: 0 0; }
+            to { background-position: 0 50px; }
         }
 
         h1 {
-            font-size: 3rem;
-            margin: 20px 0;
-            text-shadow: 0 0 15px var(--accent);
-            letter-spacing: 2px;
+            font-size: 3.5rem;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            background: linear-gradient(to bottom, #fff 30%, var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 40px;
+            filter: drop-shadow(0 0 15px var(--primary));
         }
 
-        .container {
+        .main-container {
             width: 100%;
-            max-width: 1000px;
+            max-width: 1100px;
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 20px;
         }
 
         .box {
             background: var(--glass);
-            backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 25px;
+            border-radius: 15px;
             padding: 25px;
-            margin-bottom: 25px;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
         }
 
-        /* Mocniejszy efekt podnoszenia */
+        /* Efekt podnoszenia z poświatą */
         .box:hover {
-            transform: translateY(-12px) scale(1.01);
-            border-color: var(--neon-blue);
-            box-shadow: 0 15px 45px rgba(0, 210, 255, 0.2);
+            transform: translateY(-15px) rotateX(2deg);
+            border-color: var(--primary);
+            box-shadow: 0 20px 50px rgba(0, 242, 255, 0.2);
         }
 
-        /* Siatka krajów - 20 pozycji */
+        /* Przyciski krajów - Styl High-Tech */
         .country-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-            gap: 12px;
-            margin-top: 20px;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 15px;
         }
 
-        .country-card {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 15px;
+        .card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             padding: 15px;
+            border-radius: 10px;
             cursor: pointer;
+            text-align: center;
+            position: relative;
             transition: 0.2s;
-            border: 1px solid transparent;
-            text-align: center;
+            overflow: hidden;
         }
 
-        .country-card:hover {
-            background: rgba(255, 78, 205, 0.2);
-            border-color: var(--accent);
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 50%; left: 50%;
+            width: 0; height: 0;
+            background: var(--primary);
+            opacity: 0.3;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.4s, height 0.4s;
+        }
+
+        .card:active::before {
+            width: 300px;
+            height: 300px;
+            opacity: 0;
+        }
+
+        .card:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--primary);
             transform: scale(1.05);
+            box-shadow: 0 0 15px var(--primary);
         }
 
-        .flag { font-size: 1.8rem; display: block; margin-bottom: 5px; }
+        /* Status Bar */
+        .status-bar {
+            height: 4px;
+            width: 100%;
+            background: #222;
+            margin: 15px 0;
+            border-radius: 2px;
+            overflow: hidden;
+        }
 
-        /* Powiadomienie o kopiowaniu */
+        .status-progress {
+            height: 100%;
+            width: 0%;
+            background: var(--primary);
+            box-shadow: 0 0 10px var(--primary);
+        }
+
+        /* Powiadomienie (Toast) */
         #toast {
-            visibility: hidden;
-            min-width: 250px;
-            background-color: var(--success);
-            color: #000;
-            text-align: center;
-            border-radius: 10px;
-            padding: 16px;
             position: fixed;
-            z-index: 100;
-            bottom: 30px;
+            top: -100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--primary);
+            color: black;
+            padding: 15px 30px;
+            border-radius: 50px;
             font-weight: bold;
-            box-shadow: 0 0 20px var(--success);
+            transition: 0.5s;
+            z-index: 1000;
+            box-shadow: 0 0 30px var(--primary);
         }
 
-        #toast.show { visibility: visible; animation: fadein 0.5s, fadeout 0.5s 2.5s; }
-
-        @keyframes fadein { from {bottom: 0; opacity: 0;} to {bottom: 30px; opacity: 1;} }
-        @keyframes fadeout { from {bottom: 30px; opacity: 1;} to {bottom: 0; opacity: 0;} }
-
-        #vpn-info {
-            font-size: 1.2rem;
-            color: var(--success);
-            margin: 10px 0;
-            min-height: 1.5em;
+        .shake { animation: shake 0.3s ease-in-out; }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
         }
 
-        button {
-            background: var(--accent);
-            color: white;
-            border: none;
-            padding: 10px 25px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: 0.3s;
+        .ip-box {
+            font-size: 1.5rem;
+            color: var(--primary);
+            text-shadow: 0 0 10px var(--primary);
+            background: rgba(0,0,0,0.5);
+            padding: 10px;
+            border-radius: 5px;
+            border-left: 3px solid var(--primary);
         }
 
-        button:hover { filter: brightness(1.2); transform: scale(1.05); }
     </style>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
-    <div class="bg-animate"></div>
-    <div id="toast">📋 IP skopiowane do schowka!</div>
+    <div class="bg-grid"></div>
+    <div id="toast">SYSTEM: IP COPIED TO CLIPBOARD</div>
 
-    <div class="container">
-        <h1>⚡ ZeentxPL VPN</h1>
+    <h1>ZeentxPL // VPN</h1>
 
+    <div class="main-container">
         <div class="box">
-            <h2>🛡️ Twoje bazowe IP</h2>
-            <p id="ip-real">Kliknij przycisk poniżej</p>
-            <button onclick="getRealIP()">POBIERZ MOJE IP</button>
+            <h2 style="color: var(--primary)">DASHBOARD</h2>
+            <p>Real-Time Tracking</p>
+            <div class="ip-box" id="real-ip">0.0.0.0</div>
+            <br>
+            <button onclick="fetchIP()" style="width:100%; padding:15px; background:var(--primary); border:none; font-family:'Orbitron'; cursor:pointer; font-weight:bold;">INITIALIZE SCAN</button>
+            <hr style="opacity:0.1; margin:20px 0;">
+            <div id="connection-status">STATUS: DISCONNECTED</div>
+            <div class="status-bar"><div class="status-progress" id="progress"></div></div>
         </div>
 
         <div class="box">
-            <h2>🌍 Serwery Premium (Kliknij aby skopiować IP)</h2>
-            <div id="vpn-info">Wybierz serwer z listy:</div>
-            
-            <div class="country-grid" id="grid">
-                </div>
+            <h2 style="color: var(--accent)">NETWORK NODES</h2>
+            <div class="country-grid" id="grid"></div>
         </div>
     </div>
 
     <script>
-        const kraje = [
-            {n: 'Polska', f: '🇵🇱'}, {n: 'USA', f: '🇺🇸'}, {n: 'Niemcy', f: '🇩🇪'}, {n: 'Japonia', f: '🇯🇵'},
-            {n: 'UK', f: '🇬🇧'}, {n: 'Kanada', f: '🇨🇦'}, {n: 'Francja', f: '🇫🇷'}, {n: 'Brazylia', f: '🇧🇷'},
-            {n: 'Holandia', f: '🇳🇱'}, {n: 'Szwajcaria', f: '🇨🇭'}, {n: 'Australia', f: '🇦🇺'}, {n: 'Włochy', f: '🇮🇹'},
-            {n: 'Norwegia', f: '🇳🇴'}, {n: 'Hiszpania', f: '🇪🇸'}, {n: 'Szwecja', f: '🇸🇪'}, {n: 'Singapur', f: '🇸🇬'},
-            {n: 'Islandia', f: '🇮🇸'}, {n: 'Meksyk', f: '🇲🇽'}, {n: 'Indie', f: '🇮🇳'}, {n: 'Korea Płd.', f: '🇰🇷'}
+        const nodes = [
+            {n: 'POLAND', f: '🇵🇱'}, {n: 'USA', f: '🇺🇸'}, {n: 'GERMANY', f: '🇩🇪'}, {n: 'JAPAN', f: '🇯🇵'},
+            {n: 'UK', f: '🇬🇧'}, {n: 'CANADA', f: '🇨🇦'}, {n: 'BRAZIL', f: '🇧🇷'}, {n: 'FRANCE', f: '🇫🇷'},
+            {n: 'KOREA', f: '🇰🇷'}, {n: 'RUSSIA', f: '🇷🇺'}, {n: 'CHINA', f: '🇨🇳'}, {n: 'SWEDEN', f: '🇸🇪'},
+            {n: 'NORWAY', f: '🇳🇴'}, {n: 'ITALY', f: '🇮🇹'}, {n: 'SPAIN', f: '🇪🇸'}, {n: 'DUBAI', f: '🇦🇪'},
+            {n: 'MEXICO', f: '🇲🇽'}, {n: 'INDIA', f: '🇮🇳'}, {n: 'AUSTRALIA', f: '🇦🇺'}, {n: 'EGYPT', f: '🇪🇬'}
         ];
 
-        // Generowanie siatki
         const grid = document.getElementById('grid');
-        kraje.forEach(k => {
+        nodes.forEach(node => {
             const div = document.createElement('div');
-            div.className = 'country-card';
-            div.innerHTML = `<span class="flag">${k.f}</span><span>${k.n}</span>`;
-            div.onclick = () => connectVPN(k.n, k.f);
+            div.className = 'card';
+            div.innerHTML = `<span style="font-size:2rem">${node.f}</span><br><small>${node.n}</small>`;
+            div.onclick = (e) => connect(node.n, div);
             grid.appendChild(div);
         });
 
-        async function getRealIP() {
-            document.getElementById('ip-real').innerText = "Pobieranie...";
-            try {
-                const res = await fetch('https://api.ipify.org?format=json');
-                const data = await res.json();
-                document.getElementById('ip-real').innerText = data.ip;
-            } catch { document.getElementById('ip-real').innerText = "Błąd połączenia"; }
+        function fetchIP() {
+            const el = document.getElementById('real-ip');
+            el.innerText = "SCANNING...";
+            fetch('https://api.ipify.org?format=json')
+                .then(r => r.json())
+                .then(d => el.innerText = d.ip)
+                .catch(() => el.innerText = "ERROR");
         }
 
-        function connectVPN(nazwa, flaga) {
-            const fakeIP = `${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}`;
+        function connect(name, element) {
+            // Animacja paska
+            const progress = document.getElementById('progress');
+            const status = document.getElementById('connection-status');
+            const fakeIP = `${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}.0.${Math.floor(Math.random()*255)}`;
             
-            // Aktualizacja tekstu
-            document.getElementById('vpn-info').innerHTML = `Połączono: ${flaga} <b>${nazwa}</b> | IP: <span id="target-ip">${fakeIP}</span>`;
+            status.innerText = `CONNECTING TO: ${name}...`;
+            progress.style.transition = "none";
+            progress.style.width = "0%";
             
-            // KOPIOWANIE DO SCHOWKA
-            navigator.clipboard.writeText(fakeIP).then(() => {
-                showToast();
-            });
+            // Efekt wstrząsu boku
+            element.closest('.box').classList.add('shake');
+            setTimeout(() => element.closest('.box').classList.remove('shake'), 300);
+
+            setTimeout(() => {
+                progress.style.transition = "width 0.8s ease-in";
+                progress.style.width = "100%";
+                
+                setTimeout(() => {
+                    status.innerText = `STABLE: ${name} (${fakeIP})`;
+                    navigator.clipboard.writeText(fakeIP);
+                    showToast(`NODE ${name} ACTIVE: ${fakeIP}`);
+                }, 850);
+            }, 50);
         }
 
-        function showToast() {
+        function showToast(msg) {
             const t = document.getElementById('toast');
-            t.className = "show";
-            setTimeout(() => { t.className = t.className.replace("show", ""); }, 3000);
+            t.innerText = msg;
+            t.style.top = "20px";
+            setTimeout(() => t.style.top = "-100px", 3000);
         }
     </script>
-
 </body>
 </html>
