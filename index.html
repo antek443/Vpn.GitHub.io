@@ -1,1377 +1,184 @@
 <!DOCTYPE html>
-
 <html lang="pl">
-
 <head>
-
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>ZEENTX VPN | ULTIMATE SECURITY SYSTEM</title>
-
+    <title>ZEENTX OMNI-OS | index.html</title>
     
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@400;600;700;800;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&family=JetBrains+Mono:wght@400;700&family=Inter:wght@300;600;900&family=Press+Start+2P&display=swap" rel="stylesheet">
     
-
     <style>
-
-        /* --- 1. RDZEŃ SYSTEMU GRAFICZNEGO (GLOBAL STYLES) --- */
-
         :root {
-
-            /* Palette Base (Cyberpunk Default) */
-
-            --primary: #ff4ecd;
-
-            --primary-rgb: 255, 78, 205;
-
-            --secondary: #00d2ff;
-
-            --accent: #7000ff;
-
+            --primary: #00fff2;
+            --secondary: #7000ff;
             --bg-deep: #05050a;
-
-            --sidebar-bg: #0d0d15;
-
-            --card-bg: rgba(255, 255, 255, 0.03);
-
-            --card-hover: rgba(255, 255, 255, 0.07);
-
-            --border: rgba(255, 255, 255, 0.1);
-
-            --text-main: #ffffff;
-
-            --text-dim: #888895;
-
-            --success: #00ff88;
-
-            --admin-red: #ff4747;
-
             --glass: rgba(13, 13, 21, 0.85);
-
+            --border: rgba(255, 255, 255, 0.1);
+            --mario-red: #e52521;
             --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-
-            --neon-shadow: 0 0 20px rgba(255, 78, 205, 0.3);
-
         }
 
-
-
-        /* --- 2. THEME ENGINE - KONFIGURACJA KOLORYSTYCZNA --- */
-
-        body.theme-blood {
-
-            --primary: #ff2a2a;
-
-            --primary-rgb: 255, 42, 42;
-
-            --bg-deep: #0f0202;
-
-            --sidebar-bg: #1a0505;
-
-            --primary-glow: rgba(255, 42, 42, 0.2);
-
-            --neon-shadow: 0 0 20px rgba(255, 42, 42, 0.3);
-
-        }
-
-        body.theme-forest {
-
-            --primary: #00ff88;
-
-            --primary-rgb: 0, 255, 136;
-
-            --bg-deep: #020f08;
-
-            --sidebar-bg: #051a0e;
-
-            --primary-glow: rgba(0, 255, 136, 0.2);
-
-            --neon-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
-
-        }
-
-        body.theme-ocean {
-
-            --primary: #00d2ff;
-
-            --primary-rgb: 0, 210, 255;
-
-            --bg-deep: #02080f;
-
-            --sidebar-bg: #050e1a;
-
-            --primary-glow: rgba(0, 210, 255, 0.2);
-
-            --neon-shadow: 0 0 20px rgba(0, 210, 255, 0.3);
-
-        }
-
-        body.theme-gold {
-
-            --primary: #ffcc00;
-
-            --primary-rgb: 255, 204, 0;
-
-            --bg-deep: #0f0a02;
-
-            --sidebar-bg: #1a1405;
-
-            --primary-glow: rgba(255, 204, 0, 0.2);
-
-            --neon-shadow: 0 0 20px rgba(255, 204, 0, 0.3);
-
-        }
-
-
-
-        /* --- 3. RESET I WYDAJNOŚĆ --- */
-
-        * { 
-
-            box-sizing: border-box; 
-
-            margin: 0; padding: 0; 
-
-            outline: none; 
-
-            -webkit-tap-highlight-color: transparent;
-
-        }
-
-
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body, html {
-
             height: 100vh; width: 100vw;
-
-            overflow: hidden;
-
-            color: var(--text-main);
-
-            font-family: 'Inter', sans-serif;
-
-            background: var(--bg-deep);
-
-            transition: background 0.8s ease;
-
+            overflow: hidden; font-family: 'Inter', sans-serif;
+            background: var(--bg-deep); color: white;
         }
 
-
-
-        /* Optymalizacja GPU dla animacji */
-
-        .animated-bg, .bg-orb, .view, .node-card {
-
-            will-change: transform, opacity;
-
-            transform: translateZ(0);
-
-        }
-
-
-
-        /* --- 4. ENGINE TŁA I EFEKTÓW --- */
-
-        .animated-bg {
-
+        /* --- SILNIK TAPET --- */
+        #wallpaper-engine {
             position: fixed; inset: 0; z-index: -1;
-
-            background: radial-gradient(circle at center, transparent 0%, var(--bg-deep) 100%);
-
+            background-size: cover; background-position: center;
+            transition: 1s all ease-in-out;
         }
 
+        .wp-cyber { background-image: url('https://images.unsplash.com/photo-1614850523296-d8c1af93d400?q=80&w=2070'); filter: brightness(0.4); }
+        .wp-mario { background-image: url('https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=2070'); filter: brightness(0.8) sepia(0.3); }
+        .wp-void { background: radial-gradient(circle, #1a1a1a, #000); }
+        .wp-matrix { background-color: #000; background-image: linear-gradient(rgba(0, 255, 70, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 255, 70, 0.1) 1px, transparent 1px); background-size: 30px 30px; }
 
-
-        .bg-orb {
-
-            position: absolute; width: 60vw; height: 60vw;
-
-            filter: blur(150px); border-radius: 50%;
-
-            background: radial-gradient(circle, rgba(var(--primary-rgb), 0.15) 0%, transparent 70%);
-
-            top: -10%; left: -10%;
-
-            animation: orbFloat 20s infinite alternate ease-in-out;
-
+        /* --- TRYB MARIO --- */
+        body.mario-active {
+            font-family: 'Press Start 2P', cursive;
+            --primary: #ffcc00;
         }
-
-
-
-        @keyframes orbFloat {
-
-            0% { transform: translate(0, 0) scale(1); }
-
-            50% { transform: translate(20vw, 10vh) scale(1.1); }
-
-            100% { transform: translate(-5vw, 20vh) scale(0.9); }
-
-        }
-
-
-
-        /* --- 5. SYSTEM LOGOWANIA (REWRITTEN) --- */
-
-        #login-overlay {
-
-            position: fixed; inset: 0; z-index: 9999;
-
-            background: var(--bg-deep);
-
-            display: flex; justify-content: center; align-items: center;
-
-            transition: transform 1s cubic-bezier(0.8, 0, 0.2, 1), opacity 0.8s;
-
-        }
-
-
-
-        .login-box {
-
-            width: 480px; padding: 60px;
-
-            background: var(--glass);
-
-            backdrop-filter: blur(40px);
-
-            border: 1px solid var(--border);
-
-            border-radius: 40px;
-
-            box-shadow: 0 40px 100px rgba(0,0,0,0.8);
-
-            text-align: center;
-
-            position: relative;
-
-        }
-
-
-
-        .login-box::after {
-
-            content: ''; position: absolute; inset: -2px;
-
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-
-            border-radius: 42px; z-index: -1; opacity: 0.2;
-
-        }
-
-
-
-        .logo-area { margin-bottom: 40px; }
-
-        .logo-area h1 { font-family: 'Poppins'; font-weight: 900; font-size: 3rem; letter-spacing: -2px; }
-
-        .logo-area span { color: var(--primary); text-shadow: var(--neon-shadow); }
-
-
-
-        .auth-switch {
-
-            display: flex; background: rgba(0,0,0,0.4);
-
-            padding: 6px; border-radius: 20px; margin-bottom: 35px;
-
-        }
-
-        .auth-btn {
-
-            flex: 1; padding: 14px; cursor: pointer; border-radius: 16px;
-
-            font-size: 0.85rem; font-weight: 800; color: var(--text-dim);
-
-            transition: var(--transition);
-
-        }
-
-        .auth-btn.active { background: var(--primary); color: white; box-shadow: var(--neon-shadow); }
-
-
-
-        .input-wrap { position: relative; margin-bottom: 20px; }
-
-        .input-wrap i { position: absolute; left: 24px; top: 50%; transform: translateY(-50%); color: var(--text-dim); }
-
-        
-
-        .input-wrap input {
-
-            width: 100%; padding: 20px 20px 20px 65px;
-
-            background: rgba(0,0,0,0.5); border: 1px solid var(--border);
-
-            border-radius: 20px; color: white; font-size: 1rem;
-
-            transition: var(--transition);
-
-        }
-
-        .input-wrap input:focus { border-color: var(--primary); background: rgba(var(--primary-rgb), 0.05); }
-
-
-
-        .submit-btn {
-
-            width: 100%; padding: 20px; border: none; border-radius: 20px;
-
-            background: var(--primary); color: white; font-weight: 900;
-
-            font-size: 1.1rem; cursor: pointer; transition: var(--transition);
-
-            text-transform: uppercase; letter-spacing: 2px;
-
-        }
-
-        .submit-btn:hover { transform: translateY(-5px); filter: brightness(1.2); box-shadow: var(--neon-shadow); }
-
-
-
-        /* --- 6. GŁÓWNY INTERFEJS (APP GUI) --- */
-
+        body.mario-active .side-bar { background: var(--mario-red); border-right: 5px solid #000; }
+        body.mario-active .node-card { border: 4px solid #000; background: #fff; color: #000; box-shadow: 8px 8px 0px #000; }
+        body.mario-active .nav-item.active { background: #000; color: #fff; transform: scale(1.1); }
+
+        /* --- STRUKTURA GUI --- */
         #app-shell {
-
-            display: none; height: 100vh; width: 100vw;
-
-            grid-template-columns: 320px 1fr;
-
-            opacity: 0; transition: opacity 1.5s;
-
+            display: grid; grid-template-columns: 280px 1fr; height: 100vh;
+            backdrop-filter: blur(10px);
         }
-
-
-
-        /* Side Navigation */
 
         .side-bar {
-
-            background: var(--sidebar-bg); border-right: 1px solid var(--border);
-
-            display: flex; flex-direction: column; padding: 50px 0;
-
-            z-index: 100;
-
+            background: var(--glass); border-right: 1px solid var(--border);
+            padding: 40px 20px; display: flex; flex-direction: column;
         }
 
+        .logo { font-family: 'Orbitron'; font-size: 1.5rem; text-align: center; margin-bottom: 50px; color: var(--primary); }
 
-
-        .side-logo { padding: 0 45px; margin-bottom: 60px; }
-
-        .side-logo h2 { font-family: 'Poppins'; font-weight: 900; font-size: 2rem; }
-
-        .side-logo span { color: var(--primary); }
-
-
-
-        .nav-menu { padding: 0 25px; flex-grow: 1; }
-
-        .nav-section { color: var(--text-dim); font-size: 0.75rem; font-weight: 800; text-transform: uppercase; padding: 0 25px; margin: 30px 0 15px; letter-spacing: 2.5px; }
-
-        
-
+        .nav-menu { flex-grow: 1; }
         .nav-item {
-
-            padding: 18px 25px; display: flex; align-items: center; gap: 20px;
-
-            color: var(--text-dim); cursor: pointer; border-radius: 22px;
-
-            font-weight: 600; transition: var(--transition); margin-bottom: 10px;
-
+            padding: 15px 20px; border-radius: 12px; cursor: pointer;
+            display: flex; align-items: center; gap: 15px;
+            transition: var(--transition); margin-bottom: 10px;
         }
+        .nav-item:hover { background: rgba(255,255,255,0.1); }
+        .nav-item.active { background: var(--primary); color: #000; font-weight: bold; }
 
-        .nav-item i { font-size: 1.3rem; width: 25px; text-align: center; }
-
-        .nav-item:hover, .nav-item.active { color: white; background: rgba(255,255,255,0.06); }
-
-        .nav-item.active { border-left: 5px solid var(--primary); background: linear-gradient(90deg, rgba(var(--primary-rgb), 0.1), transparent); }
-
-
-
-        /* Main Dashboard Area */
-
-        .main-stage {
-
-            background: rgba(0,0,0,0.1); overflow-y: auto; display: flex; flex-direction: column;
-
-            scroll-behavior: smooth;
-
-        }
-
-
-
-        .header-bar {
-
-            padding: 45px 60px; display: flex; justify-content: space-between; align-items: center;
-
-            position: sticky; top: 0; background: rgba(var(--bg-deep), 0.8); backdrop-filter: blur(15px); z-index: 50;
-
-        }
-
-        .user-widget {
-
-            display: flex; align-items: center; gap: 20px;
-
-            background: var(--card-bg); padding: 12px 28px;
-
-            border-radius: 24px; border: 1px solid var(--border);
-
-        }
-
-        .avatar-box { 
-
-            width: 48px; height: 48px; background: linear-gradient(135deg, var(--primary), var(--accent));
-
-            border-radius: 16px; display: flex; align-items: center; justify-content: center;
-
-            font-weight: 900; font-size: 1.4rem; box-shadow: var(--neon-shadow);
-
-        }
-
-
-
-        .view-port { padding: 20px 60px 100px; flex-grow: 1; }
-
-        .view { display: none; animation: slideIn 0.6s cubic-bezier(0.23, 1, 0.32, 1); }
-
+        .main-content { overflow-y: auto; padding: 50px; }
+        .view { display: none; animation: fadeIn 0.4s ease; }
         .view.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-
-
-        @keyframes slideIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-
-
-
-        /* --- 7. WIDOKI I ELEMENTY DANYCH --- */
-
-        
-
-        /* Stats Dashboard */
-
-        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; margin-bottom: 50px; }
-
-        .stat-box {
-
-            background: var(--card-bg); padding: 35px; border-radius: 35px; border: 1px solid var(--border);
-
-            position: relative; overflow: hidden;
-
-        }
-
-        .stat-box label { color: var(--text-dim); font-size: 0.8rem; font-weight: 800; text-transform: uppercase; }
-
-        .stat-box h3 { font-size: 2.2rem; font-weight: 900; margin-top: 10px; }
-
-        .stat-box i { position: absolute; right: -10px; bottom: -10px; font-size: 6rem; opacity: 0.05; }
-
-
-
-        /* Server Grid Engine */
-
-        .servers-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 30px; }
-
+        /* Karty */
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
         .node-card {
-
-            background: var(--card-bg); padding: 40px; border-radius: 35px; border: 1px solid var(--border);
-
-            display: flex; align-items: center; gap: 30px; cursor: pointer; transition: var(--transition);
-
-            position: relative;
-
+            background: var(--glass); border: 1px solid var(--border);
+            padding: 25px; border-radius: 20px; transition: var(--transition); text-align: center;
         }
+        .node-card:hover { transform: translateY(-5px); border-color: var(--primary); }
 
-        .node-card:hover { transform: translateY(-12px); border-color: var(--primary); background: var(--card-hover); box-shadow: 0 40px 80px rgba(0,0,0,0.6); }
+        /* Przełącznik Mario */
+        .switch { width: 60px; height: 30px; position: relative; display: inline-block; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; inset: 0; background: #333; border-radius: 30px; cursor: pointer; transition: .4s; }
+        .slider:before { position: absolute; content: ""; height: 22px; width: 22px; left: 4px; bottom: 4px; background: white; border-radius: 50%; transition: .4s; }
+        input:checked + .slider { background: var(--mario-red); }
+        input:checked + .slider:before { transform: translateX(30px); }
 
-        .node-card .flag-icon { font-size: 4rem; }
-
-        .node-card .online-dot { position: absolute; top: 30px; right: 30px; width: 14px; height: 14px; background: var(--success); border-radius: 50%; box-shadow: 0 0 20px var(--success); animation: pulse 2s infinite; }
-
-
-
-        @keyframes pulse { 0% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.4); opacity: 0.5; } 100% { transform: scale(1); opacity: 1; } }
-
-
-
-        /* Settings & Theme Picker */
-
-        .theme-selector { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 20px; margin-top: 30px; }
-
-        .theme-btn {
-
-            height: 140px; border-radius: 25px; border: 2px solid var(--border);
-
-            cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center;
-
-            font-weight: 900; text-transform: uppercase; gap: 15px; transition: var(--transition);
-
-        }
-
-        .theme-btn i { font-size: 2rem; }
-
-        .theme-btn:hover { border-color: var(--primary); transform: scale(1.05); }
-
-        .theme-btn.active { border-color: var(--primary); background: rgba(var(--primary-rgb), 0.15); box-shadow: var(--neon-shadow); }
-
-
-
-        /* Admin Table */
-
-        .admin-box { background: rgba(255, 71, 71, 0.02); border: 2px dashed rgba(255, 71, 71, 0.2); border-radius: 40px; padding: 50px; }
-
-        .data-table { width: 100%; border-collapse: collapse; margin-top: 30px; }
-
-        .data-table th { text-align: left; padding: 25px; color: var(--text-dim); border-bottom: 2px solid var(--border); font-size: 0.9rem; }
-
-        .data-table td { padding: 25px; border-bottom: 1px solid var(--border); font-family: 'JetBrains Mono'; font-size: 1.1rem; }
-
-        .del-user { background: rgba(255, 71, 71, 0.15); color: var(--admin-red); border: none; padding: 12px 25px; border-radius: 15px; cursor: pointer; font-weight: 800; transition: 0.3s; }
-
-        .del-user:hover { background: var(--admin-red); color: white; transform: scale(1.1); }
-
-
-
-        /* --- 8. MODAL SYSTEM --- */
-
-        #connection-modal {
-
-            position: fixed; inset: 0; z-index: 10000;
-
-            background: rgba(0,0,0,0.92); backdrop-filter: blur(25px);
-
-            display: none; justify-content: center; align-items: center; opacity: 0; transition: 0.6s;
-
-        }
-
-        .modal-content {
-
-            width: 500px; padding: 70px; background: var(--sidebar-bg);
-
-            border-radius: 50px; border: 1px solid var(--primary); text-align: center;
-
-            transform: scale(0.8); transition: 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-
-        }
-
-        .modal-content.active { transform: scale(1); }
-
-        .ip-display { 
-
-            background: #000; padding: 35px; border-radius: 25px; font-family: 'JetBrains Mono'; 
-
-            font-size: 2.5rem; color: var(--secondary); margin: 40px 0; border: 1px solid var(--border);
-
-            text-shadow: 0 0 30px rgba(0, 210, 255, 0.4);
-
-        }
-
-
-
-        /* --- 9. SPEED TEST GUI --- */
-
-        .gauge-container {
-
-            width: 400px; height: 400px; margin: 40px auto; position: relative;
-
-            display: flex; align-items: center; justify-content: center;
-
-            border: 20px solid var(--border); border-radius: 50%;
-
-            border-top-color: var(--primary);
-
-        }
-
-        .speed-val { font-size: 5rem; font-weight: 900; }
-
-
-
+        .coin-box { font-size: 3rem; color: gold; animation: spin 1s infinite linear; margin-bottom: 20px; }
+        @keyframes spin { from { transform: rotateY(0deg); } to { transform: rotateY(360deg); } }
     </style>
-
 </head>
+<body>
 
-<body class="theme-cyber">
-
-
-
-    <div class="animated-bg"></div>
-
-    <div class="bg-orb"></div>
-
-
-
-    <div id="login-overlay">
-
-        <div class="login-box">
-
-            <div class="logo-area">
-
-                <h1>ZEENTX<span>PRO</span></h1>
-
-                <p style="color: var(--text-dim); margin-top: 10px;">Military-Grade Encryption Access</p>
-
-            </div>
-
-
-
-            <div class="auth-switch">
-
-                <div class="auth-btn active" id="tab-login" onclick="setAuthMode('login')">LOGOWANIE</div>
-
-                <div class="auth-btn" id="tab-reg" onclick="setAuthMode('reg')">REJESTRACJA</div>
-
-            </div>
-
-
-
-            <div class="input-wrap">
-
-                <i class="fas fa-user-shield"></i>
-
-                <input type="text" id="in-user" placeholder="Nazwa profilu">
-
-            </div>
-
-
-
-            <div class="input-wrap">
-
-                <i class="fas fa-key"></i>
-
-                <input type="password" id="in-pass" placeholder="Klucz dostępu">
-
-            </div>
-
-
-
-            <button class="submit-btn" onclick="executeAuth()" id="auth-main-btn">AUTORYZUJ WEJŚCIE</button>
-
-            
-
-            <div onclick="bypassSystem()" style="margin-top: 40px; color: #111; font-size: 0.7rem; cursor: pointer;">
-
-                [DEBUG_BYPASS_MODE]
-
-            </div>
-
-        </div>
-
-    </div>
-
-
+    <div id="wallpaper-engine" class="wp-cyber"></div>
 
     <div id="app-shell">
-
         <aside class="side-bar">
-
-            <div class="side-logo">
-
-                <h2>ZEENTX<span>PL</span></h2>
-
-            </div>
-
-
-
+            <div class="logo"><i class="fas fa-terminal"></i> ZEENTX OS</div>
             <nav class="nav-menu">
-
-                <div class="nav-section">Główne Funkcje</div>
-
-                <div class="nav-item active" onclick="navTo('nodes', this)">
-
-                    <i class="fas fa-network-wired"></i> Węzły Sieciowe
-
-                </div>
-
-                <div class="nav-item" onclick="navTo('speedtest', this)">
-
-                    <i class="fas fa-tachometer-alt"></i> Speed Test Pro
-
-                </div>
-
-                <div class="nav-item" onclick="navTo('stealth', this)">
-
-                    <i class="fas fa-mask"></i> Stealth Guard
-
-                </div>
-
-
-
-                <div class="nav-section">Preferencje</div>
-
-                <div class="nav-item" onclick="navTo('settings', this)">
-
-                    <i class="fas fa-palette"></i> Zmień Tło
-
-                </div>
-
-                <div id="admin-nav" class="nav-item" style="display:none; color: var(--admin-red);" onclick="navTo('admin', this)">
-
-                    <i class="fas fa-terminal"></i> Database Root
-
-                </div>
-
+                <div class="nav-item active" onclick="showV(this, 'dash')"><i class="fas fa-home"></i> Panel</div>
+                <div class="nav-item" onclick="showV(this, 'vpn')"><i class="fas fa-globe"></i> Serwery VPN</div>
+                <div class="nav-item" onclick="showV(this, 'wp')"><i class="fas fa-image"></i> Tapety</div>
+                <div class="nav-item" onclick="showV(this, 'mario')"><i class="fas fa-gamepad"></i> Opcje Mario</div>
             </nav>
-
-
-
-            <div style="padding: 30px;">
-
-                <button onclick="location.reload()" style="width: 100%; padding: 18px; background: rgba(255,71,71,0.1); border: 1px solid var(--admin-red); border-radius: 20px; color: var(--admin-red); font-weight: 800; cursor: pointer;">
-
-                    WYLOGUJ (KILL SESJA)
-
-                </button>
-
-            </div>
-
+            <button onclick="location.reload()" style="padding: 10px; background: none; border: 1px solid gray; color: gray; border-radius: 10px; cursor: pointer;">Restart</button>
         </aside>
 
-
-
-        <main class="main-stage">
-
-            <header class="header-bar">
-
-                <div>
-
-                    <h1 id="page-title" style="font-size: 2.2rem; font-weight: 800;">Węzły Sieciowe</h1>
-
-                    <p style="color: var(--text-dim); font-family: 'JetBrains Mono'; margin-top: 5px;" id="sys-clock">SYSTEM_BOOTING...</p>
-
+        <main class="main-content">
+            <div id="v-dash" class="view active">
+                <h1>Witaj w ZEENTX</h1>
+                <p style="color: gray; margin-bottom: 30px;">System gotowy do pracy.</p>
+                <div class="grid">
+                    <div class="node-card"><h3>PING</h3><p id="ping">-- ms</p></div>
+                    <div class="node-card"><h3>STATUS</h3><p style="color: var(--primary)">ZABEZPIECZONY</p></div>
                 </div>
-
-
-
-                <div class="user-widget">
-
-                    <div style="text-align: right">
-
-                        <b id="user-display">Agent</b><br>
-
-                        <span style="color: gold; font-size: 0.7rem; font-weight: 900;"><i class="fas fa-crown"></i> ULTIMATE ACCESS</span>
-
-                    </div>
-
-                    <div class="avatar-box" id="user-initial">?</div>
-
-                </div>
-
-            </header>
-
-
-
-            <div class="view-port">
-
-                
-
-                <div id="view-nodes" class="view active">
-
-                    <div class="stats-grid">
-
-                        <div class="stat-box">
-
-                            <label>Szyfrowanie</label>
-
-                            <h3 style="color: var(--primary)">AES-256</h3>
-
-                            <i class="fas fa-lock"></i>
-
-                        </div>
-
-                        <div class="stat-box">
-
-                            <label>Aktywne Tunery</label>
-
-                            <h3 id="server-count">0</h3>
-
-                            <i class="fas fa-broadcast-tower"></i>
-
-                        </div>
-
-                        <div class="stat-box">
-
-                            <label>Średni Ping</label>
-
-                            <h3 style="color: var(--secondary)">12 ms</h3>
-
-                            <i class="fas fa-bolt"></i>
-
-                        </div>
-
-                    </div>
-
-
-
-                    <div class="servers-container" id="nodes-engine">
-
-                        </div>
-
-                </div>
-
-
-
-                <div id="view-speedtest" class="view">
-
-                    <div class="admin-box" style="text-align: center;">
-
-                        <h2>High-Performance Speed Analyzer</h2>
-
-                        <div class="gauge-container">
-
-                            <div style="text-align: center;">
-
-                                <span class="speed-val" id="spd-meter">0</span><br>
-
-                                <b style="color: var(--primary); letter-spacing: 5px;">MBPS</b>
-
-                            </div>
-
-                        </div>
-
-                        <button class="submit-btn" style="width: 300px;" onclick="runSpeedTest()">INICJUJ TEST</button>
-
-                    </div>
-
-                </div>
-
-
-
-                <div id="view-settings" class="view">
-
-                    <div class="admin-box">
-
-                        <h2>Personalizacja Środowiska</h2>
-
-                        <p style="color: var(--text-dim); margin-bottom: 30px;">Wybierz schemat kolorystyczny i tło dla swojego interfejsu.</p>
-
-                        
-
-                        <div class="theme-selector">
-
-                            <div class="theme-btn active" id="th-cyber" onclick="updateTheme('cyber')">
-
-                                <i class="fas fa-atom"></i> Cyber
-
-                            </div>
-
-                            <div class="theme-btn" id="th-blood" onclick="updateTheme('blood')">
-
-                                <i class="fas fa-tint"></i> Blood
-
-                            </div>
-
-                            <div class="theme-btn" id="th-ocean" onclick="updateTheme('ocean')">
-
-                                <i class="fas fa-water"></i> Ocean
-
-                            </div>
-
-                            <div class="theme-btn" id="th-forest" onclick="updateTheme('forest')">
-
-                                <i class="fas fa-tree"></i> Forest
-
-                            </div>
-
-                            <div class="theme-btn" id="th-gold" onclick="updateTheme('gold')">
-
-                                <i class="fas fa-coins"></i> Gold
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-
-                <div id="view-stealth" class="view">
-
-                    <div class="admin-box">
-
-                        <h2>Advanced Stealth Module</h2>
-
-                        <div style="margin-top: 30px;">
-
-                            <div style="background: rgba(255,255,255,0.03); padding: 25px; border-radius: 20px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--border);">
-
-                                <div><b>Maskowanie Ruchu UDP</b><br><small style="color: var(--text-dim);">Ukrywa użycie VPN przed dostawcą ISP</small></div>
-
-                                <div style="width: 60px; height: 30px; background: var(--success); border-radius: 15px; position: relative;"><div style="position: absolute; right: 5px; top: 5px; width: 20px; height: 20px; background: white; border-radius: 50%;"></div></div>
-
-                            </div>
-
-                            <div style="background: rgba(255,255,255,0.03); padding: 25px; border-radius: 20px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--border);">
-
-                                <div><b>Double Hop (Cascading)</b><br><small style="color: var(--text-dim);">Łączy przez dwa serwery jednocześnie</small></div>
-
-                                <div style="width: 60px; height: 30px; background: #333; border-radius: 15px; position: relative;"><div style="position: absolute; left: 5px; top: 5px; width: 20px; height: 20px; background: white; border-radius: 50%;"></div></div>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-
-                <div id="view-admin" class="view">
-
-                    <div class="admin-box">
-
-                        <h2 style="color: var(--admin-red);">Database Management Console</h2>
-
-                        <table class="data-table">
-
-                            <thead>
-
-                                <tr><th>UID (System ID)</th><th>Klucz (MD5 Hash)</th><th>Ranga</th><th>Akcje</th></tr>
-
-                            </thead>
-
-                            <tbody id="admin-db-list"></tbody>
-
-                        </table>
-
-                    </div>
-
-                </div>
-
-
-
             </div>
 
+            <div id="v-vpn" class="view">
+                <h1>Wybierz Serwer</h1>
+                <div class="grid">
+                    <div class="node-card" onclick="alert('Łączenie...')"><h1>🇵🇱</h1><b>Polska</b></div>
+                    <div class="node-card" onclick="alert('Łączenie...')"><h1>🇺🇸</h1><b>USA</b></div>
+                    <div class="node-card" onclick="alert('Łączenie...')"><h1>🇯🇵</h1><b>Japonia</b></div>
+                </div>
+            </div>
+
+            <div id="v-wp" class="view">
+                <h1>Zmień Tapetę</h1>
+                <div class="grid">
+                    <div class="node-card" onclick="setW('cyber')"><b>Neon City</b></div>
+                    <div class="node-card" onclick="setW('matrix')"><b>Matrix</b></div>
+                    <div class="node-card" onclick="setW('void')"><b>Dark Void</b></div>
+                </div>
+            </div>
+
+            <div id="v-mario" class="view">
+                <div class="node-card" style="max-width: 500px; margin: 0 auto;">
+                    <div class="coin-box"><i class="fas fa-coins"></i></div>
+                    <h2>MARIO MOD</h2>
+                    <p style="margin: 20px 0;">Włącz tryb retro, aby zmienić wygląd całego systemu!</p>
+                    <label class="switch">
+                        <input type="checkbox" id="mtoggle" onchange="toggleM()">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
         </main>
-
     </div>
-
-
-
-    <div id="connection-modal">
-
-        <div class="modal-content" id="m-win">
-
-            <div id="modal-flag" style="font-size: 7rem;">🌍</div>
-
-            <h2 id="modal-loc" style="font-size: 2.5rem; margin: 25px 0;">Lokalizacja</h2>
-
-            <p style="color: var(--text-dim); font-weight: 600;">Status: Połączono za pomocą protokołu VenturaX</p>
-
-            <div class="ip-box" id="modal-ip">0.0.0.0</div>
-
-            <button class="submit-btn" onclick="disconnectVPN()">ROZŁĄCZ TUNEL</button>
-
-        </div>
-
-    </div>
-
-
 
     <script>
-
-        /**
-
-         * ZEENTX SYSTEM INITIALIZATION
-
-         * GUI FIXED VERSION 3.5
-
-         */
-
-
-
-        // Local Database Setup
-
-        let db = JSON.parse(localStorage.getItem('zeentx_core_v35')) || { "admin": "admin123" };
-
-        let currentAuthMode = 'login';
-
-        
-
-        const locs = [
-
-            { n: 'Polska', f: '🇵🇱', ip: '185.122.44.11', c: 'Warszawa' },
-
-            { n: 'Niemcy', f: '🇩🇪', ip: '45.155.12.1', c: 'Frankfurt' },
-
-            { n: 'USA West', f: '🇺🇸', ip: '104.22.88.192', c: 'Los Angeles' },
-
-            { n: 'Japonia', f: '🇯🇵', ip: '160.25.10.1', c: 'Tokyo' },
-
-            { n: 'Szwajcaria', f: '🇨🇭', ip: '82.102.1.44', c: 'Zurich' },
-
-            { n: 'UK London', f: '🇬🇧', ip: '141.22.1.2', c: 'London' },
-
-            { n: 'Brazylia', f: '🇧🇷', ip: '177.5.99.1', c: 'Rio De Janeiro' },
-
-            { n: 'Singapur', f: '🇸🇬', ip: '103.1.2.5', c: 'Singapore' }
-
-        ];
-
-
-
-        // --- AUTH SYSTEM ---
-
-
-
-        function setAuthMode(mode) {
-
-            currentAuthMode = mode;
-
-            document.getElementById('tab-login').classList.toggle('active', mode === 'login');
-
-            document.getElementById('tab-reg').classList.toggle('active', mode === 'reg');
-
-            document.getElementById('auth-main-btn').innerText = mode === 'login' ? 'AUTORYZUJ WEJŚCIE' : 'STWÓRZ PROFIL';
-
-        }
-
-
-
-        function executeAuth() {
-
-            const u = document.getElementById('in-user').value.trim();
-
-            const p = document.getElementById('in-pass').value.trim();
-
-
-
-            if(u.length < 3 || p.length < 3) return alert("Błąd: Dane wejściowe zbyt krótkie (Min. 3 znaki)");
-
-
-
-            if(currentAuthMode === 'reg') {
-
-                if(db[u]) return alert("Błąd: UID " + u + " jest już zajęte.");
-
-                db[u] = p;
-
-                saveToDisk();
-
-                alert("Sukces: Profil " + u + " został zarejestrowany.");
-
-                setAuthMode('login');
-
-            } else {
-
-                if(db[u] === p) {
-
-                    launchSystem(u);
-
-                } else {
-
-                    alert("Błąd: Nieprawidłowe poświadczenia.");
-
-                }
-
-            }
-
-        }
-
-
-
-        function saveToDisk() {
-
-            localStorage.setItem('zeentx_core_v35', JSON.stringify(db));
-
-        }
-
-
-
-        // --- CORE SYSTEM ENGINE ---
-
-
-
-        function launchSystem(user) {
-
-            const overlay = document.getElementById('login-overlay');
-
-            const shell = document.getElementById('app-shell');
-
-
-
-            overlay.style.opacity = '0';
-
-            overlay.style.transform = 'translateY(-100%)';
-
-            
-
-            setTimeout(() => {
-
-                overlay.style.display = 'none';
-
-                shell.style.display = 'grid';
-
-                setTimeout(() => shell.style.opacity = '1', 100);
-
-            }, 800);
-
-
-
-            document.getElementById('user-display').innerText = user;
-
-            document.getElementById('user-initial').innerText = user[0].toUpperCase();
-
-
-
-            if(user === 'admin') {
-
-                document.getElementById('admin-nav').style.display = 'flex';
-
-                renderAdminConsole();
-
-            }
-
-
-
-            renderNodes();
-
-            startTimeEngine();
-
-        }
-
-
-
-        function startTimeEngine() {
-
-            setInterval(() => {
-
-                const now = new Date();
-
-                document.getElementById('sys-clock').innerText = "CORE_TIME: " + now.toLocaleTimeString() + " | LATENCY: " + (Math.random()*15).toFixed(2) + "ms";
-
-            }, 1000);
-
-        }
-
-
-
-        function renderNodes() {
-
-            const container = document.getElementById('nodes-engine');
-
-            container.innerHTML = '';
-
-            
-
-            // Generate 60 nodes for stress testing and visual impact
-
-            for(let i=0; i<60; i++) {
-
-                const l = locs[i % locs.length];
-
-                const card = document.createElement('div');
-
-                card.className = 'node-card';
-
-                card.innerHTML = `
-
-                    <div class="online-dot"></div>
-
-                    <div class="flag-icon">${l.f}</div>
-
-                    <div>
-
-                        <b style="font-size: 1.2rem;">${l.n}</b><br>
-
-                        <span style="color: var(--text-dim); font-size: 0.8rem;">ID: VNT-${2000+i} // ${l.c}</span>
-
-                    </div>
-
-                `;
-
-                card.onclick = () => connectVPN(l);
-
-                container.appendChild(card);
-
-            }
-
-            document.getElementById('server-count').innerText = "60/150";
-
-        }
-
-
-
-        // --- VPN CONNECTION ---
-
-
-
-        function connectVPN(node) {
-
-            const modal = document.getElementById('connection-modal');
-
-            const win = document.getElementById('m-win');
-
-            
-
-            document.getElementById('modal-flag').innerText = node.f;
-
-            document.getElementById('modal-loc').innerText = node.n;
-
-            document.getElementById('modal-ip').innerText = node.ip;
-
-
-
-            modal.style.display = 'flex';
-
-            setTimeout(() => {
-
-                modal.style.opacity = '1';
-
-                win.classList.add('active');
-
-            }, 50);
-
-        }
-
-
-
-        function disconnectVPN() {
-
-            const modal = document.getElementById('connection-modal');
-
-            const win = document.getElementById('m-win');
-
-            win.classList.remove('active');
-
-            modal.style.opacity = '0';
-
-            setTimeout(() => modal.style.display = 'none', 600);
-
-        }
-
-
-
-        // --- NAVIGATION & VIEWS ---
-
-
-
-        function navTo(viewId, el) {
-
+        function showV(el, id) {
             document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-
-            
-
-            document.getElementById('view-' + viewId).classList.add('active');
-
+            document.getElementById('v-' + id).classList.add('active');
             el.classList.add('active');
-
-            
-
-            const map = {
-
-                'nodes': 'Węzły Sieciowe',
-
-                'speedtest': 'Analiza Prędkości Portu',
-
-                'stealth': 'Stealth Privacy Guard',
-
-                'settings': 'Konfiguracja GUI',
-
-                'admin': 'Zarządzanie Systemem'
-
-            };
-
-            document.getElementById('page-title').innerText = map[viewId];
-
         }
 
-
-
-        // --- THEME ENGINE ---
-
-
-
-        function updateTheme(theme) {
-
-            document.body.className = 'theme-' + theme;
-
-            document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
-
-            document.getElementById('th-' + theme).classList.add('active');
-
+        function setW(type) {
+            document.getElementById('wallpaper-engine').className = 'wp-' + type;
         }
 
-
-
-        // --- SPEED TEST PRO ---
-
-
-
-        function runSpeedTest() {
-
-            let current = 0;
-
-            const target = 750 + Math.random() * 200;
-
-            const meter = document.getElementById('spd-meter');
-
-            
-
-            const run = setInterval(() => {
-
-                current += 19;
-
-                meter.innerText = Math.floor(current);
-
-                if(current >= target) {
-
-                    clearInterval(run);
-
-                    meter.innerText = Math.floor(target);
-
-                }
-
-            }, 30);
-
-        }
-
-
-
-        // --- ADMIN CONSOLE ---
-
-
-
-        function renderAdminConsole() {
-
-            const list = document.getElementById('admin-db-list');
-
-            list.innerHTML = '';
-
-            for(let user in db) {
-
-                if(user === 'admin') continue;
-
-                const row = document.createElement('tr');
-
-                row.innerHTML = `
-
-                    <td>${user}</td>
-
-                    <td>${db[user].replace(/./g, '*')}</td>
-
-                    <td><b style="color: gold">ELITE_LEVEL</b></td>
-
-                    <td><button class="del-user" onclick="deleteUser('${user}')">USUŃ</button></td>
-
-                `;
-
-                list.appendChild(row);
-
+        function toggleM() {
+            const on = document.getElementById('mtoggle').checked;
+            if(on) {
+                document.body.classList.add('mario-active');
+                setW('mario');
+            } else {
+                document.body.classList.remove('mario-active');
+                setW('cyber');
             }
-
         }
 
-
-
-        function deleteUser(u) {
-
-            if(confirm("Czy na pewno chcesz permanentnie usunąć profil: " + u + "?")) {
+        setInterval(() => {
+            document.getElementById('ping').innerText = Math.floor(Math.random() * 30 + 5) + " ms";
+        }, 2000);
+    </script>
+</body>
+</html>
