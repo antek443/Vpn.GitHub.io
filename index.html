@@ -3,267 +3,244 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZeentxPL VPN | Cyber-Gen 2026</title>
+    <title>ZeentxPL VPN | Ultimate Experience</title>
 
     <style>
         :root {
-            --primary: #00f2ff;
-            --secondary: #7000ff;
-            --accent: #ff00c1;
-            --bg: #050508;
-            --glass: rgba(15, 15, 25, 0.8);
+            --primary: #ff4ecd;
+            --secondary: #00d2ff;
+            --discord: #5865F2;
         }
 
         body {
             margin: 0;
-            padding: 20px;
-            font-family: 'Orbitron', sans-serif; /* Futurystyczna czcionka */
-            background-color: var(--bg);
+            font-family: 'Segoe UI', sans-serif;
             color: white;
+            background: #0a0a12;
+            overflow-x: hidden;
             display: flex;
             flex-direction: column;
             align-items: center;
             min-height: 100vh;
-            overflow-x: hidden;
         }
 
-       
-        .bg-grid {
+        
+        .bg {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background-image: 
-                linear-gradient(rgba(0, 242, 255, 0.05) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 242, 255, 0.05) 1px, transparent 1px);
-            background-size: 50px 50px;
-            perspective: 500px;
-            z-index: -1;
-            transform: rotateX(60deg);
-            transform-origin: top;
-            animation: gridMove 10s linear infinite;
+            background: linear-gradient(45deg, #0f0c29, #302b63, #24243e);
+            background-size: 400% 400%;
+            animation: gradient 15s infinite;
+            z-index: -2;
         }
 
-        @keyframes gridMove {
-            from { background-position: 0 0; }
-            to { background-position: 0 50px; }
+        @keyframes gradient {
+            0% {background-position: 0% 50%}
+            50% {background-position: 100% 50%}
+            100% {background-position: 0% 50%}
         }
 
         h1 {
             font-size: 3.5rem;
-            text-transform: uppercase;
-            letter-spacing: 5px;
-            background: linear-gradient(to bottom, #fff 30%, var(--primary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 40px;
-            filter: drop-shadow(0 0 15px var(--primary));
+            margin-top: 40px;
+            text-shadow: 0 0 20px var(--primary);
+            animation: float 3s infinite ease-in-out;
         }
 
-        .main-container {
-            width: 100%;
-            max-width: 1100px;
-            display: grid;
-            grid-template-columns: 1fr 2fr;
-            gap: 20px;
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
         }
 
+        .container { width: 90%; max-width: 1000px; z-index: 1; }
+
+        /* Szklane pudełka */
         .box {
-            background: var(--glass);
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            border-radius: 25px;
             border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            padding: 25px;
-            position: relative;
-            overflow: hidden;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+            padding: 30px;
+            margin: 20px 0;
+            transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        /* Efekt podnoszenia z poświatą */
         .box:hover {
-            transform: translateY(-15px) rotateX(2deg);
+            transform: translateY(-15px);
             border-color: var(--primary);
-            box-shadow: 0 20px 50px rgba(0, 242, 255, 0.2);
+            box-shadow: 0 20px 50px rgba(255, 78, 205, 0.2);
         }
 
-        /* Przyciski krajów - Styl High-Tech */
-        .country-grid {
+        /* Siatka krajów */
+        .grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
             gap: 15px;
         }
 
         .card {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 15px;
-            border-radius: 10px;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            border-radius: 20px;
             cursor: pointer;
-            text-align: center;
-            position: relative;
-            transition: 0.2s;
-            overflow: hidden;
-        }
-
-        .card::before {
-            content: '';
-            position: absolute;
-            top: 50%; left: 50%;
-            width: 0; height: 0;
-            background: var(--primary);
-            opacity: 0.3;
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            transition: width 0.4s, height 0.4s;
-        }
-
-        .card:active::before {
-            width: 300px;
-            height: 300px;
-            opacity: 0;
+            transition: 0.3s;
+            border: 1px solid transparent;
         }
 
         .card:hover {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: var(--primary);
-            transform: scale(1.05);
-            box-shadow: 0 0 15px var(--primary);
-        }
-
-        /* Status Bar */
-        .status-bar {
-            height: 4px;
-            width: 100%;
-            background: #222;
-            margin: 15px 0;
-            border-radius: 2px;
-            overflow: hidden;
-        }
-
-        .status-progress {
-            height: 100%;
-            width: 0%;
             background: var(--primary);
-            box-shadow: 0 0 10px var(--primary);
+            transform: scale(1.1) rotate(3deg);
         }
 
-        /* Powiadomienie (Toast) */
-        #toast {
+        /* MODAL (GUI po kliknięciu) */
+        .modal-overlay {
             position: fixed;
-            top: -100px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: var(--primary);
-            color: black;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+
+        .modal {
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            padding: 40px;
+            border-radius: 30px;
+            border: 2px solid var(--primary);
+            text-align: center;
+            width: 90%;
+            max-width: 400px;
+            transform: scale(0.5);
+            opacity: 0;
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .modal.active { transform: scale(1); opacity: 1; }
+
+        .btn {
             padding: 15px 30px;
+            border: none;
             border-radius: 50px;
             font-weight: bold;
-            transition: 0.5s;
-            z-index: 1000;
-            box-shadow: 0 0 30px var(--primary);
+            cursor: pointer;
+            margin: 10px;
+            transition: 0.3s;
+            text-transform: uppercase;
+            text-decoration: none;
+            display: inline-block;
         }
 
-        .shake { animation: shake 0.3s ease-in-out; }
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-5px); }
-            75% { transform: translateX(5px); }
-        }
+        .btn-copy { background: var(--primary); color: white; box-shadow: 0 0 20px var(--primary); }
+        .btn-dc { background: var(--discord); color: white; box-shadow: 0 0 20px var(--discord); }
+        .btn:hover { transform: scale(1.1); filter: brightness(1.2); }
 
-        .ip-box {
+        #ip-text {
             font-size: 1.5rem;
-            color: var(--primary);
-            text-shadow: 0 0 10px var(--primary);
+            color: var(--secondary);
+            margin: 20px 0;
+            font-family: monospace;
             background: rgba(0,0,0,0.5);
             padding: 10px;
-            border-radius: 5px;
-            border-left: 3px solid var(--primary);
+            border-radius: 10px;
         }
 
+        .close-modal {
+            position: absolute;
+            top: 15px; right: 20px;
+            cursor: pointer;
+            font-size: 1.5rem;
+        }
     </style>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
-    <div class="bg-grid"></div>
-    <div id="toast">SYSTEM: IP COPIED TO CLIPBOARD</div>
+    <div class="bg"></div>
 
-    <h1>ZeentxPL // VPN</h1>
-
-    <div class="main-container">
-        <div class="box">
-            <h2 style="color: var(--primary)">DASHBOARD</h2>
-            <p>Real-Time Tracking</p>
-            <div class="ip-box" id="real-ip">0.0.0.0</div>
+    <div class="modal-overlay" id="overlay">
+        <div class="modal" id="modal">
+            <span class="close-modal" onclick="closeModal()">×</span>
+            <h2 id="modal-title">Łączenie...</h2>
+            <div id="ip-text">---.---.---.---</div>
+            <button class="btn btn-copy" onclick="copyToClipboard()">📋 SKOPIUJ IP</button>
             <br>
-            <button onclick="fetchIP()" style="width:100%; padding:15px; background:var(--primary); border:none; font-family:'Orbitron'; cursor:pointer; font-weight:bold;">INITIALIZE SCAN</button>
-            <hr style="opacity:0.1; margin:20px 0;">
-            <div id="connection-status">STATUS: DISCONNECTED</div>
-            <div class="status-bar"><div class="status-progress" id="progress"></div></div>
+            <a href="https://discord.gg/TWOJ-LINK" target="_blank" class="btn btn-dc">💬 MÓJ DISCORD</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <h1>🌍 ZeentxPL VPN</h1>
+
+        <div class="box">
+            <h2>🛡️ Status Systemu</h2>
+            <button class="btn btn-copy" style="background:#00d2ff; box-shadow: 0 0 15px #00d2ff;" onclick="alert('Twoje bazowe IP jest chronione!')">SPRAWDŹ ZABEZPIECZENIA</button>
         </div>
 
         <div class="box">
-            <h2 style="color: var(--accent)">NETWORK NODES</h2>
-            <div class="country-grid" id="grid"></div>
+            <h2>Wybierz węzeł połączenia:</h2>
+            <div class="grid" id="grid"></div>
         </div>
     </div>
 
     <script>
-        const nodes = [
-            {n: 'POLAND', f: '🇵🇱'}, {n: 'USA', f: '🇺🇸'}, {n: 'GERMANY', f: '🇩🇪'}, {n: 'JAPAN', f: '🇯🇵'},
-            {n: 'UK', f: '🇬🇧'}, {n: 'CANADA', f: '🇨🇦'}, {n: 'BRAZIL', f: '🇧🇷'}, {n: 'FRANCE', f: '🇫🇷'},
-            {n: 'KOREA', f: '🇰🇷'}, {n: 'RUSSIA', f: '🇷🇺'}, {n: 'CHINA', f: '🇨🇳'}, {n: 'SWEDEN', f: '🇸🇪'},
-            {n: 'NORWAY', f: '🇳🇴'}, {n: 'ITALY', f: '🇮🇹'}, {n: 'SPAIN', f: '🇪🇸'}, {n: 'DUBAI', f: '🇦🇪'},
-            {n: 'MEXICO', f: '🇲🇽'}, {n: 'INDIA', f: '🇮🇳'}, {n: 'AUSTRALIA', f: '🇦🇺'}, {n: 'EGYPT', f: '🇪🇬'}
+        const kraje = [
+            {n: 'USA', f: '🇺🇸'}, {n: 'Polska', f: '🇵🇱'}, {n: 'Niemcy', f: '🇩🇪'}, {n: 'Japonia', f: '🇯🇵'},
+            {n: 'UK', f: '🇬🇧'}, {n: 'Francja', f: '🇫🇷'}, {n: 'Kanada', f: '🇨🇦'}, {n: 'Brazylia', f: '🇧🇷'},
+            {n: 'Włochy', f: '🇮🇹'}, {n: 'Australia', f: '🇦🇺'}, {n: 'Holandia', f: '🇳🇱'}, {n: 'Szwecja', f: '🇸🇪'},
+            {n: 'Szwajcaria', f: '🇨🇭'}, {n: 'Norwegia', f: '🇳🇴'}, {n: 'Hiszpania', f: '🇪🇸'}, {n: 'Indie', f: '🇮🇳'},
+            {n: 'Meksyk', f: '🇲🇽'}, {n: 'Singapur', f: '🇸🇬'}, {n: 'Islandia', f: '🇮🇸'}, {n: 'Korea', f: '🇰🇷'}
         ];
 
+        let currentIP = "";
+
+        // Generowanie kafelków
         const grid = document.getElementById('grid');
-        nodes.forEach(node => {
-            const div = document.createElement('div');
-            div.className = 'card';
-            div.innerHTML = `<span style="font-size:2rem">${node.f}</span><br><small>${node.n}</small>`;
-            div.onclick = (e) => connect(node.n, div);
-            grid.appendChild(div);
+        kraje.forEach(k => {
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.innerHTML = `<span style="font-size:2.5rem">${k.f}</span><br><b>${k.n}</b>`;
+            card.onclick = () => openModal(k.n, k.f);
+            grid.appendChild(card);
         });
 
-        function fetchIP() {
-            const el = document.getElementById('real-ip');
-            el.innerText = "SCANNING...";
-            fetch('https://api.ipify.org?format=json')
-                .then(r => r.json())
-                .then(d => el.innerText = d.ip)
-                .catch(() => el.innerText = "ERROR");
-        }
-
-        function connect(name, element) {
-            // Animacja paska
-            const progress = document.getElementById('progress');
-            const status = document.getElementById('connection-status');
-            const fakeIP = `${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}.0.${Math.floor(Math.random()*255)}`;
+        function openModal(nazwa, flaga) {
+            currentIP = `${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}`;
             
-            status.innerText = `CONNECTING TO: ${name}...`;
-            progress.style.transition = "none";
-            progress.style.width = "0%";
+            document.getElementById('modal-title').innerText = `${flaga} POŁĄCZONO Z ${nazwa}`;
+            document.getElementById('ip-text').innerText = currentIP;
             
-            // Efekt wstrząsu boku
-            element.closest('.box').classList.add('shake');
-            setTimeout(() => element.closest('.box').classList.remove('shake'), 300);
-
+            document.getElementById('overlay').style.display = 'flex';
             setTimeout(() => {
-                progress.style.transition = "width 0.8s ease-in";
-                progress.style.width = "100%";
-                
-                setTimeout(() => {
-                    status.innerText = `STABLE: ${name} (${fakeIP})`;
-                    navigator.clipboard.writeText(fakeIP);
-                    showToast(`NODE ${name} ACTIVE: ${fakeIP}`);
-                }, 850);
-            }, 50);
+                document.getElementById('modal').classList.add('active');
+            }, 10);
         }
 
-        function showToast(msg) {
-            const t = document.getElementById('toast');
-            t.innerText = msg;
-            t.style.top = "20px";
-            setTimeout(() => t.style.top = "-100px", 3000);
+        function closeModal() {
+            document.getElementById('modal').classList.remove('active');
+            setTimeout(() => {
+                document.getElementById('overlay').style.display = 'none';
+            }, 300);
+        }
+
+        function copyToClipboard() {
+            navigator.clipboard.writeText(currentIP).then(() => {
+                const btn = document.querySelector('.btn-copy');
+                const originalText = btn.innerText;
+                btn.innerText = "✅ SKOPIOWANO!";
+                btn.style.background = "#00ff88";
+                setTimeout(() => {
+                    btn.innerText = originalText;
+                    btn.style.background = "";
+                }, 2000);
+            });
+        }
+
+        // Zamknij po kliknięciu poza modalem
+        window.onclick = function(event) {
+            if (event.target == document.getElementById('overlay')) {
+                closeModal();
+            }
         }
     </script>
 </body>
