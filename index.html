@@ -3,182 +3,594 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZEENTX OMNI-OS | index.html</title>
+    <title>ZEENTX SOCIAL | GLOBAL NETWORK OS</title>
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&family=JetBrains+Mono:wght@400;700&family=Inter:wght@300;600;900&family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@400;600;800;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     
     <style>
+        /* -------------------------------------------------------------------
+           1. CSS RESET & CORE VARIABLES (SYSTEM DESIGN)
+           -------------------------------------------------------------------
+        */
         :root {
-            --primary: #00fff2;
-            --secondary: #7000ff;
-            --bg-deep: #05050a;
-            --glass: rgba(13, 13, 21, 0.85);
-            --border: rgba(255, 255, 255, 0.1);
-            --mario-red: #e52521;
-            --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            --p: #ff4ecd; /* Primary */
+            --p-rgb: 255, 78, 205;
+            --s: #00d2ff; /* Secondary */
+            --a: #7000ff; /* Accent */
+            --bg: #030307;
+            --side: #080810;
+            --card: rgba(255, 255, 255, 0.04);
+            --card-h: rgba(255, 255, 255, 0.08);
+            --brd: rgba(255, 255, 255, 0.08);
+            --txt: #ffffff;
+            --dim: #777785;
+            --ok: #00ff88;
+            --err: #ff4747;
+            --warn: #ffcc00;
+            --shadow: 0 20px 50px rgba(0,0,0,0.8);
+            --glass: blur(25px) saturate(180%);
+            --anim: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+        /* THEME OVERRIDES */
+        body.theme-nebula { --p: #00d2ff; --p-rgb: 0, 210, 255; --a: #ff4ecd; --bg: #02050a; }
+        body.theme-lava { --p: #ff4747; --p-rgb: 255, 71, 71; --a: #ffcc00; --bg: #0a0202; }
+        body.theme-emerald { --p: #00ff88; --p-rgb: 0, 255, 136; --a: #00d2ff; --bg: #020a05; }
+        body.theme-gold { --p: #ffcc00; --p-rgb: 255, 204, 0; --a: #ffffff; --bg: #0a0802; }
 
+        * { box-sizing: border-box; margin: 0; padding: 0; outline: none; }
+        
         body, html {
             height: 100vh; width: 100vw;
-            overflow: hidden; font-family: 'Inter', sans-serif;
-            background: var(--bg-deep); color: white;
+            overflow: hidden;
+            background: var(--bg);
+            color: var(--txt);
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
         }
 
-        /* --- SILNIK TAPET --- */
-        #wallpaper-engine {
-            position: fixed; inset: 0; z-index: -1;
-            background-size: cover; background-position: center;
-            transition: 1s all ease-in-out;
+        /* SCROLLBAR CUSTOMIZATION */
+        ::-webkit-scrollbar { width: 4px; height: 4px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--brd); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--p); }
+
+        /* -------------------------------------------------------------------
+           2. ANIMATED BACKGROUND (PERFORMANCE OPTIMIZED)
+           -------------------------------------------------------------------
+        */
+        .bg-engine { position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; }
+        .orb {
+            position: absolute; width: 50vw; height: 50vw;
+            background: radial-gradient(circle, rgba(var(--p-rgb), 0.12) 0%, transparent 70%);
+            filter: blur(120px); border-radius: 50%;
+            animation: float 30s infinite alternate linear;
+        }
+        .orb-2 { right: -10%; bottom: -10%; background: radial-gradient(circle, rgba(0, 210, 255, 0.08) 0%, transparent 70%); animation-delay: -5s; }
+
+        @keyframes float {
+            0% { transform: translate(0,0) rotate(0deg); }
+            100% { transform: translate(15%, 10%) rotate(360deg); }
         }
 
-        .wp-cyber { background-image: url('https://images.unsplash.com/photo-1614850523296-d8c1af93d400?q=80&w=2070'); filter: brightness(0.4); }
-        .wp-mario { background-image: url('https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=2070'); filter: brightness(0.8) sepia(0.3); }
-        .wp-void { background: radial-gradient(circle, #1a1a1a, #000); }
-        .wp-matrix { background-color: #000; background-image: linear-gradient(rgba(0, 255, 70, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 255, 70, 0.1) 1px, transparent 1px); background-size: 30px 30px; }
-
-        /* --- TRYB MARIO --- */
-        body.mario-active {
-            font-family: 'Press Start 2P', cursive;
-            --primary: #ffcc00;
-        }
-        body.mario-active .side-bar { background: var(--mario-red); border-right: 5px solid #000; }
-        body.mario-active .node-card { border: 4px solid #000; background: #fff; color: #000; box-shadow: 8px 8px 0px #000; }
-        body.mario-active .nav-item.active { background: #000; color: #fff; transform: scale(1.1); }
-
-        /* --- STRUKTURA GUI --- */
-        #app-shell {
-            display: grid; grid-template-columns: 280px 1fr; height: 100vh;
-            backdrop-filter: blur(10px);
+        /* -------------------------------------------------------------------
+           3. AUTHENTICATION SYSTEM (SOCIAL LOGIN)
+           -------------------------------------------------------------------
+        */
+        #auth-portal {
+            position: fixed; inset: 0; z-index: 9999;
+            background: var(--bg);
+            display: flex; justify-content: center; align-items: center;
+            transition: transform 1.2s cubic-bezier(0.87, 0, 0.13, 1);
         }
 
-        .side-bar {
-            background: var(--glass); border-right: 1px solid var(--border);
-            padding: 40px 20px; display: flex; flex-direction: column;
+        .auth-card {
+            width: 440px; padding: 50px;
+            background: rgba(10, 10, 20, 0.8);
+            backdrop-filter: var(--glass);
+            border: 1px solid var(--brd);
+            border-radius: 40px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            transform: translateZ(0);
         }
 
-        .logo { font-family: 'Orbitron'; font-size: 1.5rem; text-align: center; margin-bottom: 50px; color: var(--primary); }
+        .auth-card h1 { font-family: 'Poppins'; font-weight: 900; font-size: 2.8rem; letter-spacing: -2px; }
+        .auth-card h1 span { color: var(--p); text-shadow: 0 0 20px rgba(var(--p-rgb), 0.5); }
+        
+        .auth-nav { display: flex; gap: 10px; background: rgba(0,0,0,0.4); padding: 5px; border-radius: 20px; margin: 30px 0; }
+        .auth-tab { flex: 1; padding: 12px; cursor: pointer; border-radius: 15px; font-weight: 800; font-size: 0.8rem; color: var(--dim); transition: var(--anim); }
+        .auth-tab.active { background: var(--p); color: white; }
 
-        .nav-menu { flex-grow: 1; }
-        .nav-item {
-            padding: 15px 20px; border-radius: 12px; cursor: pointer;
-            display: flex; align-items: center; gap: 15px;
-            transition: var(--transition); margin-bottom: 10px;
+        .input-group { position: relative; margin-bottom: 15px; }
+        .input-group i { position: absolute; left: 20px; top: 50%; transform: translateY(-50%); color: var(--dim); }
+        .input-group input {
+            width: 100%; padding: 18px 20px 18px 55px;
+            background: rgba(0,0,0,0.5); border: 1px solid var(--brd);
+            border-radius: 18px; color: white; transition: var(--anim);
         }
-        .nav-item:hover { background: rgba(255,255,255,0.1); }
-        .nav-item.active { background: var(--primary); color: #000; font-weight: bold; }
+        .input-group input:focus { border-color: var(--p); background: rgba(var(--p-rgb), 0.05); }
 
-        .main-content { overflow-y: auto; padding: 50px; }
-        .view { display: none; animation: fadeIn 0.4s ease; }
-        .view.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .btn-action {
+            width: 100%; padding: 18px; border: none; border-radius: 18px;
+            background: var(--p); color: white; font-weight: 900;
+            cursor: pointer; transition: var(--anim); text-transform: uppercase; letter-spacing: 1px;
+        }
+        .btn-action:hover { transform: translateY(-4px); filter: brightness(1.1); box-shadow: 0 10px 25px rgba(var(--p-rgb), 0.4); }
 
-        /* Karty */
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
+        /* -------------------------------------------------------------------
+           4. MAIN LAYOUT (OS STRUCTURE)
+           -------------------------------------------------------------------
+        */
+        #main-os {
+            display: none; height: 100vh; width: 100vw;
+            grid-template-columns: 280px 1fr 320px;
+            opacity: 0; transition: opacity 1s;
+        }
+
+        /* --- LEFT SIDEBAR (NAVIGATION) --- */
+        .sidebar {
+            background: var(--side); border-right: 1px solid var(--brd);
+            display: flex; flex-direction: column; padding: 40px 0;
+        }
+        .nav-link {
+            padding: 16px 30px; display: flex; align-items: center; gap: 18px;
+            color: var(--dim); cursor: pointer; transition: var(--anim);
+            font-weight: 600; margin-bottom: 5px;
+        }
+        .nav-link i { font-size: 1.2rem; width: 25px; }
+        .nav-link:hover, .nav-link.active { color: var(--txt); background: rgba(255,255,255,0.04); }
+        .nav-link.active { border-left: 4px solid var(--p); background: linear-gradient(90deg, rgba(var(--p-rgb), 0.1), transparent); }
+
+        /* --- CENTER AREA (SOCIAL FEED & VIEWS) --- */
+        .viewport { background: rgba(0,0,0,0.2); overflow-y: auto; display: flex; flex-direction: column; }
+        
+        .header {
+            padding: 30px 40px; display: flex; justify-content: space-between; align-items: center;
+            position: sticky; top: 0; background: rgba(var(--bg), 0.8); backdrop-filter: blur(20px); z-index: 100;
+        }
+        
+        .post-box {
+            background: var(--card); border: 1px solid var(--brd); border-radius: 25px;
+            padding: 25px; margin: 0 40px 30px; transition: var(--anim);
+        }
+        .post-box:hover { border-color: var(--p); background: var(--card-h); }
+        .post-header { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; }
+        .post-avatar { width: 45px; height: 45px; border-radius: 15px; background: var(--p); display: flex; align-items: center; justify-content: center; font-weight: 900; }
+        .post-content { line-height: 1.6; color: #ddd; }
+        .post-stats { margin-top: 20px; display: flex; gap: 20px; color: var(--dim); font-size: 0.85rem; }
+        .post-stats i { cursor: pointer; transition: 0.3s; }
+        .post-stats i:hover { color: var(--p); }
+
+        /* --- RIGHT SIDEBAR (WIDGETS & NETWORK) --- */
+        .widgets {
+            background: var(--side); border-left: 1px solid var(--brd);
+            padding: 40px 25px; display: flex; flex-direction: column; gap: 30px;
+        }
+        .widget-card {
+            background: var(--card); border: 1px solid var(--brd); border-radius: 25px; padding: 25px;
+        }
+        .status-pill {
+            display: flex; align-items: center; gap: 10px; font-size: 0.8rem; font-weight: 800;
+            padding: 8px 15px; background: rgba(0,255,136,0.1); color: var(--ok); border-radius: 12px;
+        }
+
+        /* -------------------------------------------------------------------
+           5. SPECIAL VIEWS (VPN, SETTINGS, CHAT)
+           -------------------------------------------------------------------
+        */
+        .view-section { display: none; padding: 0 40px 100px; animation: slideUp 0.6s ease; }
+        .view-section.active { display: block; }
+
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* VPN NODES */
+        .nodes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; }
         .node-card {
-            background: var(--glass); border: 1px solid var(--border);
-            padding: 25px; border-radius: 20px; transition: var(--transition); text-align: center;
+            background: var(--card); border: 1px solid var(--brd); padding: 25px; border-radius: 25px;
+            display: flex; align-items: center; gap: 20px; cursor: pointer; transition: var(--anim);
         }
-        .node-card:hover { transform: translateY(-5px); border-color: var(--primary); }
+        .node-card:hover { transform: scale(1.03); border-color: var(--p); background: var(--card-h); }
+        .node-card .flag { font-size: 2.5rem; }
 
-        /* Przełącznik Mario */
-        .switch { width: 60px; height: 30px; position: relative; display: inline-block; }
-        .switch input { opacity: 0; width: 0; height: 0; }
-        .slider { position: absolute; inset: 0; background: #333; border-radius: 30px; cursor: pointer; transition: .4s; }
-        .slider:before { position: absolute; content: ""; height: 22px; width: 22px; left: 4px; bottom: 4px; background: white; border-radius: 50%; transition: .4s; }
-        input:checked + .slider { background: var(--mario-red); }
-        input:checked + .slider:before { transform: translateX(30px); }
+        /* CHAT SYSTEM */
+        .chat-container { height: 600px; display: flex; flex-direction: column; background: var(--card); border-radius: 30px; border: 1px solid var(--brd); overflow: hidden; }
+        .chat-messages { flex-grow: 1; padding: 30px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; }
+        .msg { max-width: 80%; padding: 15px 20px; border-radius: 20px; font-size: 0.9rem; position: relative; }
+        .msg.sent { align-self: flex-end; background: var(--p); color: white; border-bottom-right-radius: 2px; }
+        .msg.received { align-self: flex-start; background: rgba(255,255,255,0.05); color: var(--txt); border-bottom-left-radius: 2px; }
+        .chat-input { padding: 20px; display: flex; gap: 15px; background: rgba(0,0,0,0.3); border-top: 1px solid var(--brd); }
+        .chat-input input { flex-grow: 1; background: transparent; border: none; color: white; font-size: 1rem; }
 
-        .coin-box { font-size: 3rem; color: gold; animation: spin 1s infinite linear; margin-bottom: 20px; }
-        @keyframes spin { from { transform: rotateY(0deg); } to { transform: rotateY(360deg); } }
+        /* THEME PICKER */
+        .theme-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-top: 20px; }
+        .theme-item {
+            height: 100px; border-radius: 20px; border: 2px solid var(--brd); cursor: pointer;
+            display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 0.7rem; transition: var(--anim);
+        }
+        .theme-item:hover { border-color: var(--p); transform: translateY(-5px); }
+        .theme-item.active { border-color: var(--p); background: rgba(var(--p-rgb), 0.1); box-shadow: 0 0 20px rgba(var(--p-rgb), 0.2); }
+
     </style>
 </head>
-<body>
+<body class="theme-main">
 
-    <div id="wallpaper-engine" class="wp-cyber"></div>
+    <div class="bg-engine">
+        <div class="orb"></div>
+        <div class="orb orb-2"></div>
+    </div>
 
-    <div id="app-shell">
-        <aside class="side-bar">
-            <div class="logo"><i class="fas fa-terminal"></i> ZEENTX OS</div>
-            <nav class="nav-menu">
-                <div class="nav-item active" onclick="showV(this, 'dash')"><i class="fas fa-home"></i> Panel</div>
-                <div class="nav-item" onclick="showV(this, 'vpn')"><i class="fas fa-globe"></i> Serwery VPN</div>
-                <div class="nav-item" onclick="showV(this, 'wp')"><i class="fas fa-image"></i> Tapety</div>
-                <div class="nav-item" onclick="showV(this, 'mario')"><i class="fas fa-gamepad"></i> Opcje Mario</div>
-            </nav>
-            <button onclick="location.reload()" style="padding: 10px; background: none; border: 1px solid gray; color: gray; border-radius: 10px; cursor: pointer;">Restart</button>
+    <div id="auth-portal">
+        <div class="auth-card">
+            <h1>ZEENTX<span>SOCIAL</span></h1>
+            <p style="color: var(--dim); margin-top: 5px;">Zaloguj się do sieci VPN 4.0</p>
+            
+            <div class="auth-nav">
+                <div class="auth-tab active" onclick="setAuth('login', this)">LOGOWANIE</div>
+                <div class="auth-tab" onclick="setAuth('reg', this)">REJESTRACJA</div>
+            </div>
+
+            <div class="input-group">
+                <i class="fas fa-at"></i>
+                <input type="text" id="auth-u" placeholder="Nazwa użytkownika">
+            </div>
+            <div class="input-group">
+                <i class="fas fa-fingerprint"></i>
+                <input type="password" id="auth-p" placeholder="Hasło bezpieczne">
+            </div>
+
+            <button class="btn-action" onclick="runAuth()">INICJUJ SESJĘ</button>
+            
+            <div onclick="adminBypass()" style="margin-top: 30px; opacity: 0.05; cursor: pointer; font-size: 0.6rem;">[DEV_FORCE_ROOT]</div>
+        </div>
+    </div>
+
+    <div id="main-os">
+        <aside class="sidebar">
+            <div style="padding: 0 30px; margin-bottom: 40px;">
+                <h2 style="font-family: 'Poppins'; font-weight: 900;">ZEENTX<span>.</span></h2>
+            </div>
+            
+            <div class="nav-link active" onclick="navView('feed', this)">
+                <i class="fas fa-stream"></i> Global Feed
+            </div>
+            <div class="nav-link" onclick="navView('nodes', this)">
+                <i class="fas fa-globe-americas"></i> VPN Nodes
+            </div>
+            <div class="nav-link" onclick="navView('chat', this)">
+                <i class="fas fa-comment-dots"></i> Public Chat
+            </div>
+            <div class="nav-link" onclick="navView('settings', this)">
+                <i class="fas fa-sliders-h"></i> OS Settings
+            </div>
+            
+            <div style="margin-top: auto; padding: 30px;">
+                <div id="admin-btn" class="nav-link" style="display:none; color: var(--err);" onclick="navView('admin', this)">
+                    <i class="fas fa-user-shield"></i> Root Admin
+                </div>
+                <button onclick="location.reload()" style="width:100%; padding:15px; border-radius:15px; border:1px solid var(--err); background:transparent; color:var(--err); font-weight:800; cursor:pointer;">
+                    OFFLINE
+                </button>
+            </div>
         </aside>
 
-        <main class="main-content">
-            <div id="v-dash" class="view active">
-                <h1>Witaj w ZEENTX</h1>
-                <p style="color: gray; margin-bottom: 30px;">System gotowy do pracy.</p>
-                <div class="grid">
-                    <div class="node-card"><h3>PING</h3><p id="ping">-- ms</p></div>
-                    <div class="node-card"><h3>STATUS</h3><p style="color: var(--primary)">ZABEZPIECZONY</p></div>
+        <main class="viewport">
+            <header class="header">
+                <div>
+                    <h2 id="v-title">Global Social Feed</h2>
+                    <p style="color: var(--dim); font-size: 0.75rem;" id="v-clock">SYSTEM_OK</p>
                 </div>
-            </div>
+                <div style="display: flex; align-items: center; gap: 20px;">
+                    <div class="status-pill"><i class="fas fa-shield-alt"></i> VPN ACTIVE</div>
+                    <div class="post-avatar" id="u-init">U</div>
+                </div>
+            </header>
 
-            <div id="v-vpn" class="view">
-                <h1>Wybierz Serwer</h1>
-                <div class="grid">
-                    <div class="node-card" onclick="alert('Łączenie...')"><h1>🇵🇱</h1><b>Polska</b></div>
-                    <div class="node-card" onclick="alert('Łączenie...')"><h1>🇺🇸</h1><b>USA</b></div>
-                    <div class="node-card" onclick="alert('Łączenie...')"><h1>🇯🇵</h1><b>Japonia</b></div>
+            <div class="view-content">
+                
+                <div id="v-feed" class="view-section active">
+                    <div id="feed-container"></div>
                 </div>
-            </div>
 
-            <div id="v-wp" class="view">
-                <h1>Zmień Tapetę</h1>
-                <div class="grid">
-                    <div class="node-card" onclick="setW('cyber')"><b>Neon City</b></div>
-                    <div class="node-card" onclick="setW('matrix')"><b>Matrix</b></div>
-                    <div class="node-card" onclick="setW('void')"><b>Dark Void</b></div>
+                <div id="v-nodes" class="view-section">
+                    <div class="nodes-grid" id="nodes-container"></div>
                 </div>
-            </div>
 
-            <div id="v-mario" class="view">
-                <div class="node-card" style="max-width: 500px; margin: 0 auto;">
-                    <div class="coin-box"><i class="fas fa-coins"></i></div>
-                    <h2>MARIO MOD</h2>
-                    <p style="margin: 20px 0;">Włącz tryb retro, aby zmienić wygląd całego systemu!</p>
-                    <label class="switch">
-                        <input type="checkbox" id="mtoggle" onchange="toggleM()">
-                        <span class="slider"></span>
-                    </label>
+                <div id="v-chat" class="view-section">
+                    <div class="chat-container">
+                        <div class="chat-messages" id="chat-box">
+                            <div class="msg received"><b>System:</b> Witaj w publicznym kanale ZEENTX.</div>
+                            <div class="msg received"><b>Bot:</b> Wszystkie wiadomości są szyfrowane E2E.</div>
+                        </div>
+                        <div class="chat-input">
+                            <input type="text" id="chat-in" placeholder="Napisz coś na kanale...">
+                            <button class="btn-action" style="width: 100px; padding: 10px;" onclick="sendMsg()">WYŚLIJ</button>
+                        </div>
+                    </div>
                 </div>
+
+                <div id="v-settings" class="view-section">
+                    <div class="widget-card">
+                        <h3>Personalizacja Wyglądu</h3>
+                        <p style="color: var(--dim); margin-bottom: 20px;">Wybierz motyw systemowy ZEENTX.</p>
+                        <div class="theme-grid">
+                            <div class="theme-item active" onclick="setTheme('main', this)" style="background: #ff4ecd;">PINK NEON</div>
+                            <div class="theme-item" onclick="setTheme('nebula', this)" style="background: #00d2ff;">NEBULA</div>
+                            <div class="theme-item" onclick="setTheme('lava', this)" style="background: #ff4747;">LAVA</div>
+                            <div class="theme-item" onclick="setTheme('emerald', this)" style="background: #00ff88;">EMERALD</div>
+                            <div class="theme-item" onclick="setTheme('gold', this)" style="background: #ffcc00;">GOLD OS</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="v-admin" class="view-section">
+                    <div class="widget-card" style="border-color: var(--err);">
+                        <h2 style="color: var(--err);">Root User Database</h2>
+                        <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+                            <thead style="text-align: left; color: var(--dim);">
+                                <tr><th style="padding: 10px;">User UID</th><th style="padding: 10px;">Hash</th><th style="padding: 10px;">Action</th></tr>
+                            </thead>
+                            <tbody id="admin-list"></tbody>
+                        </table>
+                    </div>
+                </div>
+
             </div>
         </main>
+
+        <aside class="widgets">
+            <div class="widget-card">
+                <label style="color: var(--dim); font-size: 0.7rem; font-weight: 800; text-transform: uppercase;">Twoja Lokalizacja</label>
+                <h3 style="margin-top: 10px;"><i class="fas fa-map-marker-alt" style="color: var(--p);"></i> Warsaw, PL</h3>
+                <p style="color: var(--dim); font-size: 0.8rem; margin-top: 5px;">IP: 92.112.4.120</p>
+            </div>
+
+            <div class="widget-card">
+                <label style="color: var(--dim); font-size: 0.7rem; font-weight: 800; text-transform: uppercase;">Statystyki Sieci</label>
+                <div style="margin-top: 15px; display: flex; flex-direction: column; gap: 10px;">
+                    <div style="display: flex; justify-content: space-between;">
+                        <span>Download</span>
+                        <b style="color: var(--s);">850 Mbps</b>
+                    </div>
+                    <div style="height: 4px; background: #222; border-radius: 2px;">
+                        <div style="width: 85%; height: 100%; background: var(--s); border-radius: 2px;"></div>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-top: 5px;">
+                        <span>Upload</span>
+                        <b style="color: var(--p);">420 Mbps</b>
+                    </div>
+                    <div style="height: 4px; background: #222; border-radius: 2px;">
+                        <div style="width: 42%; height: 100%; background: var(--p); border-radius: 2px;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="widget-card" style="flex-grow: 1; border: 1px dashed var(--brd);">
+                <h4 style="margin-bottom: 15px;">Aktywni Znajomi</h4>
+                <div id="friends-list" style="display: flex; flex-direction: column; gap: 15px;">
+                    </div>
+            </div>
+        </aside>
     </div>
 
     <script>
-        function showV(el, id) {
-            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            document.getElementById('v-' + id).classList.add('active');
+        /**
+         * ZEENTX SOCIAL-VPN KERNEL v4.0
+         * LOGIC FOR: AUTH, SOCIAL, VPN, THEMES
+         */
+
+        let db = JSON.parse(localStorage.getItem('zeentx_social_v4')) || { "admin": "admin123" };
+        let currentUser = "";
+        let authMode = "login";
+
+        const serverData = [
+            { n: 'Polska', f: '🇵🇱', ip: '185.22.40.1' },
+            { n: 'USA East', f: '🇺🇸', ip: '104.22.1.5' },
+            { n: 'Niemcy', f: '🇩🇪', ip: '45.12.10.2' },
+            { n: 'Japonia', f: '🇯🇵', ip: '160.1.2.3' },
+            { n: 'UK London', f: '🇬🇧', ip: '141.22.1.2' },
+            { n: 'Francja', f: '🇫🇷', ip: '82.10.11.1' }
+        ];
+
+        const postsData = [
+            { u: 'CyberGuard', t: 'Właśnie zablokowaliśmy potężny atak DDoS na serwer w Warszawie! #Security #VPN', l: 124, r: 12 },
+            { u: 'NetRunner', t: 'VPN 4.0 działa niesamowicie szybko. Ping 5ms w grach to teraz standard.', l: 89, r: 5 },
+            { u: 'Anonymous', t: 'Pamiętajcie o włączeniu funkcji Kill Switch w ustawieniach Stealth.', l: 256, r: 45 },
+            { u: 'ZeentxBot', t: 'Witaj w wersji 4.0! Dodaliśmy system Social Media, aby ułatwić komunikację między użytkownikami.', l: 1024, r: 230 }
+        ];
+
+        // 1. AUTH LOGIC
+        function setAuth(mode, el) {
+            authMode = mode;
+            document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
             el.classList.add('active');
         }
 
-        function setW(type) {
-            document.getElementById('wallpaper-engine').className = 'wp-' + type;
-        }
+        function runAuth() {
+            const u = document.getElementById('auth-u').value.trim();
+            const p = document.getElementById('auth-p').value.trim();
 
-        function toggleM() {
-            const on = document.getElementById('mtoggle').checked;
-            if(on) {
-                document.body.classList.add('mario-active');
-                setW('mario');
+            if(!u || !p) return alert("Błąd: Uzupełnij pola!");
+
+            if(authMode === 'reg') {
+                if(db[u]) return alert("UID zajęte!");
+                db[u] = p;
+                saveDB();
+                alert("Konto utworzone!");
             } else {
-                document.body.classList.remove('mario-active');
-                setW('cyber');
+                if(db[u] === p) {
+                    bootOS(u);
+                } else {
+                    alert("Nieprawidłowy klucz dostępu!");
+                }
             }
         }
 
-        setInterval(() => {
-            document.getElementById('ping').innerText = Math.floor(Math.random() * 30 + 5) + " ms";
-        }, 2000);
+        function saveDB() { localStorage.setItem('zeentx_social_v4', JSON.stringify(db)); }
+
+        // 2. OS CORE
+        function bootOS(user) {
+            currentUser = user;
+            const portal = document.getElementById('auth-portal');
+            const os = document.getElementById('main-os');
+
+            portal.style.transform = "translateY(-100%)";
+            os.style.display = "grid";
+            setTimeout(() => os.style.opacity = "1", 100);
+
+            document.getElementById('u-init').innerText = user[0].toUpperCase();
+            if(user === 'admin') {
+                document.getElementById('admin-btn').style.display = 'flex';
+                renderAdmin();
+            }
+
+            renderFeed();
+            renderNodes();
+            renderFriends();
+            startClock();
+        }
+
+        function startClock() {
+            setInterval(() => {
+                document.getElementById('v-clock').innerText = "CORE_TIME: " + new Date().toLocaleTimeString() + " | LATENCY: 8ms";
+            }, 1000);
+        }
+
+        // 3. UI RENDERING
+        function renderFeed() {
+            const container = document.getElementById('feed-container');
+            container.innerHTML = '';
+            postsData.forEach(p => {
+                const div = document.createElement('div');
+                div.className = 'post-box';
+                div.innerHTML = `
+                    <div class="post-header">
+                        <div class="post-avatar" style="background:var(--s)">${p.u[0]}</div>
+                        <b>${p.u}</b>
+                        <small style="color:var(--dim)"> • 2h temu</small>
+                    </div>
+                    <div class="post-content">${p.t}</div>
+                    <div class="post-stats">
+                        <span><i class="fas fa-heart"></i> ${p.l}</span>
+                        <span><i class="fas fa-retweet"></i> ${p.r}</span>
+                        <span><i class="fas fa-share"></i> Udostępnij</span>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function renderNodes() {
+            const container = document.getElementById('nodes-container');
+            container.innerHTML = '';
+            for(let i=0; i<40; i++) {
+                const n = serverData[i % serverData.length];
+                const card = document.createElement('div');
+                card.className = 'node-card';
+                card.innerHTML = `
+                    <div class="flag">${n.f}</div>
+                    <div>
+                        <b>${n.n} #${100+i}</b><br>
+                        <small style="color:var(--dim)">${n.ip}</small>
+                    </div>
+                `;
+                container.appendChild(card);
+            }
+        }
+
+        function renderFriends() {
+            const list = document.getElementById('friends-list');
+            const names = ['X-Phantom', 'ZeroCool', 'AcidBurn', 'Neo_PL', 'Morpheus'];
+            names.forEach(name => {
+                const div = document.createElement('div');
+                div.style = "display:flex; align-items:center; gap:10px;";
+                div.innerHTML = `
+                    <div style="width:10px; height:10px; border-radius:50%; background:var(--ok);"></div>
+                    <span style="font-size:0.9rem; font-weight:600;">${name}</span>
+                `;
+                list.appendChild(div);
+            });
+        }
+
+        // 4. NAVIGATION
+        function navView(view, el) {
+            document.querySelectorAll('.view-section').forEach(v => v.classList.remove('active'));
+            document.querySelectorAll('.nav-link').forEach(n => n.classList.remove('active'));
+            
+            document.getElementById('v-' + view).classList.add('active');
+            el.classList.add('active');
+            
+            const titles = {
+                'feed': 'Global Social Feed',
+                'nodes': 'Zaszyfrowane Węzły VPN',
+                'chat': 'Publiczny Kanał Komunikacji',
+                'settings': 'Ustawienia Systemu OS',
+                'admin': 'Baza Danych Użytkowników'
+            };
+            document.getElementById('v-title').innerText = titles[view];
+        }
+
+        // 5. CHAT LOGIC
+        function sendMsg() {
+            const input = document.getElementById('chat-in');
+            const box = document.getElementById('chat-box');
+            if(!input.value) return;
+
+            const msg = document.createElement('div');
+            msg.className = 'msg sent';
+            msg.innerHTML = `<b>Ty:</b> ${input.value}`;
+            box.appendChild(msg);
+            box.scrollTop = box.scrollHeight;
+            input.value = "";
+
+            // Bot reply
+            setTimeout(() => {
+                const reply = document.createElement('div');
+                reply.className = 'msg received';
+                reply.innerHTML = `<b>System:</b> Wiadomość została rozesłana do 128 aktywnych węzłów.`;
+                box.appendChild(reply);
+                box.scrollTop = box.scrollHeight;
+            }, 1000);
+        }
+
+        // 6. THEME ENGINE
+        function setTheme(theme, el) {
+            document.body.className = 'theme-' + theme;
+            document.querySelectorAll('.theme-item').forEach(i => i.classList.remove('active'));
+            el.classList.add('active');
+        }
+
+        // 7. ADMIN TOOLS
+        function renderAdmin() {
+            const list = document.getElementById('admin-list');
+            list.innerHTML = '';
+            for(let u in db) {
+                if(u === 'admin') continue;
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td style="padding:10px;">${u}</td>
+                    <td style="padding:10px; font-family:monospace;">${btoa(db[u]).substring(0,10)}...</td>
+                    <td style="padding:10px;"><button onclick="deleteUser('${u}')" style="color:var(--err); background:none; border:none; cursor:pointer; font-weight:800;">USUŃ</button></td>
+                `;
+                list.appendChild(tr);
+            }
+        }
+
+        function deleteUser(u) {
+            if(confirm("Usunąć użytkownika " + u + "?")) {
+                delete db[u];
+                saveDB();
+                renderAdmin();
+            }
+        }
+
+        function adminBypass() {
+            document.getElementById('auth-u').value = "admin";
+            document.getElementById('auth-p').value = "admin123";
+            runAuth();
+        }
+
     </script>
 </body>
 </html>
