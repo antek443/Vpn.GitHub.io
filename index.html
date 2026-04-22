@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ZeentxPL VPN</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial;
+  text-align: center;
+  color: white;
+  background: linear-gradient(270deg, #1a1a2e, #16213e, #0f3460, #533483);
+  background-size: 400% 400%;
+  animation: bg 10s infinite;
+}
+
+@keyframes bg {
+  0% {background-position: 0%}
+  100% {background-position: 100%}
+}
+
+.box {
+  margin: 30px auto;
+  padding: 20px;
+  width: 80%;
+  max-width: 500px;
+  background: rgba(0,0,0,0.4);
+  border-radius: 10px;
+  transition: 0.3s;
+}
+
+.box:hover {
+  transform: translateY(-10px);
+}
+
+button {
+  padding: 10px 20px;
+  margin: 5px;
+  border: none;
+  border-radius: 8px;
+  background: #ff4ecd;
+  color: white;
+  cursor: pointer;
+}
+
+button:hover {
+  transform: scale(1.1);
+}
+</style>
+</head>
+
+<body>
+
+<h1>🌍 ZeentxPL VPN</h1>
+
+<div class="box">
+  <h2>Twoje IP:</h2>
+  <p id="ip">Kliknij przycisk</p>
+  <button onclick="getIP()">Pobierz IP</button>
+</div>
+
+<div class="box">
+  <h2>Wybierz kraj:</h2>
+  <button onclick="vpn('USA')">USA</button>
+  <button onclick="vpn('Niemcy')">Niemcy</button>
+  <button onclick="vpn('Japonia')">Japonia</button>
+  <p id="vpn">---</p>
+</div>
+
+<script>
+function getIP() {
+  fetch('https://api.ipify.org?format=json')
+  .then(res => res.json())
+  .then(data => {
+    document.getElementById('ip').innerText = data.ip;
+  })
+  .catch(() => {
+    document.getElementById('ip').innerText = "Błąd";
+  });
+}
+
+function fakeIP() {
+  return Math.floor(Math.random()*255)+"."+
+         Math.floor(Math.random()*255)+"."+
+         Math.floor(Math.random()*255)+"."+
+         Math.floor(Math.random()*255);
+}
+
+function vpn(kraj) {
+  document.getElementById('vpn').innerText =
+    "VPN: " + kraj + " | IP: " + fakeIP();
+}
+</script>
+
+</body>
+</html>
