@@ -3,178 +3,201 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZeentxPL VPN | Bezpieczeństwo</title>
+    <title>ZeentxPL VPN | PRO Dashboard</title>
 
     <style>
         :root {
-            --primary: #ff4ecd;
-            --secondary: #00d2ff;
-            --bg-dark: #0f3460;
+            --accent: #ff4ecd;
+            --neon-blue: #00d2ff;
+            --success: #00ff88;
+            --glass: rgba(255, 255, 255, 0.07);
         }
 
         body {
             margin: 0;
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            text-align: center;
+            padding: 20px;
+            font-family: 'Segoe UI', sans-serif;
             color: white;
-            min-height: 100vh;
+            background: #050505;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            /* Dynamiczny gradient */
-            background: linear-gradient(-45deg, #1a1a2e, #16213e, #0f3460, #533483);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
-            overflow-x: hidden;
+            min-height: 100vh;
         }
 
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        /* Animowane tło */
+        .bg-animate {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(45deg, #0f0c29, #302b63, #24243e);
+            z-index: -1;
         }
 
         h1 {
             font-size: 3rem;
-            text-shadow: 0 0 20px rgba(255, 78, 205, 0.6);
-            animation: float 3s ease-in-out infinite;
+            margin: 20px 0;
+            text-shadow: 0 0 15px var(--accent);
+            letter-spacing: 2px;
         }
 
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+        .container {
+            width: 100%;
+            max-width: 1000px;
         }
 
-        /* Styl Glassmorphism dla boksów */
         .box {
-            margin: 20px;
-            padding: 30px;
-            width: 85%;
-            max-width: 450px;
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(12px); /* Rozmycie tła pod pudełkiem */
-            -webkit-backdrop-filter: blur(12px);
+            background: var(--glass);
+            backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            border-radius: 25px;
+            padding: 25px;
+            margin-bottom: 25px;
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
+        /* Mocniejszy efekt podnoszenia */
         .box:hover {
-            transform: scale(1.03);
-            background: rgba(255, 255, 255, 0.1);
-            box-shadow: 0 8px 32px 0 rgba(255, 78, 205, 0.2);
+            transform: translateY(-12px) scale(1.01);
+            border-color: var(--neon-blue);
+            box-shadow: 0 15px 45px rgba(0, 210, 255, 0.2);
+        }
+
+        /* Siatka krajów - 20 pozycji */
+        .country-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .country-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 15px;
+            cursor: pointer;
+            transition: 0.2s;
+            border: 1px solid transparent;
+            text-align: center;
+        }
+
+        .country-card:hover {
+            background: rgba(255, 78, 205, 0.2);
+            border-color: var(--accent);
+            transform: scale(1.05);
+        }
+
+        .flag { font-size: 1.8rem; display: block; margin-bottom: 5px; }
+
+        /* Powiadomienie o kopiowaniu */
+        #toast {
+            visibility: hidden;
+            min-width: 250px;
+            background-color: var(--success);
+            color: #000;
+            text-align: center;
+            border-radius: 10px;
+            padding: 16px;
+            position: fixed;
+            z-index: 100;
+            bottom: 30px;
+            font-weight: bold;
+            box-shadow: 0 0 20px var(--success);
+        }
+
+        #toast.show { visibility: visible; animation: fadein 0.5s, fadeout 0.5s 2.5s; }
+
+        @keyframes fadein { from {bottom: 0; opacity: 0;} to {bottom: 30px; opacity: 1;} }
+        @keyframes fadeout { from {bottom: 30px; opacity: 1;} to {bottom: 0; opacity: 0;} }
+
+        #vpn-info {
+            font-size: 1.2rem;
+            color: var(--success);
+            margin: 10px 0;
+            min-height: 1.5em;
         }
 
         button {
-            padding: 12px 25px;
-            margin: 8px;
-            border: none;
-            border-radius: 12px;
-            background: linear-gradient(45deg, var(--primary), #bc13fe);
+            background: var(--accent);
             color: white;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 10px;
             cursor: pointer;
-            transition: 0.3s;
-            box-shadow: 0 4px 15px rgba(255, 78, 205, 0.4);
-        }
-
-        button:hover {
-            transform: translateY(-3px) scale(1.05);
-            box-shadow: 0 6px 20px rgba(255, 78, 205, 0.6);
-            filter: brightness(1.1);
-        }
-
-        button:active {
-            transform: scale(0.95);
-        }
-
-        #ip, #vpn {
-            font-family: 'Courier New', monospace;
-            background: rgba(0, 0, 0, 0.3);
-            padding: 10px;
-            border-radius: 8px;
-            margin-top: 15px;
-            color: var(--secondary);
             font-weight: bold;
+            transition: 0.3s;
         }
 
-        /* Dekoracyjne kółka w tle */
-        .circle {
-            position: absolute;
-            z-index: -1;
-            background: radial-gradient(circle, rgba(255,78,205,0.1) 0%, rgba(0,0,0,0) 70%);
-            border-radius: 50%;
-            animation: move 20s linear infinite;
-        }
-
-        @keyframes move {
-            from { transform: translate(0, 0); }
-            to { transform: translate(100vw, 100vh); }
-        }
+        button:hover { filter: brightness(1.2); transform: scale(1.05); }
     </style>
 </head>
-
 <body>
 
-    <div class="circle" style="width: 300px; height: 300px; top: 10%; left: 10%;"></div>
-    <div class="circle" style="width: 200px; height: 200px; bottom: 20%; right: 10%; animation-duration: 15s;"></div>
+    <div class="bg-animate"></div>
+    <div id="toast">📋 IP skopiowane do schowka!</div>
 
-    <h1>🌍 ZeentxPL VPN</h1>
+    <div class="container">
+        <h1>⚡ ZeentxPL VPN</h1>
 
-    <div class="box">
-        <h2 style="margin-top:0">🛡️ Twój Adres IP</h2>
-        <p id="ip">Status: Oczekiwanie...</p>
-        <button onclick="getIP()">Sprawdź IP</button>
-    </div>
-
-    <div class="box">
-        <h2>🌐 Wybierz Serwer</h2>
-        <div style="display: flex; justify-content: center; flex-wrap: wrap;">
-            <button onclick="vpn('USA')">🇺🇸 USA</button>
-            <button onclick="vpn('Niemcy')">🇩🇪 Niemcy</button>
-            <button onclick="vpn('Japonia')">🇯🇵 Japonia</button>
+        <div class="box">
+            <h2>🛡️ Twoje bazowe IP</h2>
+            <p id="ip-real">Kliknij przycisk poniżej</p>
+            <button onclick="getRealIP()">POBIERZ MOJE IP</button>
         </div>
-        <p id="vpn">Połączenie: Brak</p>
+
+        <div class="box">
+            <h2>🌍 Serwery Premium (Kliknij aby skopiować IP)</h2>
+            <div id="vpn-info">Wybierz serwer z listy:</div>
+            
+            <div class="country-grid" id="grid">
+                </div>
+        </div>
     </div>
 
     <script>
-    function getIP() {
-        const ipDisplay = document.getElementById('ip');
-        ipDisplay.innerText = "Pobieranie...";
-        
-        fetch('https://api.ipify.org?format=json')
-        .then(res => res.json())
-        .then(data => {
-            ipDisplay.style.color = "#00ff88"; // Zielony kolor przy sukcesie
-            ipDisplay.innerText = data.ip;
-        })
-        .catch(() => {
-            ipDisplay.innerText = "Błąd połączenia";
-            ipDisplay.style.color = "#ff4e4e";
+        const kraje = [
+            {n: 'Polska', f: '🇵🇱'}, {n: 'USA', f: '🇺🇸'}, {n: 'Niemcy', f: '🇩🇪'}, {n: 'Japonia', f: '🇯🇵'},
+            {n: 'UK', f: '🇬🇧'}, {n: 'Kanada', f: '🇨🇦'}, {n: 'Francja', f: '🇫🇷'}, {n: 'Brazylia', f: '🇧🇷'},
+            {n: 'Holandia', f: '🇳🇱'}, {n: 'Szwajcaria', f: '🇨🇭'}, {n: 'Australia', f: '🇦🇺'}, {n: 'Włochy', f: '🇮🇹'},
+            {n: 'Norwegia', f: '🇳🇴'}, {n: 'Hiszpania', f: '🇪🇸'}, {n: 'Szwecja', f: '🇸🇪'}, {n: 'Singapur', f: '🇸🇬'},
+            {n: 'Islandia', f: '🇮🇸'}, {n: 'Meksyk', f: '🇲🇽'}, {n: 'Indie', f: '🇮🇳'}, {n: 'Korea Płd.', f: '🇰🇷'}
+        ];
+
+        // Generowanie siatki
+        const grid = document.getElementById('grid');
+        kraje.forEach(k => {
+            const div = document.createElement('div');
+            div.className = 'country-card';
+            div.innerHTML = `<span class="flag">${k.f}</span><span>${k.n}</span>`;
+            div.onclick = () => connectVPN(k.n, k.f);
+            grid.appendChild(div);
         });
-    }
 
-    function fakeIP() {
-        return Array.from({length: 4}, () => Math.floor(Math.random() * 256)).join('.');
-    }
+        async function getRealIP() {
+            document.getElementById('ip-real').innerText = "Pobieranie...";
+            try {
+                const res = await fetch('https://api.ipify.org?format=json');
+                const data = await res.json();
+                document.getElementById('ip-real').innerText = data.ip;
+            } catch { document.getElementById('ip-real').innerText = "Błąd połączenia"; }
+        }
 
-    function vpn(kraj) {
-        const vpnDisplay = document.getElementById('vpn');
-        vpnDisplay.style.opacity = "0"; // Efekt mrugnięcia przy zmianie
-        
-        setTimeout(() => {
-            vpnDisplay.innerHTML = `Łączenie z <strong>${kraj}</strong>...`;
+        function connectVPN(nazwa, flaga) {
+            const fakeIP = `${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}`;
             
-            setTimeout(() => {
-                vpnDisplay.style.opacity = "1";
-                vpnDisplay.innerHTML = `✅ Połączono: ${kraj} <br> <small>Nowe IP: ${fakeIP()}</small>`;
-            }, 800);
-        }, 200);
-    }
+            // Aktualizacja tekstu
+            document.getElementById('vpn-info').innerHTML = `Połączono: ${flaga} <b>${nazwa}</b> | IP: <span id="target-ip">${fakeIP}</span>`;
+            
+            // KOPIOWANIE DO SCHOWKA
+            navigator.clipboard.writeText(fakeIP).then(() => {
+                showToast();
+            });
+        }
+
+        function showToast() {
+            const t = document.getElementById('toast');
+            t.className = "show";
+            setTimeout(() => { t.className = t.className.replace("show", ""); }, 3000);
+        }
     </script>
 
 </body>
