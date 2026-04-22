@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZeentxPL VPN | Global Network</title>
+    <title>ZeentxPL VPN | Global Panel</title>
 
     <style>
         :root {
@@ -14,19 +14,15 @@
             --glass: rgba(255, 255, 255, 0.08);
         }
 
-        body {
+        body, html {
             margin: 0;
             padding: 0;
             font-family: 'Segoe UI', sans-serif;
             color: white;
             background: var(--bg-dark);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
+            height: 100%;
         }
 
-        /* Dynamiczne tło */
         .bg {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -42,7 +38,82 @@
             100% {background-position: 0% 50%}
         }
 
-        /* Navbar */
+        /* Przełącznik języka */
+        .lang-switcher {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 2000;
+        }
+
+        .lang-btn {
+            background: var(--glass);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: white;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            margin-left: 5px;
+        }
+
+        .lang-btn:hover { background: var(--primary); }
+
+        /* LOGOWANIE */
+        #login-screen {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            background: var(--bg-dark);
+            transition: 0.8s ease-in-out;
+        }
+
+        .login-box {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            padding: 40px;
+            border-radius: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            width: 90%;
+            max-width: 400px;
+        }
+
+        .login-box input {
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(0, 0, 0, 0.3);
+            color: white;
+            box-sizing: border-box;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 15px;
+            margin-top: 10px;
+            border-radius: 12px;
+            border: none;
+            background: var(--primary);
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* GŁÓWNY PANEL */
+        #main-content {
+            display: none;
+            opacity: 0;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+
         .top-nav {
             width: 100%;
             background: rgba(0, 0, 0, 0.5);
@@ -60,75 +131,37 @@
             text-decoration: none;
             color: white;
             background: var(--discord);
-            padding: 12px 35px;
+            padding: 10px 30px;
             border-radius: 50px;
             font-weight: bold;
-            transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 0 20px rgba(88, 101, 242, 0.5);
         }
 
-        .dc-link:hover {
-            transform: scale(1.1);
-            box-shadow: 0 0 35px var(--discord);
-        }
+        .container { width: 90%; max-width: 1000px; padding: 20px; }
 
-        .container {
-            width: 90%;
-            max-width: 1100px;
-            padding: 20px;
-        }
-
-        h1 {
-            font-size: 3.5rem;
-            text-align: center;
-            margin: 50px 0;
-            background: linear-gradient(to right, #fff, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 0 15px rgba(255, 78, 205, 0.4));
-        }
-
-        /* Główne sekcje */
         .box {
             background: var(--glass);
-            backdrop-filter: blur(25px);
-            border-radius: 30px;
+            backdrop-filter: blur(20px);
+            border-radius: 25px;
+            padding: 30px;
+            margin-top: 20px;
             border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 40px;
-            margin-bottom: 50px;
-            transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        .box:hover {
-            transform: translateY(-20px);
-            border-color: var(--primary);
-            box-shadow: 0 25px 60px rgba(255, 78, 205, 0.2);
-        }
-
-        /* Grid krajów */
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-            gap: 15px;
-        }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 12px; margin-top: 20px; }
 
         .card {
             background: rgba(0, 0, 0, 0.4);
-            padding: 20px 10px;
-            border-radius: 20px;
+            padding: 15px;
+            border-radius: 15px;
             cursor: pointer;
-            transition: 0.3s;
             text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            border: 1px solid transparent;
+            transition: 0.3s;
         }
 
-        .card:hover {
-            background: var(--primary);
-            transform: scale(1.1) rotate(2deg);
-            box-shadow: 0 0 25px var(--primary);
-        }
+        .card:hover { transform: scale(1.05); border-color: var(--primary); }
 
-        /* Modal GUI */
+        /* MODAL */
         .overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -136,123 +169,140 @@
             display: none;
             justify-content: center;
             align-items: center;
-            z-index: 1000;
-            backdrop-filter: blur(15px);
+            z-index: 2000;
+            backdrop-filter: blur(10px);
         }
 
         .modal {
-            background: linear-gradient(135deg, #1a1a2e, #0a0a12);
+            background: #16213e;
             padding: 40px;
-            border-radius: 40px;
+            border-radius: 30px;
             border: 2px solid var(--primary);
             text-align: center;
-            max-width: 450px;
-            width: 85%;
-            transform: scale(0.5);
-            opacity: 0;
-            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            width: 80%;
+            max-width: 350px;
         }
 
-        .overlay.active { display: flex; }
-        .overlay.active .modal { transform: scale(1); opacity: 1; }
-
-        .ip-display {
-            font-size: 2rem;
-            color: var(--secondary);
-            background: rgba(0,0,0,0.5);
-            padding: 20px;
-            border-radius: 20px;
-            margin: 25px 0;
-            font-family: 'Courier New', monospace;
-            border: 1px dashed var(--secondary);
-        }
-
-        .copy-btn {
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 18px;
-            border-radius: 15px;
-            font-weight: bold;
-            font-size: 1.1rem;
-            cursor: pointer;
-            width: 100%;
-            transition: 0.3s;
-        }
-
-        .copy-btn:hover { filter: brightness(1.2); transform: scale(1.02); }
-
-        footer {
-            margin-bottom: 50px;
-            opacity: 0.5;
-            font-size: 0.9rem;
-        }
+        #m-ip { font-size: 1.8rem; color: var(--secondary); margin: 20px 0; font-family: monospace; }
     </style>
 </head>
 <body>
 
     <div class="bg"></div>
 
-    <div class="top-nav">
-        <a href="https://discord.com/invite/bHeSDzrrjR" target="_blank" class="dc-link">💬 DOŁĄCZ DO DISCORDA</a>
+    <div class="lang-switcher">
+        <button class="lang-btn" onclick="setLang('pl')">PL 🇵🇱</button>
+        <button class="lang-btn" onclick="setLang('en')">EN 🇬🇧</button>
     </div>
 
-    <div class="container">
-        <h1>ZeentxPL VPN</h1>
+    <div id="login-screen">
+        <div class="login-box">
+            <h2 id="l-title">🔐 ZeentxPL LOGIN</h2>
+            <input type="text" id="username" placeholder="Użytkownik / Username">
+            <input type="password" id="password" placeholder="Hasło / Password">
+            <button class="login-btn" id="l-btn" onclick="checkLogin()">ZALOGUJ SIĘ</button>
+            <p id="l-error" style="color: #ff4444; display: none; margin-top: 10px;">Błędne dane!</p>
+        </div>
+    </div>
 
-        <div class="box">
-            <h2 style="color: var(--secondary)">🚀 Globalna Sieć Serwerów</h2>
-            <p>Kliknij na dowolną flagę, aby wygenerować unikalny adres IP i zabezpieczyć swoje połączenie w kilka sekund.</p>
+    <div id="main-content">
+        <div class="top-nav">
+            <a href="https://discord.com/invite/bHeSDzrrjR" target="_blank" class="dc-link" id="nav-dc">💬 DISCORD</a>
         </div>
 
-        <div class="box">
-            <h3 style="margin-bottom: 30px; text-align: center;">Wybierz lokalizację (40 serwerów premium)</h3>
-            <div class="grid" id="grid"></div>
-        </div>
+        <div class="container">
+            <h1 id="main-title" style="text-align:center; font-size: 2.5rem; margin-top: 30px;">ZeentxPL VPN</h1>
 
-        <div class="box">
-            <h2 style="color: var(--primary)">🛡️ Dlaczego ZeentxPL?</h2>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; text-align: left; margin-top: 20px;">
-                <div>
-                    <h4>⚡ Ultra Szybkość</h4>
-                    <p>Serwery o przepustowości 10Gbps zapewniają brak lagów.</p>
-                </div>
-                <div>
-                    <h4>🔒 Prywatność</h4>
-                    <p>Nie przechowujemy żadnych logów Twojej aktywności.</p>
-                </div>
-                <div>
-                    <h4>🌍 Brak Limitów</h4>
-                    <p>Zmieniaj kraje tak często, jak tylko tego potrzebujesz.</p>
-                </div>
+            <div class="box">
+                <h2 id="s1-title">Witaj w Panelu Premium</h2>
+                <p id="s1-status">Status subskrypcji: <span style="color: #00ff88;">AKTYWNA</span></p>
+                <div class="grid" id="grid"></div>
+            </div>
+            
+            <div class="box">
+                <h2 id="s2-title">🛡️ Ochrona</h2>
+                <p id="s2-desc">Wszystkie połączenia są szyfrowane metodą AES-256.</p>
             </div>
         </div>
-
-        <footer>© 2026 ZeentxPL VPN Network. Wszystkie prawa zastrzeżone.</footer>
     </div>
 
     <div class="overlay" id="overlay" onclick="closeModal(event)">
         <div class="modal">
-            <h2 id="m-title" style="color: var(--primary);">KRAJ</h2>
-            <p>Twoje dedykowane IP zostało wygenerowane:</p>
-            <div class="ip-display" id="m-ip">0.0.0.0</div>
-            <button class="copy-btn" onclick="copyIP()">📋 SKOPIUJ ADRES IP</button>
-            <p style="margin-top: 20px; font-size: 0.8rem; opacity: 0.5;">Kliknij poza oknem, aby wrócić do listy</p>
+            <h2 id="m-title">KRAJ</h2>
+            <div id="m-ip">0.0.0.0</div>
+            <button class="login-btn" id="m-copy" onclick="copyIP()">📋 SKOPIUJ IP</button>
         </div>
     </div>
 
     <script>
+        let currentLang = 'pl';
+        const translations = {
+            pl: {
+                lTitle: "🔐 ZeentxPL LOGOWANIE",
+                lBtn: "ZALOGUJ SIĘ",
+                lError: "Błędne dane logowania!",
+                navDc: "💬 DISCORD",
+                mainTitle: "ZeentxPL VPN",
+                s1Title: "Witaj w Panelu Premium",
+                s1Status: "Status subskrypcji: ",
+                s1Active: "AKTYWNA",
+                s2Title: "🛡️ Ochrona",
+                s2Desc: "Wszystkie połączenia są szyfrowane metodą AES-256.",
+                mCopy: "📋 SKOPIUJ IP",
+                mSuccess: "✅ SKOPIOWANO!"
+            },
+            en: {
+                lTitle: "🔐 ZeentxPL LOGIN",
+                lBtn: "LOGIN NOW",
+                lError: "Invalid login credentials!",
+                navDc: "💬 DISCORD",
+                mainTitle: "ZeentxPL VPN",
+                s1Title: "Welcome to Premium Panel",
+                s1Status: "Subscription status: ",
+                s1Active: "ACTIVE",
+                s2Title: "🛡️ Protection",
+                s2Desc: "All connections are encrypted with AES-256.",
+                mCopy: "📋 COPY IP",
+                mSuccess: "✅ COPIED!"
+            }
+        };
+
+        function setLang(lang) {
+            currentLang = lang;
+            const t = translations[lang];
+            document.getElementById('l-title').innerText = t.lTitle;
+            document.getElementById('l-btn').innerText = t.lBtn;
+            document.getElementById('l-error').innerText = t.lError;
+            document.getElementById('nav-dc').innerText = t.navDc;
+            document.getElementById('main-title').innerText = t.mainTitle;
+            document.getElementById('s1-title').innerText = t.s1Title;
+            document.getElementById('s1-status').innerHTML = `${t.s1Status} <span style="color: #00ff88;">${t.s1Active}</span>`;
+            document.getElementById('s2-title').innerText = t.s2Title;
+            document.getElementById('s2-desc').innerText = t.s2Desc;
+            document.getElementById('m-copy').innerText = t.mCopy;
+        }
+
+        function checkLogin() {
+            const user = document.getElementById('username').value;
+            const pass = document.getElementById('password').value;
+            if(user === "admin" && pass === "admin") {
+                document.getElementById('login-screen').style.transform = "translateY(-100%)";
+                setTimeout(() => {
+                    document.getElementById('login-screen').style.display = "none";
+                    document.getElementById('main-content').style.display = "flex";
+                    setTimeout(() => document.getElementById('main-content').style.opacity = "1", 50);
+                }, 800);
+            } else {
+                document.getElementById('l-error').style.display = "block";
+            }
+        }
+
         const kraje = [
             {n: 'Polska', f: '🇵🇱'}, {n: 'USA', f: '🇺🇸'}, {n: 'Niemcy', f: '🇩🇪'}, {n: 'Japonia', f: '🇯🇵'},
             {n: 'UK', f: '🇬🇧'}, {n: 'Kanada', f: '🇨🇦'}, {n: 'Francja', f: '🇫🇷'}, {n: 'Brazylia', f: '🇧🇷'},
             {n: 'Holandia', f: '🇳🇱'}, {n: 'Szwajcaria', f: '🇨🇭'}, {n: 'Australia', f: '🇦🇺'}, {n: 'Włochy', f: '🇮🇹'},
             {n: 'Norwegia', f: '🇳🇴'}, {n: 'Hiszpania', f: '🇪🇸'}, {n: 'Szwecja', f: '🇸🇪'}, {n: 'Singapur', f: '🇸🇬'},
-            {n: 'Korea', f: '🇰🇷'}, {n: 'Islandia', f: '🇮🇸'}, {n: 'Meksyk', f: '🇲🇽'}, {n: 'Indie', f: '🇮🇳'},
-            {n: 'Turcja', f: '🇹🇷'}, {n: 'Egipt', f: '🇪🇬'}, {n: 'Grecja', f: '🇬🇷'}, {n: 'Portugalia', f: '🇵🇹'},
-            {n: 'Irlandia', f: '🇮🇪'}, {n: 'Belgia', f: '🇧🇪'}, {n: 'Austria', f: '🇦🇹'}, {n: 'Czechy', f: '🇨🇿'},
-            {n: 'Finlandia', f: '🇫🇮'}, {n: 'Dania', f: '🇩🇰'}, {n: 'Izrael', f: '🇮🇱'}, {n: 'RPA', f: '🇿🇦'},
-            {n: 'Tajlandia', f: '🇹🇭'}, {n: 'Argentyna', f: '🇦🇷'}, {n: 'Chile', f: '🇨🇱'}, {n: 'ZEA', f: '🇦🇪'},
-            {n: 'Ukraina', f: '🇺🇦'}, {n: 'Chorwacja', f: '🇭🇷'}, {n: 'Węgry', f: '🇭🇺'}, {n: 'Rumunia', f: '🇷🇴'}
+            {n: 'Korea', f: '🇰🇷'}, {n: 'Turcja', f: '🇹🇷'}, {n: 'Meksyk', f: '🇲🇽'}, {n: 'Indie', f: '🇮🇳'}
         ];
 
         const grid = document.getElementById('grid');
@@ -261,7 +311,7 @@
         kraje.forEach(k => {
             const card = document.createElement('div');
             card.className = 'card';
-            card.innerHTML = `<div style="font-size:2.8rem; margin-bottom:10px;">${k.f}</div><b>${k.n}</b>`;
+            card.innerHTML = `<div style="font-size:2rem">${k.f}</div><b>${k.n}</b>`;
             card.onclick = () => openModal(k.n, k.f);
             grid.appendChild(card);
         });
@@ -270,28 +320,17 @@
             currentIP = `${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}`;
             document.getElementById('m-title').innerText = `${flag} ${name}`;
             document.getElementById('m-ip').innerText = currentIP;
-            document.getElementById('overlay').classList.add('active');
+            document.getElementById('overlay').style.display = 'flex';
         }
 
-        function closeModal(e) {
-            if (e.target.id === 'overlay') {
-                document.getElementById('overlay').classList.remove('active');
-            }
-        }
+        function closeModal(e) { if (e.target.id === 'overlay') document.getElementById('overlay').style.display = 'none'; }
 
         function copyIP() {
             navigator.clipboard.writeText(currentIP);
-            const btn = document.querySelector('.copy-btn');
-            const oldText = btn.innerText;
-            btn.innerText = "✅ SKOPIOWANO!";
-            btn.style.background = "#00ff88";
-            btn.style.color = "#000";
-            
-            setTimeout(() => {
-                btn.innerText = oldText;
-                btn.style.background = "";
-                btn.style.color = "";
-            }, 2000);
+            const btn = document.getElementById('m-copy');
+            const original = btn.innerText;
+            btn.innerText = translations[currentLang].mSuccess;
+            setTimeout(() => btn.innerText = translations[currentLang].mCopy, 2000);
         }
     </script>
 </body>
