@@ -49,7 +49,7 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        /* --- ANIMOWANE TŁO (MESA GRADIENT) --- */
+        /* --- ANIMOWANE TŁO --- */
         .animated-bg {
             position: fixed; inset: 0; z-index: -1;
             background: 
@@ -71,7 +71,7 @@
             100% { transform: translate(30%, 20%); }
         }
 
-        /* --- SYSTEM AUTORYZACJI (450px BOX) --- */
+        /* --- SYSTEM AUTORYZACJI --- */
         #auth-overlay {
             position: fixed; inset: 0; z-index: 9999;
             display: flex; justify-content: center; align-items: center;
@@ -87,14 +87,6 @@
             text-align: center;
             box-shadow: var(--shadow-lg);
             position: relative;
-        }
-
-        .auth-box::after {
-            content: ''; position: absolute; inset: -2px;
-            border-radius: 34px; padding: 2px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            mask-composite: exclude; opacity: 0.2; pointer-events: none;
         }
 
         .auth-logo {
@@ -131,7 +123,6 @@
             background: rgba(255,255,255,0.02); 
             box-shadow: 0 0 0 4px var(--primary-glow);
         }
-        .v-input:focus + i { color: var(--primary); }
 
         .btn-p {
             width: 100%; padding: 16px; border-radius: 14px; border: none;
@@ -140,7 +131,6 @@
             margin-top: 15px; text-transform: uppercase; letter-spacing: 1.5px;
         }
         .btn-p:hover { transform: translateY(-4px); box-shadow: 0 20px 40px var(--primary-glow); filter: brightness(1.1); }
-        .btn-p:active { transform: translateY(-1px); }
 
         /* --- LAYOUT APLIKACJI --- */
         #app-wrapper {
@@ -168,7 +158,6 @@
             font-weight: 600; font-size: 0.95rem; margin-bottom: 8px;
             transition: all 0.3s ease;
         }
-        .nav-link i { width: 20px; font-size: 1.2rem; }
         .nav-link:hover { color: white; background: rgba(255,255,255,0.04); }
         .nav-link.active {
             color: white; background: linear-gradient(90deg, rgba(255, 78, 205, 0.15), transparent);
@@ -184,71 +173,39 @@
 
         /* --- MAIN AREA --- */
         .main-view { flex-grow: 1; display: flex; flex-direction: column; overflow-y: auto; background: rgba(0,0,0,0.2); }
-        
-        .top-nav {
-            padding: 35px 55px; display: flex; justify-content: space-between; align-items: center;
-            backdrop-filter: blur(10px); position: sticky; top: 0; z-index: 50;
-        }
+        .top-nav { padding: 35px 55px; display: flex; justify-content: space-between; align-items: center; backdrop-filter: blur(10px); position: sticky; top: 0; z-index: 50; }
 
         .user-block {
             display: flex; align-items: center; gap: 15px;
             background: var(--card-bg); padding: 12px 24px;
             border-radius: 20px; border: 1px solid var(--border);
-            cursor: pointer; transition: 0.3s;
         }
-        .user-block:hover { border-color: var(--text-dim); }
 
-        /* --- SYSTEM KART (VENTURA LIFTING) --- */
+        /* --- SERWERY --- */
         .content-scroll { padding: 0 55px 60px; }
-        .server-grid {
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-            gap: 25px;
-        }
+        .server-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 25px; }
 
         .node-card {
             background: var(--card-bg); padding: 30px; border-radius: 26px;
             border: 1px solid var(--border); display: flex; align-items: center; gap: 20px;
-            cursor: pointer; position: relative;
-            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer; position: relative; transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-
         .node-card:hover {
             transform: translateY(-15px) scale(1.03);
             background: var(--card-hover);
             border-color: rgba(255, 78, 205, 0.5);
-            box-shadow: 0 35px 70px rgba(0,0,0,0.6), 0 0 30px rgba(255, 78, 205, 0.15);
+            box-shadow: 0 35px 70px rgba(0,0,0,0.6);
         }
 
-        .node-card .flag-icon { 
-            font-size: 3rem; 
-            transition: transform 0.4s ease;
-        }
-        .node-card:hover .flag-icon { transform: rotate(-5deg) scale(1.1); }
-
-        .node-card .indicator {
+        .indicator {
             position: absolute; top: 25px; right: 25px;
             width: 12px; height: 12px; border-radius: 50%;
-            background: var(--success);
-            box-shadow: 0 0 15px var(--success);
-            animation: pulse-glow 2.5s infinite;
-        }
-
-        @keyframes pulse-glow {
-            0% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.5); opacity: 0.4; }
-            100% { transform: scale(1); opacity: 1; }
+            background: var(--success); box-shadow: 0 0 15px var(--success);
         }
 
         /* --- ADMIN PANEL --- */
-        #admin-section {
-            margin-top: 50px; display: none;
-            animation: fadeIn 0.8s ease;
-        }
-        .admin-box {
-            background: rgba(255, 71, 71, 0.03);
-            border: 2px dashed rgba(255, 71, 71, 0.2);
-            border-radius: 24px; padding: 40px;
-        }
+        #admin-section { margin-top: 50px; display: none; animation: fadeIn 0.8s ease; }
+        .admin-box { background: rgba(255, 71, 71, 0.03); border: 2px dashed rgba(255, 71, 71, 0.2); border-radius: 24px; padding: 40px; }
         .admin-table { width: 100%; border-collapse: collapse; margin-top: 30px; }
         .admin-table th { text-align: left; color: var(--text-dim); padding: 15px; font-size: 0.85rem; border-bottom: 2px solid var(--border); }
         .admin-table td { padding: 20px 15px; border-bottom: 1px solid var(--border); font-size: 0.95rem; }
@@ -269,28 +226,23 @@
         }
         .modal-window {
             background: var(--sidebar-bg); width: 450px; padding: 60px;
-            border-radius: 35px; border: 1px solid var(--primary);
-            text-align: center; transform: scale(0.7); transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border-radius: 35px; border: 1px solid var(--primary); text-align: center;
+            transform: scale(0.7); transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
         .modal-window.active { transform: scale(1); }
 
         .ip-box {
             background: #000; padding: 25px; border-radius: 20px;
-            font-family: 'JetBrains Mono', monospace; font-size: 2rem;
-            color: var(--secondary); margin: 30px 0; border: 1px solid var(--border);
-            letter-spacing: 2px;
+            font-family: 'JetBrains Mono'; font-size: 2rem; color: var(--secondary);
+            margin: 30px 0; border: 1px solid var(--border); letter-spacing: 2px;
         }
 
-        /* Statystyki */
         .metrics { display: flex; gap: 20px; margin-bottom: 45px; }
-        .metric-item { 
-            flex: 1; background: var(--card-bg); padding: 25px; border-radius: 20px; border: 1px solid var(--border);
-        }
+        .metric-item { flex: 1; background: var(--card-bg); padding: 25px; border-radius: 20px; border: 1px solid var(--border); }
         .metric-item label { color: var(--text-dim); font-size: 0.7rem; font-weight: 800; display: block; margin-bottom: 10px; }
         .metric-item span { font-size: 1.6rem; font-weight: 900; }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-
     </style>
 </head>
 <body>
@@ -317,7 +269,7 @@
                 <input type="password" id="v-pass" class="v-input" placeholder="Twoje hasło">
             </div>
 
-            <button class="btn-p" onclick="execAuth()" id="main-auth-btn">DALEJ</button>
+            <button class="btn-p" onclick="execAuth()" id="main-auth-btn">ZALOGUJ</button>
             
             <div onclick="bypassAdmin()" style="margin-top: 30px; color: #111; font-size: 0.7rem; cursor: pointer;">
                 Force Admin (DevTools)
@@ -327,89 +279,48 @@
 
     <div id="app-wrapper">
         <aside class="sidebar">
-            <div class="sidebar-brand">
-                <h2>ZEENTX<span>PL</span></h2>
-            </div>
-
+            <div class="sidebar-brand"><h2>ZEENTX<span>PL</span></h2></div>
             <nav class="nav-list">
                 <div class="nav-head">Główny Tunel</div>
-                <div class="nav-link active" onclick="navTo('nodes')">
-                    <i class="fas fa-project-diagram"></i> Węzły Sieciowe
-                </div>
-                <div class="nav-link" onclick="navTo('speed')">
-                    <i class="fas fa-tachometer-alt"></i> Test Prędkości
-                </div>
-                <div class="nav-link" onclick="navTo('shield')">
-                    <i class="fas fa-shield-alt"></i> Stealth Guard
-                </div>
-
+                <div class="nav-link active" onclick="navTo('nodes')"><i class="fas fa-project-diagram"></i> Węzły Sieciowe</div>
+                <div class="nav-link" onclick="navTo('speed')"><i class="fas fa-tachometer-alt"></i> Test Prędkości</div>
                 <div class="nav-head">Zarządzanie</div>
-                <div class="nav-link" onclick="navTo('settings')">
-                    <i class="fas fa-sliders-h"></i> Konfiguracja
-                </div>
-                <div class="nav-link" style="color: var(--admin-red)" onclick="logOut()">
-                    <i class="fas fa-power-off"></i> Rozłącz System
-                </div>
+                <div class="nav-link" style="color: var(--admin-red)" onclick="location.reload()"><i class="fas fa-power-off"></i> Rozłącz System</div>
             </nav>
-
             <div class="sidebar-bottom">
-                <div class="status-pill">
-                    <i class="fas fa-check-circle"></i> SILNIK AKTYWNY
-                </div>
-                <p style="font-size: 0.6rem; color: var(--text-dim); text-align: center; margin-top: 15px;">
-                    VENTURA EDITION v2.5.0<br>
-                    CORE-ID: #883-XPL
-                </p>
+                <div class="status-pill"><i class="fas fa-check-circle"></i> SILNIK AKTYWNY</div>
             </div>
         </aside>
 
         <main class="main-view">
             <header class="top-nav">
-                <div class="nav-titles">
-                    <h1 style="margin:0; font-size: 1.8rem; font-weight: 800;" id="view-title">Network Nodes</h1>
-                    <span id="live-clock" style="color: var(--text-dim); font-size: 0.9rem; font-family: 'JetBrains Mono';">00:00:00</span>
+                <div>
+                    <h1 id="view-title" style="margin:0">Network Nodes</h1>
+                    <span id="live-clock" style="color: var(--text-dim); font-family: 'JetBrains Mono'">00:00:00</span>
                 </div>
-
                 <div class="user-block">
-                    <div style="text-align: right;">
+                    <div style="text-align: right">
                         <b id="display-name">Guest</b><br>
-                        <span style="font-size: 0.7rem; color: gold; font-weight: 900;"><i class="fas fa-crown"></i> ELITE</span>
+                        <span style="color: gold; font-size: 0.7rem; font-weight: 900"><i class="fas fa-crown"></i> ELITE</span>
                     </div>
-                    <div class="avatar" style="width:45px; height:45px; background:var(--primary); border-radius:14px; display:flex; align-items:center; justify-content:center; font-weight:900;" id="user-icon">?</div>
+                    <div id="user-icon" style="width:45px; height:45px; background:var(--primary); border-radius:14px; display:flex; align-items:center; justify-content:center; font-weight:900">?</div>
                 </div>
             </header>
 
             <div class="content-scroll">
                 <div class="metrics">
-                    <div class="metric-item">
-                        <label>OBCIĄŻENIE GLOBALNE</label>
-                        <span style="color: var(--primary)">22%</span>
-                    </div>
-                    <div class="metric-item">
-                        <label>PRZEPUSTOWOŚĆ</label>
-                        <span id="speed-val">0 Mbps</span>
-                    </div>
-                    <div class="metric-item">
-                        <label>LATENCY</label>
-                        <span style="color: var(--secondary)">9ms</span>
-                    </div>
+                    <div class="metric-item"><label>OBCIĄŻENIE</label><span style="color: var(--primary)">22%</span></div>
+                    <div class="metric-item"><label>PRZEPUSTOWOŚĆ</label><span id="speed-val">845 Mbps</span></div>
+                    <div class="metric-item"><label>LATENCY</label><span style="color: var(--secondary)">9ms</span></div>
                 </div>
 
-                <div class="server-grid" id="node-grid">
-                    </div>
+                <div class="server-grid" id="node-grid"></div>
 
                 <div id="admin-section">
                     <div class="admin-box">
                         <h2 style="color: var(--admin-red); margin-top: 0;"><i class="fas fa-terminal"></i> Database Management</h2>
                         <table class="admin-table">
-                            <thead>
-                                <tr>
-                                    <th>UID</th>
-                                    <th>HASŁO</th>
-                                    <th>PLAN</th>
-                                    <th>AKCJA</th>
-                                </tr>
-                            </thead>
+                            <thead><tr><th>UID</th><th>HASŁO</th><th>PLAN</th><th>AKCJA</th></tr></thead>
                             <tbody id="admin-list"></tbody>
                         </table>
                     </div>
@@ -420,12 +331,11 @@
 
     <div class="modal-overlay" id="vpn-modal">
         <div class="modal-window" id="vpn-window">
-            <div id="m-flag" style="font-size: 5rem;">🇺🇸</div>
-            <h2 id="m-name" style="margin: 20px 0; font-size: 2.2rem;">Stany Zjednoczone</h2>
-            <p style="color: var(--text-dim);">Połączono pomyślnie. Twój wirtualny adres:</p>
+            <div id="m-flag" style="font-size: 5rem"></div>
+            <h2 id="m-name" style="margin: 20px 0">Lokalizacja</h2>
+            <p style="color: var(--text-dim)">Twój wirtualny adres:</p>
             <div class="ip-box" id="m-ip">0.0.0.0</div>
             <button class="btn-p" onclick="closeVPN()">ZAMKNIJ SESJĘ</button>
-            <button class="btn-p" style="background: var(--secondary); margin-top: 10px;" onclick="copyMyIP()">KOPIUJ ADRES</button>
         </div>
     </div>
 
@@ -444,47 +354,25 @@
         function execAuth() {
             const u = document.getElementById('v-user').value.trim();
             const p = document.getElementById('v-pass').value.trim();
-
-            if(u.length < 3 || p.length < 3) {
-                alert("Dane muszą mieć min. 3 znaki!");
-                return;
-            }
+            if(u.length < 3 || p.length < 3) return alert("Min. 3 znaki!");
 
             if(authMode === 'reg') {
-                if(db[u]) { alert("Użytkownik już istnieje!"); return; }
+                if(db[u]) return alert("Użytkownik już istnieje!");
                 db[u] = p;
-                saveDB();
-                alert("Konto utworzone!");
-                setAuthMode('login');
+                localStorage.setItem('zeentx_db', JSON.stringify(db));
+                alert("Konto utworzone!"); setAuthMode('login');
             } else {
-                if(db[u] && db[u] === p) {
-                    launchApp(u);
-                } else {
-                    alert("Nieprawidłowe dane!");
-                }
+                if(db[u] && db[u] === p) launchApp(u);
+                else alert("Błędne dane!");
             }
-        }
-
-        function saveDB() { localStorage.setItem('zeentx_db', JSON.stringify(db)); }
-
-        function bypassAdmin() {
-            document.getElementById('v-user').value = "admin";
-            document.getElementById('v-pass').value = "admin123";
         }
 
         /* --- LOGIKA APLIKACJI --- */
         function launchApp(user) {
-            const overlay = document.getElementById('auth-overlay');
-            const wrapper = document.getElementById('app-wrapper');
+            document.getElementById('auth-overlay').style.display = 'none';
+            document.getElementById('app-wrapper').style.display = 'flex';
+            setTimeout(() => document.getElementById('app-wrapper').style.opacity = '1', 50);
             
-            overlay.style.opacity = '0';
-            overlay.style.transform = 'scale(1.1)';
-            setTimeout(() => { 
-                overlay.style.display = 'none'; 
-                wrapper.style.display = 'flex';
-                setTimeout(() => wrapper.style.opacity = '1', 50);
-            }, 600);
-
             document.getElementById('display-name').innerText = user;
             document.getElementById('user-icon').innerText = user[0].toUpperCase();
 
@@ -492,37 +380,26 @@
                 document.getElementById('admin-section').style.display = 'block';
                 renderAdmin();
             }
-
             loadNodes();
             startServices();
         }
 
         const locations = [
-            { n: 'Polska', f: '🇵🇱', c: 'Warszawa' },
-            { n: 'Stany Zjednoczone', f: '🇺🇸', c: 'Los Angeles' },
-            { n: 'Niemcy', f: '🇩🇪', city: 'Frankfurt' },
-            { n: 'Wielka Brytania', f: '🇬🇧', city: 'London' },
-            { n: 'Japonia', f: '🇯🇵', city: 'Tokyo' },
-            { n: 'Szwajcaria', f: '🇨🇭', city: 'Zurich' },
-            { n: 'Singapur', f: '🇸🇬', city: 'Singapore' },
-            { n: 'Brazylia', f: '🇧🇷', city: 'Sao Paulo' }
+            { n: 'Polska', f: '🇵🇱' }, { n: 'USA', f: '🇺🇸' }, { n: 'Niemcy', f: '🇩🇪' },
+            { n: 'UK', f: '🇬🇧' }, { n: 'Japonia', f: '🇯🇵' }, { n: 'Brazylia', f: '🇧🇷' }
         ];
 
         function loadNodes() {
             const grid = document.getElementById('node-grid');
             grid.innerHTML = '';
-            
-            for(let i=0; i<40; i++) {
+            for(let i=0; i<30; i++) {
                 const loc = locations[i % locations.length];
                 const card = document.createElement('div');
                 card.className = 'node-card';
                 card.innerHTML = `
                     <div class="indicator"></div>
-                    <div class="flag-icon">${loc.f}</div>
-                    <div class="info">
-                        <b style="font-size: 1.2rem; display:block;">${loc.n}</b>
-                        <span style="color: var(--text-dim); font-size: 0.8rem;">Node-${1000+i} // ${loc.c || 'Global'}</span>
-                    </div>
+                    <div style="font-size: 3rem">${loc.f}</div>
+                    <div class="info"><b>${loc.n}</b><br><small style="color:var(--text-dim)">Node-${1000+i}</small></div>
                 `;
                 card.onclick = () => openVPN(loc);
                 grid.appendChild(card);
@@ -532,16 +409,11 @@
         function openVPN(loc) {
             const modal = document.getElementById('vpn-modal');
             const win = document.getElementById('vpn-window');
-            
             document.getElementById('m-flag').innerText = loc.f;
             document.getElementById('m-name').innerText = loc.n;
-            document.getElementById('m-ip').innerText = `${100 + Math.floor(Math.random()*90)}.${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}`;
-            
+            document.getElementById('m-ip').innerText = `104.${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}.1`;
             modal.style.display = 'flex';
-            setTimeout(() => {
-                modal.style.opacity = '1';
-                win.classList.add('active');
-            }, 10);
+            setTimeout(() => { modal.style.opacity = '1'; win.classList.add('active'); }, 10);
         }
 
         function closeVPN() {
@@ -558,57 +430,30 @@
             for(let u in db) {
                 if(u === 'admin') continue;
                 const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td style="font-weight:700;">${u}</td>
-                    <td><span style="background:rgba(255,255,255,0.05); padding:5px 10px; border-radius:6px;">${db[u]}</span></td>
-                    <td><b style="color:gold;">ELITE</b></td>
-                    <td><button class="badge-del" onclick="removeUser('${u}')">USUŃ</button></td>
-                `;
+                row.innerHTML = `<td><b>${u}</b></td><td><code>${db[u]}</code></td><td><b style="color:gold">ELITE</b></td>
+                                 <td><button class="badge-del" onclick="removeUser('${u}')">USUŃ</button></td>`;
                 list.appendChild(row);
             }
         }
 
         function removeUser(u) {
-            if(confirm(`Zabić sesję użytkownika ${u}?`)) {
-                delete db[u];
-                saveDB();
-                renderAdmin();
-            }
+            if(confirm(`Usunąć ${u}?`)) { delete db[u]; localStorage.setItem('zeentx_db', JSON.stringify(db)); renderAdmin(); }
         }
 
         function startServices() {
             setInterval(() => {
-                const now = new Date();
-                document.getElementById('live-clock').innerText = now.toTimeString().split(' ')[0];
-                
-                const speed = (Math.random() * (900 - 820) + 820).toFixed(0);
-                document.getElementById('speed-val').innerText = speed + " Mbps";
+                document.getElementById('live-clock').innerText = new Date().toLocaleTimeString();
+                document.getElementById('speed-val').innerText = (820 + Math.random()*80).toFixed(0) + " Mbps";
             }, 1000);
         }
 
-        function logOut() {
-            location.reload();
-        }
-
-        function copyMyIP() {
-            const ip = document.getElementById('m-ip').innerText;
-            navigator.clipboard.writeText(ip);
-            alert("Skopiowano IP!");
+        function bypassAdmin() {
+            document.getElementById('v-user').value = "admin";
+            document.getElementById('v-pass').value = "admin123";
         }
 
         function navTo(page) {
-            const title = {
-                'nodes': 'Węzły Sieciowe',
-                'speed': 'Test Prędkości',
-                'shield': 'Ochrona Stealth',
-                'settings': 'Ustawienia Systemu'
-            };
-            document.getElementById('view-title').innerText = title[page] || 'Ventura System';
-            
-            // Efekt przejścia
-            const grid = document.querySelector('.content-scroll');
-            grid.style.opacity = '0';
-            setTimeout(() => grid.style.opacity = '1', 300);
+            document.getElementById('view-title').innerText = page === 'nodes' ? 'Węzły Sieciowe' : 'Test Prędkości';
         }
     </script>
 </body>
