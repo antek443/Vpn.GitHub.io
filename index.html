@@ -3,250 +3,279 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZEENTX | OMNI-ARCADE</title>
+    <title>ZEENTX | OMNI HUB V9</title>
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;600;900&family=JetBrains+Mono&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            --accent: #ff0055;
-            --accent-glow: rgba(255, 0, 85, 0.4);
-            --bg: #050508;
-            --card-bg: rgba(255, 255, 255, 0.03);
-            --border: rgba(255, 255, 255, 0.08);
+            --accent: #00ffa3;
+            --accent-glow: rgba(0, 255, 163, 0.3);
+            --bg: #050507;
+            --card-bg: rgba(255, 255, 255, 0.02);
+            --border: rgba(255, 255, 255, 0.06);
             --text: #ffffff;
-            --ease: cubic-bezier(0.16, 1, 0.3, 1);
+            --ease-ventura: cubic-bezier(0.2, 1, 0.2, 1);
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+        * { box-sizing: border-box; margin: 0; padding: 0; outline: none; }
         body { 
             background: var(--bg); color: var(--text); 
             font-family: 'Outfit', sans-serif; overflow: hidden; height: 100vh;
         }
 
-        /* --- BACKGROUND ANIMATION --- */
-        .bg-glow {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at 10% 10%, #200020 0%, transparent 50%),
-                        radial-gradient(circle at 90% 90%, #000030 0%, transparent 50%);
-            z-index: -1;
+        /* --- BACKGROUND --- */
+        .bg-mesh {
+            position: fixed; inset: 0; z-index: -1;
+            background-image: radial-gradient(circle at 50% -20%, #1a2a24 0%, transparent 50%);
         }
 
         /* --- ALERTY --- */
-        #alert-container {
+        #alert-stack {
             position: fixed; top: 30px; right: 30px; z-index: 10000;
-            display: flex; flex-direction: column; gap: 12px;
+            display: flex; flex-direction: column; gap: 10px;
         }
-        .alert {
-            background: rgba(10, 10, 15, 0.9); border: 1px solid var(--border);
-            border-left: 5px solid var(--accent); padding: 20px; border-radius: 15px;
+        .v-alert {
+            background: rgba(10, 15, 12, 0.95); border: 1px solid var(--border);
+            border-left: 4px solid var(--accent); padding: 18px 25px; border-radius: 12px;
             backdrop-filter: blur(20px); transform: translateX(150%);
-            transition: 0.6s var(--ease); box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+            transition: 0.6s var(--ease-ventura); box-shadow: 0 20px 40px rgba(0,0,0,0.5);
         }
-        .alert.active { transform: translateX(0); }
+        .v-alert.active { transform: translateX(0); }
 
-        /* --- REJESTRACJA --- */
-        #auth-overlay {
-            position: fixed; inset: 0; z-index: 5000; background: var(--bg);
-            display: flex; justify-content: center; align-items: center; transition: 1s var(--ease);
+        /* --- LOGIN SCREEN --- */
+        #login-screen {
+            position: fixed; inset: 0; z-index: 9999; background: var(--bg);
+            display: flex; justify-content: center; align-items: center; transition: 1s var(--ease-ventura);
         }
-        .auth-card {
-            width: 400px; padding: 50px; background: var(--card-bg);
+        .login-card {
+            width: 420px; padding: 60px; background: var(--card-bg);
             border: 1px solid var(--border); border-radius: 40px; text-align: center;
-            backdrop-filter: blur(40px); border-top: 1px solid rgba(255,255,255,0.2);
+            backdrop-filter: blur(40px);
         }
-        input {
-            width: 100%; padding: 18px; margin: 12px 0; background: rgba(0,0,0,0.4);
-            border: 1px solid var(--border); border-radius: 15px; color: white; transition: 0.3s;
+        .login-card input {
+            width: 100%; padding: 18px; margin: 15px 0; background: rgba(0,0,0,0.3);
+            border: 1px solid var(--border); border-radius: 15px; color: white;
         }
-        input:focus { border-color: var(--accent); box-shadow: 0 0 15px var(--accent-glow); }
-        .btn-launch {
-            width: 100%; padding: 20px; background: var(--accent); border: none;
-            border-radius: 18px; color: white; font-weight: 900; cursor: pointer;
-            margin-top: 20px; letter-spacing: 2px;
+        .btn-enter {
+            width: 100%; padding: 20px; background: var(--accent); color: black;
+            border: none; border-radius: 18px; font-weight: 900; cursor: pointer;
+            text-transform: uppercase; letter-spacing: 2px; margin-top: 10px;
         }
 
         /* --- MAIN LAYOUT --- */
-        #main-app { display: none; grid-template-columns: 300px 1fr 300px; height: 100vh; }
+        #app-container { display: none; grid-template-columns: 280px 1fr 320px; height: 100vh; }
 
+        /* Sidebar */
         .sidebar { border-right: 1px solid var(--border); padding: 40px 25px; }
         .nav-link {
-            padding: 18px; margin-bottom: 10px; border-radius: 20px; cursor: pointer;
+            padding: 16px; margin-bottom: 10px; border-radius: 15px; cursor: pointer;
             display: flex; align-items: center; gap: 15px; color: rgba(255,255,255,0.4);
-            transition: 0.4s var(--ease); font-weight: 600;
+            transition: 0.3s;
         }
-        /* VENTURA HOVER EFFECT */
         .nav-link:hover {
-            background: rgba(255,255,255,0.05); color: white;
-            transform: translateX(15px) translateY(-5px);
-            box-shadow: -10px 15px 30px rgba(0,0,0,0.3);
+            background: rgba(255,255,255,0.03); color: var(--accent);
+            transform: translateX(8px);
         }
-        .nav-link.active { background: var(--accent); color: white; box-shadow: 0 10px 25px var(--accent-glow); }
+        .nav-link.active { background: var(--accent); color: black; font-weight: 900; }
 
-        /* --- GAME GRID --- */
-        .game-viewport { padding: 40px; overflow-y: auto; scroll-behavior: smooth; }
-        .game-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 25px; }
+        /* Content Area */
+        .main-view { padding: 40px; overflow-y: auto; scroll-behavior: smooth; }
 
-        /* VENTURA GAME CARD */
-        .game-card {
+        /* ONLINE SECTION (4 GIERKI) */
+        .online-row {
+            display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 60px;
+        }
+        .online-card {
+            height: 180px; background: linear-gradient(135deg, rgba(0,255,163,0.1) 0%, rgba(0,0,0,0) 100%);
+            border: 1px solid var(--accent); border-radius: 25px; position: relative;
+            cursor: pointer; overflow: hidden; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; transition: 0.5s var(--ease-ventura);
+        }
+        .online-card:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 25px 50px rgba(0, 255, 163, 0.2);
+            background: var(--accent); color: black;
+        }
+        .online-card i { font-size: 2.5rem; margin-bottom: 10px; }
+
+        /* MINI GAMES GRID (150 GIER) */
+        .mini-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 20px;
+        }
+        .mini-card {
             background: var(--card-bg); border: 1px solid var(--border);
-            padding: 25px; border-radius: 30px; cursor: pointer;
-            transition: 0.5s var(--ease); text-align: center;
+            padding: 25px; border-radius: 25px; cursor: pointer;
+            transition: 0.5s var(--ease-ventura); text-align: center;
         }
-        .game-card:hover {
-            transform: translateY(-20px) scale(1.05);
+        .mini-card:hover {
+            transform: translateY(-20px) scale(1.03);
             border-color: var(--accent);
-            box-shadow: 0 40px 60px rgba(0,0,0,0.6), 0 0 20px var(--accent-glow);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.5), 0 0 20px var(--accent-glow);
         }
-        .game-card i { font-size: 2.5rem; color: var(--accent); margin-bottom: 15px; }
-        .game-card h4 { font-weight: 900; margin-bottom: 5px; }
-        .game-card .status { font-size: 0.7rem; color: #00ff88; text-transform: uppercase; }
+        .mini-card h4 { font-size: 0.9rem; margin-bottom: 5px; }
+        .mini-card .ip-label { font-family: 'JetBrains Mono'; font-size: 0.7rem; color: var(--accent); opacity: 0.7; }
 
-        /* SOCIAL BAR */
-        .social-bar { border-left: 1px solid var(--border); padding: 40px 20px; }
-        .user-info { background: rgba(255,255,255,0.03); padding: 20px; border-radius: 25px; margin-bottom: 30px; }
-
-        /* ONLINE GAME SECTION */
-        .online-banner {
-            grid-column: 1 / -1; background: linear-gradient(90deg, #7000ff, #ff0055);
-            padding: 40px; border-radius: 35px; margin-bottom: 40px; display: flex;
-            justify-content: space-between; align-items: center; cursor: pointer;
-            transition: 0.4s var(--ease);
+        /* Social Sidebar */
+        .social-sidebar { border-left: 1px solid var(--border); padding: 40px 25px; }
+        .profile-box {
+            background: rgba(255,255,255,0.02); padding: 25px; border-radius: 25px; margin-bottom: 40px;
+            text-align: center;
         }
-        .online-banner:hover { transform: scale(1.02) translateY(-10px); box-shadow: 0 20px 40px rgba(255,0,85,0.3); }
+        .avatar {
+            width: 80px; height: 80px; background: var(--accent); border-radius: 25px;
+            margin: 0 auto 15px; display: flex; align-items: center; justify-content: center;
+            font-size: 2rem; color: black; font-weight: 900;
+        }
 
     </style>
 </head>
 <body>
 
-    <div class="bg-glow"></div>
-    <div id="alert-container"></div>
+    <div class="bg-mesh"></div>
+    <div id="alert-stack"></div>
 
-    <div id="auth-overlay">
-        <div class="auth-card">
-            <h1 style="font-weight: 900; font-size: 2.5rem; margin-bottom: 10px;">ZEENTX<span style="color:var(--accent)">.ARCADE</span></h1>
-            <p style="color: gray; margin-bottom: 30px;">Zarejestruj profil gracza</p>
-            <input type="text" id="username" placeholder="Twój Nick">
-            <input type="password" placeholder="Hasło">
-            <button class="btn-launch" onclick="launchArcade()">WEJDŹ DO GRY</button>
+    <div id="login-screen">
+        <div class="login-card">
+            <h1 style="font-weight: 900; letter-spacing: -2px; margin-bottom: 10px;">ZEENTX<span style="color:var(--accent)">.HUB</span></h1>
+            <p style="color: gray; margin-bottom: 30px;">Zarejestruj profil w systemie OMNI</p>
+            <input type="text" id="user-input" placeholder="Wybierz Nick">
+            <input type="password" placeholder="Hasło dostępu">
+            <button class="btn-enter" onclick="bootSystem()">Inicjalizacja</button>
         </div>
     </div>
 
-    <div id="main-app">
+    <div id="app-container">
         <aside class="sidebar">
-            <div style="font-weight: 900; font-size: 1.5rem; margin-bottom: 50px;">OMNI HUB</div>
-            <div class="nav-link active"><i class="fas fa-gamepad"></i> Wszystkie Gry</div>
-            <div class="nav-link"><i class="fas fa-bolt"></i> Popularne</div>
-            <div class="nav-link"><i class="fas fa-globe"></i> Gry Online</div>
-            <div class="nav-link"><i class="fas fa-trophy"></i> Rankingi</div>
+            <div style="font-weight: 900; font-size: 1.4rem; margin-bottom: 60px;">VENTURA CLIENT</div>
+            <nav>
+                <div class="nav-link active"><i class="fas fa-th-large"></i> Dashboard</div>
+                <div class="nav-link"><i class="fas fa-gamepad"></i> Gry Mini (150)</div>
+                <div class="nav-link"><i class="fas fa-globe"></i> Gry Online (4)</div>
+                <div class="nav-link"><i class="fas fa-cog"></i> Konfiguracja</div>
+            </nav>
         </aside>
 
-        <main class="game-viewport">
-            <div id="online-games">
-                <div class="online-banner" onclick="spawnAlert('Online', 'Kopiowanie linku do pokoju: SERVER-EU-1')">
-                    <div>
-                        <h2 style="font-size: 2rem; font-weight: 900;">MULTI-DUEL 1v1</h2>
-                        <p>Dołącz do aktywnej gry online z innymi graczami.</p>
-                    </div>
-                    <div style="background: white; color: black; padding: 15px 30px; border-radius: 15px; font-weight: 900;">GRAJ TERAZ</div>
+        <main class="main-view">
+            <h2 style="margin-bottom: 25px; font-weight: 900;">LIVE <span style="color:var(--accent)">ONLINE</span></h2>
+            <div class="online-row">
+                <div class="online-card" onclick="copyIP('144.20.10.1:25565', 'Multi-Arena 1')">
+                    <i class="fas fa-users"></i>
+                    <b>ARENA 1v1</b>
+                </div>
+                <div class="online-card" onclick="copyIP('144.20.10.2:25565', 'Survival Online')">
+                    <i class="fas fa-fire"></i>
+                    <b>SURVIVAL</b>
+                </div>
+                <div class="online-card" onclick="copyIP('144.20.10.3:25565', 'Battle Royale')">
+                    <i class="fas fa-crosshairs"></i>
+                    <b>ROYALE</b>
+                </div>
+                <div class="online-card" onclick="copyIP('144.20.10.4:25565', 'Creative Mode')">
+                    <i class="fas fa-paint-brush"></i>
+                    <b>CREATIVE</b>
                 </div>
             </div>
 
-            <h2 style="font-size: 2.5rem; font-weight: 900; margin-bottom: 30px;">Biblioteka <span style="color:var(--accent)">(250)</span></h2>
-            
-            <div class="game-grid" id="master-grid">
+            <h2 style="margin-bottom: 25px; font-weight: 900;">BIBLIOTEKA <span style="color:var(--accent)">MINI-GAMES</span></h2>
+            <div class="mini-grid" id="mini-container">
                 </div>
         </main>
 
-        <aside class="social-bar">
-            <div class="user-info">
-                <div style="width: 50px; height: 50px; background: var(--accent); border-radius: 15px; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; font-weight: 900;" id="av-text">U</div>
-                <b id="u-display">Gracz</b><br>
-                <small style="color: gray;">Ranga: Legend</small>
+        <aside class="social-sidebar">
+            <div class="profile-box">
+                <div class="avatar" id="avatar-icon">?</div>
+                <h3 id="profile-name">Gracz</h3>
+                <small style="color:var(--accent)">Ranga: VENTURA ELITE</small>
             </div>
-            
-            <h3>Znajomi</h3>
-            <div id="friends" style="margin-top: 20px;">
-                <div style="display:flex; gap:10px; margin-bottom:15px; opacity: 0.6;">
-                    <div style="width:10px; height:10px; border-radius:50%; background:#00ff88;"></div>
-                    <span>Mario_Dev</span>
+
+            <h4 style="color:gray; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 20px;">Aktywność</h4>
+            <div id="social-list">
                 </div>
-                <div style="display:flex; gap:10px; margin-bottom:15px; opacity: 0.6;">
-                    <div style="width:10px; height:10px; border-radius:50%; background:#00ff88;"></div>
-                    <span>Cyber_Kid</span>
-                </div>
-            </div>
         </aside>
     </div>
 
     <script>
-        const gameTitles = ["Super Mario", "Cyber Rush", "Ninja Blade", "Tetris Z", "Pixel Quest", "Space Wars", "Dino Run", "Retro Drift"];
-        const icons = ["fa-mandalorian", "fa-ghost", "fa-dragon", "fa-robot", "fa-rocket", "fa-meteor"];
+        // --- START SYSTEMU ---
+        function bootSystem() {
+            const nick = document.getElementById('user-input').value || "User";
+            document.getElementById('profile-name').innerText = nick;
+            document.getElementById('avatar-icon').innerText = nick[0].toUpperCase();
 
-        // 1. Start systemu
-        function launchArcade() {
-            const nick = document.getElementById('username').value || "Player";
-            document.getElementById('u-display').innerText = nick;
-            document.getElementById('av-text').innerText = nick[0].toUpperCase();
+            document.getElementById('login-screen').style.opacity = '0';
+            document.getElementById('login-screen').style.transform = 'scale(0.9)';
             
-            document.getElementById('auth-overlay').style.transform = 'translateY(-100%)';
             setTimeout(() => {
-                document.getElementById('auth-overlay').style.display = 'none';
-                document.getElementById('main-app').style.display = 'grid';
-                generateGames();
-                spawnAlert("Witaj!", "Zalogowano jako " + nick + ". Miłej gry!");
+                document.getElementById('login-screen').style.display = 'none';
+                document.getElementById('app-container').style.display = 'grid';
+                generateMiniGames();
+                generateSocial();
+                addAlert("System", "Autoryzacja pomyślna. Witaj " + nick);
             }, 800);
         }
 
-        // 2. Generator 250 gier
-        function generateGames() {
-            const grid = document.getElementById('master-grid');
-            for(let i=1; i<=250; i++) {
-                const title = gameTitles[i % gameTitles.length];
-                const icon = icons[i % icons.length];
-                const card = document.createElement('div');
-                card.className = 'game-card';
+        // --- GENERATOR 150 GIER ---
+        function generateMiniGames() {
+            const container = document.getElementById('mini-container');
+            const types = ["Mario", "PacMan", "Tetris", "Sonic", "Snake", "Doom", "Retro", "Galaga"];
+            
+            for(let i=1; i<=150; i++) {
+                const gameName = types[i % types.length] + " v" + i;
+                const mockIP = `mini-server.zeentx:${2000 + i}`;
                 
-                // Losowe IP/Link serwera
-                const mockIP = `192.168.${Math.floor(Math.random()*255)}.${i}`;
-
+                const card = document.createElement('div');
+                card.className = 'mini-card';
                 card.innerHTML = `
-                    <i class="fas ${icon}"></i>
-                    <h4>${title} #${i}</h4>
-                    <span class="status">● Gotowa</span>
-                    <div style="margin-top:15px; font-size: 0.6rem; color:gray; font-family: 'JetBrains Mono'">${mockIP}</div>
+                    <div style="font-size: 1.5rem; margin-bottom: 10px;">🕹️</div>
+                    <h4>${gameName}</h4>
+                    <div class="ip-label">${mockIP}</div>
                 `;
-
-                // LOGIKA: KLIKNIĘCIE KOPIUJE IP / LINK
-                card.onclick = () => {
-                    navigator.clipboard.writeText(mockIP);
-                    spawnAlert("Kopiowanie", "Skopiowano adres serwera gry: " + mockIP);
-                    
-                    // Wizualny klik
-                    card.style.transform = 'scale(0.95)';
-                    setTimeout(() => card.style.transform = '', 100);
-                };
-
-                grid.appendChild(card);
+                
+                card.onclick = () => copyIP(mockIP, gameName);
+                container.appendChild(card);
             }
         }
 
-        // 3. System Alertów
-        function spawnAlert(title, msg) {
-            const container = document.getElementById('alert-container');
+        // --- FUNKCJA KOPIOWANIA ---
+        function copyIP(ip, name) {
+            navigator.clipboard.writeText(ip);
+            addAlert("Schowek", "Skopiowano adres " + name + ": " + ip);
+        }
+
+        // --- SYSTEM ALERTÓW ---
+        function addAlert(title, msg) {
+            const stack = document.getElementById('alert-stack');
             const el = document.createElement('div');
-            el.className = 'alert';
+            el.className = 'v-alert';
             el.innerHTML = `
-                <b style="color:var(--accent); display:block; font-size:0.8rem; margin-bottom:5px;">${title}</b>
-                <span style="font-size:0.9rem">${msg}</span>
+                <b style="color:var(--accent); display:block; margin-bottom:5px;">${title}</b>
+                <span style="font-size:0.85rem; color:gray;">${msg}</span>
             `;
-            container.appendChild(el);
-            setTimeout(() => el.classList.add('active'), 50);
+            stack.appendChild(el);
+            setTimeout(() => el.classList.add('active'), 100);
             setTimeout(() => {
                 el.classList.remove('active');
                 setTimeout(() => el.remove(), 600);
-            }, 3000);
+            }, 4000);
+        }
+
+        // --- ZNAJOMI ---
+        function generateSocial() {
+            const friends = ["Admin_Zeentx", "V_Dev", "CyberMan", "Retro_Gamer"];
+            const container = document.getElementById('social-list');
+            friends.forEach(f => {
+                const item = document.createElement('div');
+                item.style.padding = "10px 0";
+                item.style.display = "flex";
+                item.style.alignItems = "center";
+                item.style.gap = "12px";
+                item.innerHTML = `
+                    <div style="width:8px; height:8px; border-radius:50%; background:#00ff88;"></div>
+                    <span style="color:gray; font-size:0.9rem">${f}</span>
+                `;
+                container.appendChild(item);
+            });
         }
     </script>
 </body>
