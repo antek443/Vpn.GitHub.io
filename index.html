@@ -3,196 +3,318 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZEENTX | OMNI HUB</title>
+    <title>ZEENTX OMNI V11 | DARK MASTER_RECODE</title>
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;600;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;700&family=Montserrat:wght@100;400;600;900&display=swap" rel="stylesheet">
     
     <style>
+        /* --- 1. RDZEŃ SYSTEMU (MROCZNE KOLORY) --- */
         :root {
-            --accent: #00ffcc;
-            --bg: #0a0a0c;
-            --card: rgba(255, 255, 255, 0.03);
-            --border: rgba(255, 255, 255, 0.1);
+            --p: #00fff2; /* Neon Cyan */
+            --p-rgb: 0, 255, 242;
+            --a: #ff0055; /* Neon Red */
+            --bg-deep: #020204; /* Mroczna mrocz mroczność */
+            --card: rgba(10, 10, 15, 0.98);
+            --border: rgba(255, 255, 255, 0.05);
+            --text-m: #ffffff;
+            --text-d: #666675;
+            --success: #00ff88;
+            --ease: cubic-bezier(0.16, 1, 0.3, 1);
+            --glow: 0 0 15px rgba(0, 255, 242, 0.2);
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { 
-            background: var(--bg); color: white; 
-            font-family: 'Outfit', sans-serif; overflow: hidden; height: 100vh;
-        }
-
-        /* --- TŁO --- */
-        .glow {
-            position: fixed; inset: 0; z-index: -1;
-            background: radial-gradient(circle at 50% 0%, #004433 0%, transparent 70%);
-        }
-
-        /* --- LOGIN --- */
-        #login {
-            position: fixed; inset: 0; z-index: 9999; background: var(--bg);
-            display: flex; justify-content: center; align-items: center; transition: 0.8s ease-in-out;
-        }
-        .login-box {
-            width: 380px; padding: 50px; background: var(--card);
-            border: 1px solid var(--border); border-radius: 30px; text-align: center; backdrop-filter: blur(20px);
-        }
-        input {
-            width: 100%; padding: 15px; margin: 15px 0; background: rgba(0,0,0,0.5);
-            border: 1px solid var(--border); border-radius: 12px; color: white; text-align: center;
-        }
-        .btn-go {
-            width: 100%; padding: 15px; background: var(--accent); color: black;
-            border: none; border-radius: 12px; font-weight: 900; cursor: pointer;
-        }
-
-        /* --- LAYOUT --- */
-        #app { display: none; grid-template-columns: 260px 1fr; height: 100vh; }
+        * { box-sizing: border-box; margin: 0; padding: 0; outline: none; }
         
+        body, html {
+            height: 100vh; width: 100vw;
+            overflow: hidden;
+            background: var(--bg-deep);
+            color: var(--text-m);
+            font-family: 'Montserrat', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* --- BACKGROUND FX --- */
+        #aura-bg { position: fixed; inset: 0; z-index: -1; }
+        .g-orb {
+            position: absolute; width: 40vw; height: 40vw;
+            background: radial-gradient(circle, rgba(var(--p-rgb), 0.1) 0%, transparent 60%);
+            border-radius: 50%; filter: blur(100px);
+            animation: orb_float 20s infinite linear;
+        }
+        @keyframes orb_float { 
+            0% { transform: translate(0,0) scale(1); }
+            50% { transform: translate(10vw, 5vh) scale(1.1); }
+            100% { transform: translate(-5vw, 15vh) scale(1); }
+        }
+
+        /* --- POWIADOMIENIA (ALERTY) --- */
+        #a-stack {
+            position: fixed; top: 30px; right: 30px; z-index: 10000;
+            display: flex; flex-direction: column; gap: 10px;
+        }
+        .a-toast {
+            background: rgba(10,10,15,0.98); border: 1px solid var(--border);
+            border-left: 4px solid var(--p); padding: 15px 25px; border-radius: 12px;
+            backdrop-filter: blur(20px); transform: translateX(120%);
+            transition: 0.5s var(--ease); box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .a-toast.active { transform: translateX(0); }
+
+        /* --- LOGOWANIE (rejerstacja) --- */
+        #auth-veil {
+            position: fixed; inset: 0; z-index: 5000; background: var(--bg-deep);
+            display: flex; justify-content: center; align-items: center; transition: 1s var(--ease);
+        }
+        .auth-card {
+            width: 440px; padding: 60px; background: var(--card);
+            border: 1px solid var(--border); border-radius: 40px; text-align: center;
+            backdrop-filter: blur(40px); border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        .auth-card input {
+            width: 100%; padding: 18px; margin: 15px 0; background: rgba(0,0,0,0.5);
+            border: 1px solid var(--border); border-radius: 15px; color: white; text-align: center; font-family: monospace;
+        }
+        .btn-l {
+            width: 100%; padding: 20px; background: var(--p); color: black;
+            border: none; border-radius: 18px; font-weight: 900; cursor: pointer;
+            text-transform: uppercase; letter-spacing: 2px; margin-top: 10px;
+        }
+
+        /* --- GLOWNY INTERFEJS (Ventura Client Styl) --- */
+        #app-c { display: none; grid-template-columns: 280px 1fr 300px; height: 100vh; }
+
+        /* Sidebar Ventura Look */
         .side { border-right: 1px solid var(--border); padding: 40px 20px; background: rgba(0,0,0,0.3); }
-        .nav { padding: 15px; border-radius: 12px; cursor: pointer; color: gray; transition: 0.3s; margin-bottom: 5px; }
-        .nav:hover, .nav.active { background: var(--card); color: var(--accent); }
-
-        .main { padding: 40px; overflow-y: auto; }
-
-        /* GRID ONLINE (10) */
-        .online-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 15px; margin-bottom: 40px; }
-        .game-top {
-            height: 120px; border: 1px solid var(--accent); border-radius: 20px;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            cursor: pointer; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            background: rgba(0, 255, 204, 0.05);
+        .brand { font-family: 'Montserrat'; font-weight: 900; font-size: 1.5rem; text-align: center; margin-bottom: 50px; color: var(--p); letter-spacing: 2px; }
+        .nav-item {
+            padding: 18px 20px; margin-bottom: 8px; border-radius: 15px; cursor: pointer;
+            display: flex; align-items: center; gap: 15px; color: rgba(255,255,255,0.4);
+            transition: 0.3s var(--ease); font-weight: 600;
         }
-        .game-top:hover { transform: translateY(-10px); background: var(--accent); color: black; box-shadow: 0 0 30px rgba(0,255,204,0.4); }
-
-        /* GRID MINI (50) */
-        .mini-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px; }
-        .mini-box {
-            background: var(--card); border: 1px solid var(--border);
-            padding: 20px; border-radius: 20px; cursor: pointer; text-align: center;
-            transition: 0.3s;
+        .nav-item:hover {
+            background: rgba(var(--p-rgb), 0.05); color: white;
+            transform: translateX(10px) translateY(-5px);
+            box-shadow: -10px 10px 20px rgba(0,0,0,0.3);
         }
-        .mini-box:hover { transform: scale(1.05); border-color: var(--accent); background: rgba(255,255,255,0.05); }
+        .nav-item.active { background: var(--p); color: black; font-weight: 900; box-shadow: var(--glow); }
 
-        /* --- OKNO GRY (DYNAMICZNE) --- */
-        #game-view {
-            position: fixed; inset: 0; z-index: 10000; background: #000;
-            display: none; flex-direction: column;
-        }
-        .game-header { padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; background: #111; }
-        #game-frame { width: 100%; height: 100%; border: none; display: none; }
+        /* Content Area */
+        .viewport { padding: 40px; overflow-y: auto; scroll-behavior: smooth; }
         
-        /* Loader animowany */
-        .loader-wrap { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-        .loading-bar { width: 200px; height: 4px; background: #222; border-radius: 2px; margin-top: 20px; overflow: hidden; }
-        .loading-progress { width: 0%; height: 100%; background: var(--accent); transition: 2s linear; }
+        /* 10 GIER GLOBALNYCH */
+        .o-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 15px; margin-bottom: 40px; }
+        .o-card {
+            height: 140px; border: 1px solid var(--p); border-radius: 20px;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            cursor: pointer; transition: 0.5s var(--ease);
+            background: linear-gradient(135deg, rgba(var(--p-rgb),0.05) 0%, transparent 100%);
+        }
+        .o-card:hover {
+            transform: translateY(-15px) scale(1.05);
+            background: var(--p); color: black;
+            box-shadow: 0 0 30px rgba(var(--p-rgb),0.4), var(--glow);
+        }
+        .o-card i { font-size: 2rem; margin-bottom: 8px; }
+
+        /* 250 GIER MINI (Mario) */
+        .mini-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 20px; }
+        .mini-card {
+            background: var(--card); border: 1px solid var(--border);
+            padding: 25px; border-radius: 25px; cursor: pointer; text-align: center;
+            transition: 0.5s var(--ease); position: relative; overflow: hidden;
+        }
+        /* UNIESIENIE PO NAJECHANIU */
+        .mini-card:hover {
+            transform: translateY(-20px) scale(1.02);
+            border-color: var(--p);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.5), var(--glow);
+        }
+        .mini-card i { font-size: 1.5rem; color: var(--p); margin-bottom: 15px; }
+        .mini-card h4 { font-size: 0.8rem; margin-bottom: 5px; }
+        .mini-card .ip { font-family: 'JetBrains Mono'; font-size: 0.7rem; color: var(--success); opacity: 0.6; }
+
+        /* Right Profile Bar */
+        .social { border-left: 1px solid var(--border); padding: 40px 25px; background: rgba(0,0,0,0.3); }
+        .p-box { background: rgba(255,255,255,0.02); padding: 25px; border-radius: 25px; text-align: center; margin-bottom: 30px; }
+        .av { width: 70px; height: 70px; background: var(--p); border-radius: 20px; margin: 0 auto 15px; color: black; display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: 900; }
+        
+        /* TERMINAL (mini gra w logice) */
+        .term {
+            background: #000; border-radius: 15px; padding: 20px; font-family: 'JetBrains Mono';
+            height: 200px; overflow-y: auto; border: 1px solid var(--p); color: var(--p); margin-bottom: 10px;
+        }
+        .term-i { width: 100%; background: none; border: none; color: white; font-family: monospace; padding: 5px; }
 
     </style>
 </head>
-<body>
+<body class="theme-main">
 
-    <div class="glow"></div>
+    <div id="aura-bg"><div class="g-orb"></div></div>
+    <div id="a-stack"></div>
 
-    <div id="login">
-        <div class="login-box">
-            <h2 style="margin-bottom: 10px;">ZEENTX<span style="color:var(--accent)">.HUB</span></h2>
-            <input type="text" id="nick" placeholder="Podaj swój Nick">
-            <button class="btn-go" onclick="start()">WEJDŹ DO SYSTEMU</button>
+    <div id="auth-veil">
+        <div class="auth-card">
+            <h1 class="brand">ZEENTX<span style="color:var(--p)">.OMNI</span></h1>
+            <p style="color: gray; margin-bottom: 30px;">Zarejestruj identyfikator systemowy</p>
+            <input type="text" id="u-n-in" placeholder="Wybierz Nick">
+            <input type="password" placeholder="Pass-key szyfrujący">
+            <button class="btn-l" onclick="bootOMNI()">Inicjalizacja Węzła</button>
         </div>
     </div>
 
-    <div id="game-view">
-        <div class="game-header">
-            <span id="game-title" style="font-weight: 900; color: var(--accent);">GRA</span>
-            <button onclick="closeGame()" style="background:red; color:white; border:none; padding: 8px 20px; border-radius: 8px; cursor:pointer; font-weight:900;">ZAMKNIJ X</button>
-        </div>
-        <div class="loader-wrap" id="loader">
-            <h2 id="load-text">URUCHAMIANIE...</h2>
-            <div class="loading-bar"><div class="loading-progress" id="p-bar"></div></div>
-        </div>
-        <iframe id="game-frame" src=""></iframe>
-    </div>
-
-    <div id="app">
+    <div id="app-c">
         <aside class="side">
-            <h1 style="font-size: 1.2rem; margin-bottom: 40px;">OMNI ENGINE</h1>
-            <div class="nav active"><i class="fas fa-home"></i> Dashboard</div>
-            <div class="nav"><i class="fas fa-gamepad"></i> Gry (50)</div>
-            <div class="nav"><i class="fas fa-globe"></i> Online (10)</div>
-            <div class="nav"><i class="fab fa-discord"></i> Discord</div>
+            <div class="brand">DARK OMNI</div>
+            <nav>
+                <div class="nav-item active" onclick="swView('games', this)"><i class="fas fa-layer-group"></i> 250 Gier</div>
+                <div class="nav-item" onclick="swView('global', this)"><i class="fas fa-globe-europe"></i> World (10)</div>
+                <div class="nav-item" onclick="swView('terminal', this)"><i class="fas fa-terminal"></i> Terminal</div>
+                <div class="nav-item"><i class="fas fa-cog"></i> Ustawienia</div>
+            </nav>
         </aside>
 
-        <main class="main">
-            <h2 style="margin-bottom: 20px;">TOP 10 <span style="color:var(--accent)">ONLINE</span></h2>
-            <div class="online-grid">
-                <div class="game-top" onclick="play('World Craft', 'https://www.retrogames.cc/embed/41724-super-mario-world-usa.html')"><i class="fas fa-cube"></i><b>World</b></div>
-                <div class="game-top" onclick="play('Scrabble', 'https://poki.com/pl/g/scrabble-sprint')"><i class="fas fa-font"></i><b>Scrabble</b></div>
-                <div class="game-top" onclick="play('Snake', 'https://poki.com/pl/g/snake-is-mlg')"><i class="fas fa-snake"></i><b>Snake.io</b></div>
-                <div class="game-top" onclick="play('Tetris', 'https://poki.com/pl/g/tetris')"><i class="fas fa-th-large"></i><b>Tetris</b></div>
-                <div class="game-top" onclick="play('Chess', 'https://poki.com/pl/g/master-chess')"><i class="fas fa-chess"></i><b>Chess</b></div>
-                <div class="game-top" onclick="play('Tank', 'https://poki.com/pl/g/tank-trouble')"><i class="fas fa-shield-alt"></i><b>Tank</b></div>
-                <div class="game-top" onclick="play('Drift', 'https://poki.com/pl/g/drift-hunters')"><i class="fas fa-car"></i><b>Drift</b></div>
-                <div class="game-top" onclick="play('Sniper', 'https://poki.com/pl/g/rooftop-snipers')"><i class="fas fa-crosshairs"></i><b>Sniper</b></div>
-                <div class="game-top" onclick="play('Duel', 'https://poki.com/pl/g/thumb-fighter')"><i class="fas fa-hand-rock"></i><b>Duel</b></div>
-                <div class="game-top" onclick="play('Soccer', 'https://poki.com/pl/g/football-legends')"><i class="fas fa-futbol"></i><b>Soccer</b></div>
+        <main class="viewport">
+            <div id="v-games" class="view_c active">
+                <h1 style="font-size: 2.5rem; font-weight: 900; margin-bottom: 25px;">Biblioteka <span style="color:var(--p)">(250)</span></h1>
+                <div class="mini-grid" id="mini-container">
+                    </div>
             </div>
 
-            <h2 style="margin-bottom: 20px;">MINI GRY <span style="color:var(--accent)">(50)</span></h2>
-            <div class="mini-grid" id="mini-container"></div>
+            <div id="v-global" class="view_c" style="display: none;">
+                <h1 style="font-size: 2.5rem; font-weight: 900; margin-bottom: 25px;">Węzły <span style="color:var(--p)">Globalne (10)</span></h1>
+                <div class="o-grid">
+                    <div class="o-card" onclick="copyIP('185.12.33.x', 'World Online')"><i class="fas fa-cube"></i><b>World</b></div>
+                    <div class="o-card" onclick="copyIP('45.55.10.x', 'Scrabble Hub')"><i class="fas fa-font"></i><b>Scrabble</b></div>
+                    <div class="o-card" onclick="copyIP('104.x.x.1', 'Cyber Tanks')"><i class="fas fa-shield-alt"></i><b>Tanks</b></div>
+                    <div class="o-card" onclick="copyIP('200.10.x.5', 'Digital Chess')"><i class="fas fa-chess"></i><b>Chess</b></div>
+                    <div class="o-card" onclick="copyIP('92.10.x.1', 'Galaxy Wars')"><i class="fas fa-rocket"></i><b>Galaxy</b></div>
+                    <div class="o-card" onclick="copyIP('160.11.x.1', 'Poker Club')"><i class="fas fa-spade"></i><b>Poker</b></div>
+                    <div class="o-card" onclick="copyIP('88.x.x.1', 'Speed Race')"><i class="fas fa-car"></i><b>Racing</b></div>
+                    <div class="o-card" onclick="copyIP('141.x.x.1', 'Sniper Ops')"><i class="fas fa-crosshairs"></i><b>Sniper</b></div>
+                    <div class="o-card" onclick="copyIP('192.168.1.1', 'Magic Duel')"><i class="fas fa-hat-wizard"></i><b>Magic</b></div>
+                    <div class="o-card" onclick="copyIP('10.0.0.1', 'Cyber Soccer')"><i class="fas fa-futbol"></i><b>Soccer</b></div>
+                </div>
+            </div>
+
+            <div id="v-terminal" class="view_c" style="display: none;">
+                <h1 style="font-size: 2.5rem; font-weight: 900; margin-bottom: 25px;">Root Terminal</h1>
+                <div class="term" id="t-o">Type 'mine' to gain data KB, 'help' for commands.</div>
+                <input type="text" class="term-i" id="t-i" onkeydown="handleTerminal(event)" placeholder="Enter command...">
+            </div>
         </main>
+
+        <aside class="social">
+            <div class="p-box">
+                <div class="av" id="u-a">?</div>
+                <h3 id="u-d">Gracz</h3>
+                <small style="color:var(--p)">Status: Online</small>
+            </div>
+            <div style="margin-top: 40px;">
+                <h4 style="color: gray; font-size: 0.7rem; text-transform: uppercase; margin-bottom: 20px;">Działania</h4>
+                <div style="display:grid; gap:10px;">
+                    <button class="btn-l" style="padding:10px; font-size:0.8rem; background: var(--a); color:white" onclick="alert('Czyszczenie cache...')">DEBUG CHACHE</button>
+                    <button class="btn-l" style="padding:10px; font-size:0.8rem; background: none; border:1px solid #333; color:gray" onclick="location.reload()">WYLOGUJ</button>
+                </div>
+            </div>
+        </aside>
     </div>
 
     <script>
-        function start() {
-            const n = document.getElementById('nick').value;
-            if(!n) return alert("Podaj nick!");
-            document.getElementById('login').style.transform = 'translateY(-100%)';
+        // --- CORE OMNI SYSTEM ---
+        function bootOMNI() {
+            const nick = document.getElementById('u-n-in').value || "User_" + Math.floor(Math.random()*999);
+            document.getElementById('u-d').innerText = nick;
+            document.getElementById('u-a').innerText = nick[0].toUpperCase();
+
+            document.getElementById('auth-veil').style.opacity = '0';
+            document.getElementById('auth-veil').style.transform = 'scale(0.9)';
+            
             setTimeout(() => {
-                document.getElementById('app').style.display = 'grid';
-                genMini();
-            }, 600);
+                document.getElementById('auth-veil').style.display = 'none';
+                document.getElementById('app-c').style.display = 'grid';
+                generateMiniGames();
+                sendAlert("Root", nick + " uwierzytelniony. Węzeł załadowany.");
+            }, 800);
         }
 
-        function genMini() {
+        // --- GENERATOR 250 GIER MIN ---
+        function generateMiniGames() {
             const container = document.getElementById('mini-container');
-            for(let i=1; i<=50; i++) {
-                const div = document.createElement('div');
-                div.className = 'mini-box';
-                div.innerHTML = `<i class="fas fa-ghost"></i><br><b>Gra #${i}</b>`;
-                div.onclick = () => play('Mini Gra #'+i, 'https://poki.com/pl/g/retro-bowl');
-                container.appendChild(div);
+            const icons = ["fa-gamepad", "fa-ghost", "fa-robot", "fa-dragon", "fa-satellite-dish", "fa-microchip"];
+            const marios = ["Super Mario", "Pixel Jump", "Tetris-OS", "Galaxy Run", "Dino Dash", "Retro Quest"];
+
+            for(let i=1; i<=250; i++) {
+                const name = marios[i % marios.length] + " v" + i;
+                const icon = icons[i % icons.length];
+                const card = document.createElement('div');
+                card.className = 'mini-card';
+                card.innerHTML = `
+                    <i class="fas ${icon}"></i>
+                    <h4>${name}</h4>
+                    <span class="ip">mini_server:${2000 + i}</span>
+                `;
+                
+                card.onclick = () => copyIP('mini:'+(2000+i), name);
+                container.appendChild(card);
             }
         }
 
-        function play(title, url) {
-            const view = document.getElementById('game-view');
-            const frame = document.getElementById('game-frame');
-            const bar = document.getElementById('p-bar');
-            const loader = document.getElementById('loader');
-
-            view.style.display = 'flex';
-            document.getElementById('game-title').innerText = title.toUpperCase();
-            
-            // Reset ładowania
-            frame.style.display = 'none';
-            loader.style.display = 'flex';
-            bar.style.width = '0%';
-            
-            setTimeout(() => {
-                bar.style.width = '100%';
-            }, 100);
-
-            // Po 2 sekundach pokazujemy grę
-            setTimeout(() => {
-                loader.style.display = 'none';
-                frame.style.display = 'block';
-                frame.src = url;
-            }, 2100);
+        // --- KOPIOWANIE IP ---
+        function copyIP(ip, name) {
+            navigator.clipboard.writeText(ip);
+            sendAlert("Kopiowanie", "Adres " + name + " skopiowany: " + ip);
+            // Dynamiczne podniesienie dla efektu kliku
+            event.target.style.transform = 'translateY(-30px) scale(1.05)';
+            setTimeout(() => event.target.style.transform = '', 150);
         }
 
-        function closeGame() {
-            document.getElementById('game-view').style.display = 'none';
-            document.getElementById('game-frame').src = "";
+        // --- ALERT SYSTEM ---
+        function sendAlert(title, msg) {
+            const stack = document.getElementById('a-stack');
+            const el = document.createElement('div');
+            el.className = 'a-toast';
+            el.innerHTML = `
+                <b style="color:var(--p); display:block; font-size:0.8rem; margin-bottom:5px;">${title}</b>
+                <span style="font-size:0.85rem; color:gray;">${msg}</span>
+            `;
+            stack.appendChild(el);
+            setTimeout(() => el.classList.add('active'), 50);
+            setTimeout(() => {
+                el.classList.remove('active');
+                setTimeout(() => el.remove(), 600);
+            }, 4000);
+        }
+
+        // --- VIEW SWITCHER ---
+        function swView(id, el) {
+            document.querySelectorAll('.view_c').forEach(v => v.style.display = 'none');
+            document.querySelectorAll('.nav-item').forEach(l => l.classList.remove('active'));
+            document.getElementById('v-' + id).style.display = 'block';
+            el.classList.add('active');
+        }
+
+        // --- TERMINAL MINIGAME ---
+        let minedData = 0;
+        function handleTerminal(e) {
+            if(e.key === 'Enter') {
+                const cmd = e.target.value.toLowerCase().trim();
+                const out = document.getElementById('t-o');
+                e.target.value = '';
+
+                if(cmd === 'help') out.innerHTML += `<div>help, clear, mine, whoami</div>`;
+                else if(cmd === 'clear') out.innerHTML = '';
+                else if(cmd === 'mine') { 
+                    minedData += 50; 
+                    out.innerHTML += `<div>Data fragment mined. Total mined: ${minedData} KB.</div>`;
+                    sendAlert("System", "Mined 50 KB data.");
+                }
+                else if(cmd === 'whoami') out.innerHTML += `<div>UID: ${document.getElementById('u-d').innerText} / Rank: ADMIN</div>`;
+                else out.innerHTML += `<div style="color:var(--a)">Invalid command: ${cmd}</div>`;
+                
+                out.scrollTop = out.scrollHeight;
+            }
         }
     </script>
 </body>
