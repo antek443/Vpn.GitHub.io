@@ -3,205 +3,188 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZEENTX | OMNI CLIENT</title>
+    <title>ZEENTX OMNI | CLIENT</title>
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;600;900&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            --accent: #00ffcc; /* Neonowy turkus */
-            --bg-body: #050505;
-            --sidebar-bg: rgba(0, 0, 0, 0.6);
-            --card-bg: rgba(255, 255, 255, 0.03);
+            --accent: #00ffcc;
+            --bg: #030303;
+            --card: rgba(255, 255, 255, 0.03);
             --border: rgba(255, 255, 255, 0.08);
-            --font-main: 'Outfit', sans-serif;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { 
-            background: var(--bg-body); color: white; 
-            font-family: var(--font-main); overflow: hidden; height: 100vh;
+            background: var(--bg); color: white; 
+            font-family: 'Outfit', sans-serif; overflow: hidden; height: 100vh;
         }
 
         /* --- ANIMOWANE TŁO (VENTURA STYLE) --- */
-        .bg-animate {
+        .aura-layer {
             position: fixed; inset: 0; z-index: -1;
-            background: radial-gradient(circle at center, #0a1210 0%, #050505 100%);
+            background: radial-gradient(circle at center, #08100e 0%, #030303 100%);
         }
-        .light-orb {
-            position: absolute; width: 500px; height: 500px;
+        .orb {
+            position: absolute; width: 600px; height: 600px;
             background: radial-gradient(circle, rgba(0, 255, 204, 0.08) 0%, transparent 70%);
-            border-radius: 50%; filter: blur(80px);
-            animation: moveOrb 15s infinite alternate ease-in-out;
+            filter: blur(100px); border-radius: 50%;
+            animation: float 15s infinite alternate ease-in-out;
         }
-        .orb-1 { top: -10%; left: 10%; }
-        .orb-2 { bottom: -10%; right: 10%; animation-delay: -7s; }
-        @keyframes moveOrb {
+        .o1 { top: -20%; left: -10%; }
+        .o2 { bottom: -20%; right: -10%; animation-delay: -7s; }
+        @keyframes float {
             0% { transform: translate(0, 0) scale(1); }
-            100% { transform: translate(150px, 100px) scale(1.3); }
+            100% { transform: translate(100px, 50px) scale(1.2); }
         }
 
-        /* --- LAYOUT --- */
-        #main-wrapper { display: grid; grid-template-columns: 280px 1fr; height: 100vh; }
+        /* --- INTERFEJS --- */
+        #hub { display: grid; grid-template-columns: 280px 1fr 300px; height: 100vh; }
 
-        /* SIDEBAR */
+        /* SIDEBAR LEWY */
         .sidebar {
-            background: var(--sidebar-bg);
-            backdrop-filter: blur(30px);
-            border-right: 1px solid var(--border);
-            padding: 40px;
-            display: flex;
-            flex-direction: column;
-            z-index: 10;
+            background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(25px);
+            border-right: 1px solid var(--border); padding: 40px;
         }
-        .logo { font-size: 1.6rem; font-weight: 900; letter-spacing: 2px; margin-bottom: 50px; }
-        .logo span { color: var(--accent); }
+        .brand { font-size: 1.6rem; font-weight: 900; color: var(--accent); margin-bottom: 50px; }
+        .nav-link { padding: 15px 0; color: #555; cursor: pointer; transition: 0.3s; font-weight: 600; display: flex; align-items: center; gap: 12px; }
+        .nav-link:hover, .nav-link.active { color: white; transform: translateX(5px); }
+        .nav-link i { color: var(--accent); }
 
-        .nav-item {
-            padding: 15px 0; color: #666; font-weight: 600; cursor: pointer;
-            display: flex; align-items: center; gap: 15px; transition: 0.3s;
+        /* CONTENT ŚRODEK */
+        .viewport { padding: 50px; overflow-y: auto; }
+        .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+        .game-box {
+            background: var(--card); border: 1px solid var(--border); border-radius: 25px;
+            padding: 35px; text-align: center; transition: 0.5s cubic-bezier(0.2, 1, 0.2, 1); cursor: pointer;
         }
-        .nav-item:hover, .nav-item.active { color: white; transform: translateX(5px); }
-        .nav-item i { color: var(--accent); }
+        .game-box:hover {
+            transform: translateY(-15px); border-color: var(--accent);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.5), 0 0 20px rgba(0,255,204,0.1);
+        }
+        .game-box i { font-size: 3rem; color: var(--accent); margin-bottom: 20px; display: block; }
+        .p-btn { background: var(--accent); color: black; border: none; padding: 12px 30px; border-radius: 12px; font-weight: 900; margin-top: 15px; cursor: pointer; }
 
-        /* CONTENT */
-        .viewport { padding: 60px; overflow-y: auto; z-index: 5; position: relative; }
-        h1 { font-size: 3.5rem; font-weight: 900; margin-bottom: 40px; letter-spacing: -2px; }
+        /* SIDEBAR PRAWY (ZNAJOMI) */
+        .friends-bar {
+            background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(25px);
+            border-left: 1px solid var(--border); padding: 30px;
+        }
+        .f-input {
+            width: 100%; background: #111; border: 1px solid var(--border);
+            padding: 12px; border-radius: 10px; color: white; margin-bottom: 20px;
+        }
+        .friend-item {
+            display: flex; align-items: center; gap: 15px; margin-bottom: 15px;
+            padding: 10px; border-radius: 10px; background: rgba(255,255,255,0.02);
+        }
+        .status-dot { width: 8px; height: 8px; background: var(--accent); border-radius: 50%; box-shadow: 0 0 10px var(--accent); }
 
-        /* KARTY GIER (EFEKT UNIESIENIA) */
-        .game-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; }
-        .card {
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 30px;
-            padding: 40px;
-            text-align: center;
-            transition: all 0.5s cubic-bezier(0.2, 1, 0.2, 1);
-            cursor: pointer;
-            position: relative;
+        /* OKNO GRY */
+        #game-view {
+            position: fixed; inset: 0; background: #000; z-index: 1000;
+            display: none; flex-direction: column;
         }
-        .card:hover {
-            transform: translateY(-20px);
-            border-color: var(--accent);
-            background: rgba(0, 255, 204, 0.02);
-            box-shadow: 0 40px 80px rgba(0,0,0,0.6), 0 0 20px rgba(0, 255, 204, 0.1);
-        }
-        .card i { font-size: 3.5rem; color: var(--accent); margin-bottom: 25px; display: block; }
-        .card h3 { font-size: 1.5rem; margin-bottom: 15px; font-weight: 900; }
-        .card p { color: #888; margin-bottom: 25px; font-size: 0.9rem; line-height: 1.5; }
-        
-        .play-btn {
-            background: var(--accent); color: black; border: none;
-            padding: 12px 35px; border-radius: 12px; font-weight: 900;
-            cursor: pointer; text-transform: uppercase; transition: 0.3s;
-        }
-        .play-btn:hover { transform: scale(1.1); box-shadow: 0 0 20px var(--accent); }
-
-        /* --- OKNO GRY (W ŚRODKU STRONY) --- */
-        #game-overlay {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.98);
-            z-index: 1000; display: none; flex-direction: column;
-            backdrop-filter: blur(15px);
-        }
-        .header-bar {
-            padding: 20px 40px; background: #000; border-bottom: 1px solid var(--border);
-            display: flex; justify-content: space-between; align-items: center;
-        }
-        .close-btn { 
-            background: #ff3e3e; color: white; border: none; padding: 10px 25px; 
-            border-radius: 10px; cursor: pointer; font-weight: 900;
-        }
-        #game-container { flex: 1; width: 100%; height: 100%; position: relative; }
+        .game-header { padding: 15px 30px; background: #080808; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
         iframe { width: 100%; height: 100%; border: none; }
 
     </style>
 </head>
 <body>
 
-    <div class="bg-animate">
-        <div class="light-orb orb-1"></div>
-        <div class="light-orb orb-2"></div>
+    <div class="aura-layer"><div class="orb o1"></div><div class="orb o2"></div></div>
+
+    <div id="game-view">
+        <div class="game-header">
+            <h3 id="game-name" style="color:var(--accent)">GRA</h3>
+            <button onclick="closeGame()" style="background:#ff3355; color:white; border:none; padding:8px 20px; border-radius:8px; cursor:pointer; font-weight:900;">ZAMKNIJ X</button>
+        </div>
+        <iframe id="game-iframe"></iframe>
     </div>
 
-    <div id="game-overlay">
-        <div class="header-bar">
-            <h2 id="game-title" style="color: var(--accent); letter-spacing: 1px;">URUCHOMIONO GRĘ</h2>
-            <button class="close-btn" onclick="stopGame()">ZAMKNIJ GRĘ [X]</button>
-        </div>
-        <div id="game-container">
-            <iframe id="game-frame" src=""></iframe>
-        </div>
-    </div>
-
-    <div id="main-wrapper">
+    <div id="hub">
         <aside class="sidebar">
-            <div class="logo">ZEENTX<span>.HUB</span></div>
-            <nav>
-                <div class="nav-item active"><i class="fas fa-home"></i> Home</div>
-                <div class="nav-item"><i class="fas fa-gamepad"></i> Gry Online</div>
-                <div class="nav-item"><i class="fas fa-rocket"></i> Premium</div>
-                <div class="nav-item"><i class="fas fa-cog"></i> Ustawienia</div>
-            </nav>
-            <div style="margin-top: auto; font-size: 0.7rem; color: #333;">OMNI ENGINE V2.0</div>
+            <div class="brand">ZEENTX<span>.HUB</span></div>
+            <div class="nav-link active"><i class="fas fa-home"></i> Dashboard</div>
+            <div class="nav-link"><i class="fas fa-gamepad"></i> Gry Online</div>
+            <div class="nav-link"><i class="fas fa-store"></i> Sklep</div>
         </aside>
 
         <main class="viewport">
-            <h1>Odkryj <span>Gry</span></h1>
-            
-            <div class="game-grid">
-                <div class="card" onclick="play('Super Mario World', 'https://www.retrogames.cc/embed/41724-super-mario-world-usa.html')">
+            <h1 style="margin-bottom: 30px;">Witaj, <span style="color:var(--accent)">Graczu</span></h1>
+            <div class="grid">
+                <div class="game-box" onclick="playGame('SUPER MARIO', 'https://n64js.com/')">
                     <i class="fas fa-ghost"></i>
-                    <h3>Mario Retro</h3>
-                    <p>Zagraj w klasyczną przygodę Mario bezpośrednio w swoim kliencie.</p>
-                    <button class="play-btn">Uruchom</button>
+                    <h3>Super Mario 64</h3>
+                    <p>Wersja 3D działająca w przeglądarce.</p>
+                    <button class="p-btn">GRAJ TERAZ</button>
                 </div>
-
-                <div class="card" onclick="play('Scrabble Online', 'https://poki.com/pl/g/scrabble-sprint')">
+                <div class="game-box" onclick="playGame('SCRABBLE', 'https://mattle.online/scrabble-plus')">
                     <i class="fas fa-spell-check"></i>
-                    <h3>Scrabble</h3>
-                    <p>Sprawdź swoje słownictwo w trybie online przeciwko innym.</p>
-                    <button class="play-btn">Uruchom</button>
+                    <h3>Scrabble Hub</h3>
+                    <p>Rywalizacja słowna online.</p>
+                    <button class="p-btn">GRAJ TERAZ</button>
                 </div>
-
-                <div class="card" onclick="play('Venge.io (Strzelanka)', 'https://venge.io/')">
+                <div class="game-box" onclick="playGame('SHOOTER 3D', 'https://venge.io/')">
                     <i class="fas fa-crosshairs"></i>
-                    <h3>Strzelanka 3D</h3>
-                    <p>Szybka gra FPS typu multiplayer z grafiką 3D w Twojej przeglądarce.</p>
-                    <button class="play-btn">Uruchom</button>
+                    <h3>Venge.io</h3>
+                    <p>Szybki shooter multiplayer.</p>
+                    <button class="p-btn">GRAJ TERAZ</button>
                 </div>
             </div>
         </main>
+
+        <aside class="friends-bar">
+            <h3 style="margin-bottom: 20px; font-size: 0.9rem; color: #555; text-transform: uppercase;">Znajomi Online</h3>
+            <input type="text" id="friendName" class="f-input" placeholder="Wpisz nick..." onkeydown="if(event.key==='Enter') addFriend()">
+            <div id="friends-list">
+                <div class="friend-item"><div class="status-dot"></div> <span>Ventura_Admin</span></div>
+            </div>
+        </aside>
     </div>
 
     <script>
-        function play(name, url) {
-            const overlay = document.getElementById('game-overlay');
-            const frame = document.getElementById('game-frame');
-            const title = document.getElementById('game-title');
+        // FUNKCJA DODAWANIA ZNAJOMYCH
+        function addFriend() {
+            const input = document.getElementById('friendName');
+            const name = input.value.trim();
+            if(name === "") return;
 
-            title.innerText = "GRA: " + name.toUpperCase();
-            overlay.style.display = 'flex';
+            const list = document.getElementById('friends-list');
+            const item = document.createElement('div');
+            item.className = 'friend-item';
+            item.innerHTML = `<div class="status-dot"></div> <span>${name}</span>`;
             
-            // Wczytywanie gry do iframe
+            list.appendChild(item);
+            input.value = "";
+            
+            // Mały efekt powiadomienia
+            console.log("Dodano znajomego: " + name);
+        }
+
+        // FUNKCJA URUCHAMIANIA GRY
+        function playGame(title, url) {
+            const view = document.getElementById('game-view');
+            const frame = document.getElementById('game-iframe');
+            document.getElementById('game-name').innerText = title;
+            
+            view.style.display = 'flex';
             frame.src = url;
         }
 
-        function stopGame() {
-            const overlay = document.getElementById('game-overlay');
-            const frame = document.getElementById('game-frame');
-            
-            overlay.style.display = 'none';
-            frame.src = ""; // Wyłączamy źródło, żeby gra przestała grać w tle
+        function closeGame() {
+            document.getElementById('game-view').style.display = 'none';
+            document.getElementById('game-iframe').src = "";
         }
 
-        // Efekt śledzenia myszy dla tła (lekki ruch)
+        // Animacja orbów za myszką
         document.addEventListener('mousemove', (e) => {
-            const x = e.clientX / window.innerWidth;
-            const y = e.clientY / window.innerHeight;
-            
-            document.querySelector('.orb-1').style.transform = `translate(${x * 60}px, ${y * 60}px)`;
-            document.querySelector('.orb-2').style.transform = `translate(${-x * 60}px, ${-y * 60}px)`;
+            const x = (e.clientX / window.innerWidth) * 40;
+            const y = (e.clientY / window.innerHeight) * 40;
+            document.querySelector('.o1').style.transform = `translate(${x}px, ${y}px)`;
+            document.querySelector('.o2').style.transform = `translate(${-x}px, ${-y}px)`;
         });
     </script>
 </body>
