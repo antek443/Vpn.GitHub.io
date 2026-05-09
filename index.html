@@ -3,189 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZEENTX OMNI | CLIENT</title>
-    
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;600;900&display=swap" rel="stylesheet">
-    
-    <style>
-        :root {
-            --accent: #00ffcc;
-            --bg: #030303;
-            --card: rgba(255, 255, 255, 0.03);
-            --border: rgba(255, 255, 255, 0.08);
-        }
-
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { 
-            background: var(--bg); color: white; 
-            font-family: 'Outfit', sans-serif; overflow: hidden; height: 100vh;
-        }
-
-        /* --- ANIMOWANE TŁO (VENTURA STYLE) --- */
-        .aura-layer {
-            position: fixed; inset: 0; z-index: -1;
-            background: radial-gradient(circle at center, #08100e 0%, #030303 100%);
-        }
-        .orb {
-            position: absolute; width: 600px; height: 600px;
-            background: radial-gradient(circle, rgba(0, 255, 204, 0.08) 0%, transparent 70%);
-            filter: blur(100px); border-radius: 50%;
-            animation: float 15s infinite alternate ease-in-out;
-        }
-        .o1 { top: -20%; left: -10%; }
-        .o2 { bottom: -20%; right: -10%; animation-delay: -7s; }
-        @keyframes float {
-            0% { transform: translate(0, 0) scale(1); }
-            100% { transform: translate(100px, 50px) scale(1.2); }
-        }
-
-        /* --- INTERFEJS --- */
-        #hub { display: grid; grid-template-columns: 280px 1fr 300px; height: 100vh; }
-
-        /* SIDEBAR LEWY */
-        .sidebar {
-            background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(25px);
-            border-right: 1px solid var(--border); padding: 40px;
-        }
-        .brand { font-size: 1.6rem; font-weight: 900; color: var(--accent); margin-bottom: 50px; }
-        .nav-link { padding: 15px 0; color: #555; cursor: pointer; transition: 0.3s; font-weight: 600; display: flex; align-items: center; gap: 12px; }
-        .nav-link:hover, .nav-link.active { color: white; transform: translateX(5px); }
-        .nav-link i { color: var(--accent); }
-
-        /* CONTENT ŚRODEK */
-        .viewport { padding: 50px; overflow-y: auto; }
-        .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
-        .game-box {
-            background: var(--card); border: 1px solid var(--border); border-radius: 25px;
-            padding: 35px; text-align: center; transition: 0.5s cubic-bezier(0.2, 1, 0.2, 1); cursor: pointer;
-        }
-        .game-box:hover {
-            transform: translateY(-15px); border-color: var(--accent);
-            box-shadow: 0 30px 60px rgba(0,0,0,0.5), 0 0 20px rgba(0,255,204,0.1);
-        }
-        .game-box i { font-size: 3rem; color: var(--accent); margin-bottom: 20px; display: block; }
-        .p-btn { background: var(--accent); color: black; border: none; padding: 12px 30px; border-radius: 12px; font-weight: 900; margin-top: 15px; cursor: pointer; }
-
-        /* SIDEBAR PRAWY (ZNAJOMI) */
-        .friends-bar {
-            background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(25px);
-            border-left: 1px solid var(--border); padding: 30px;
-        }
-        .f-input {
-            width: 100%; background: #111; border: 1px solid var(--border);
-            padding: 12px; border-radius: 10px; color: white; margin-bottom: 20px;
-        }
-        .friend-item {
-            display: flex; align-items: center; gap: 15px; margin-bottom: 15px;
-            padding: 10px; border-radius: 10px; background: rgba(255,255,255,0.02);
-        }
-        .status-dot { width: 8px; height: 8px; background: var(--accent); border-radius: 50%; box-shadow: 0 0 10px var(--accent); }
-
-        /* OKNO GRY */
-        #game-view {
-            position: fixed; inset: 0; background: #000; z-index: 1000;
-            display: none; flex-direction: column;
-        }
-        .game-header { padding: 15px 30px; background: #080808; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
-        iframe { width: 100%; height: 100%; border: none; }
-
-    </style>
+    <title>Mój Profil</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </head>
 <body>
 
-    <div class="aura-layer"><div class="orb o1"></div><div class="orb o2"></div></div>
+    <header>
+        <div class="logo">MojaStrefa🚀</div>
+        <nav>
+            <a href="#home">Start</a>
+            <a href="#socials">Sociale</a>
+            <a href="#about">O mnie</a>
+        </nav>
+    </header>
 
-    <div id="game-view">
-        <div class="game-header">
-            <h3 id="game-name" style="color:var(--accent)">GRA</h3>
-            <button onclick="closeGame()" style="background:#ff3355; color:white; border:none; padding:8px 20px; border-radius:8px; cursor:pointer; font-weight:900;">ZAMKNIJ X</button>
+    <section class="hero" id="home">
+        <h1>Siema, tu Twój Nick! 👋</h1>
+        <p>Wpadnij na moje profile, sprawdź co robię i pogadajmy na Discordzie.</p>
+        <a href="#socials" class="btn">Sprawdź moje linki</a>
+    </section>
+
+    <section class="social-section" id="socials">
+        <div class="card discord">
+            <h3>Discord</h3>
+            <p>TwójNick#0000</p>
+            <a href="https://discord.com/users/TWÓJ_ID" target="_blank" class="social-btn">Dodaj mnie</a>
         </div>
-        <iframe id="game-iframe"></iframe>
-    </div>
 
-    <div id="hub">
-        <aside class="sidebar">
-            <div class="brand">ZEENTX<span>.HUB</span></div>
-            <div class="nav-link active"><i class="fas fa-home"></i> Dashboard</div>
-            <div class="nav-link"><i class="fas fa-gamepad"></i> Gry Online</div>
-            <div class="nav-link"><i class="fas fa-store"></i> Sklep</div>
-        </aside>
+        <div class="card instagram">
+            <h3>Instagram</h3>
+            <p>@twój_ig</p>
+            <a href="https://instagram.com/twój_ig" target="_blank" class="social-btn">Obserwuj</a>
+        </div>
 
-        <main class="viewport">
-            <h1 style="margin-bottom: 30px;">Witaj, <span style="color:var(--accent)">Graczu</span></h1>
-            <div class="grid">
-                <div class="game-box" onclick="playGame('SUPER MARIO', 'https://n64js.com/')">
-                    <i class="fas fa-ghost"></i>
-                    <h3>Super Mario 64</h3>
-                    <p>Wersja 3D działająca w przeglądarce.</p>
-                    <button class="p-btn">GRAJ TERAZ</button>
-                </div>
-                <div class="game-box" onclick="playGame('SCRABBLE', 'https://mattle.online/scrabble-plus')">
-                    <i class="fas fa-spell-check"></i>
-                    <h3>Scrabble Hub</h3>
-                    <p>Rywalizacja słowna online.</p>
-                    <button class="p-btn">GRAJ TERAZ</button>
-                </div>
-                <div class="game-box" onclick="playGame('SHOOTER 3D', 'https://venge.io/')">
-                    <i class="fas fa-crosshairs"></i>
-                    <h3>Venge.io</h3>
-                    <p>Szybki shooter multiplayer.</p>
-                    <button class="p-btn">GRAJ TERAZ</button>
-                </div>
-            </div>
-        </main>
+        <div class="card tiktok">
+            <h3>TikTok</h3>
+            <p>@twój_tiktok</p>
+            <a href="https://tiktok.com/@twój_tiktok" target="_blank" class="social-btn">Zobacz filmy</a>
+        </div>
+    </section>
 
-        <aside class="friends-bar">
-            <h3 style="margin-bottom: 20px; font-size: 0.9rem; color: #555; text-transform: uppercase;">Znajomi Online</h3>
-            <input type="text" id="friendName" class="f-input" placeholder="Wpisz nick..." onkeydown="if(event.key==='Enter') addFriend()">
-            <div id="friends-list">
-                <div class="friend-item"><div class="status-dot"></div> <span>Ventura_Admin</span></div>
-            </div>
-        </aside>
-    </div>
+    <footer>
+        <p>&copy; 2026 Wszystkie prawa zastrzeżone | Twój Nick</p>
+    </footer>
 
-    <script>
-        // FUNKCJA DODAWANIA ZNAJOMYCH
-        function addFriend() {
-            const input = document.getElementById('friendName');
-            const name = input.value.trim();
-            if(name === "") return;
-
-            const list = document.getElementById('friends-list');
-            const item = document.createElement('div');
-            item.className = 'friend-item';
-            item.innerHTML = `<div class="status-dot"></div> <span>${name}</span>`;
-            
-            list.appendChild(item);
-            input.value = "";
-            
-            // Mały efekt powiadomienia
-            console.log("Dodano znajomego: " + name);
-        }
-
-        // FUNKCJA URUCHAMIANIA GRY
-        function playGame(title, url) {
-            const view = document.getElementById('game-view');
-            const frame = document.getElementById('game-iframe');
-            document.getElementById('game-name').innerText = title;
-            
-            view.style.display = 'flex';
-            frame.src = url;
-        }
-
-        function closeGame() {
-            document.getElementById('game-view').style.display = 'none';
-            document.getElementById('game-iframe').src = "";
-        }
-
-        // Animacja orbów za myszką
-        document.addEventListener('mousemove', (e) => {
-            const x = (e.clientX / window.innerWidth) * 40;
-            const y = (e.clientY / window.innerHeight) * 40;
-            document.querySelector('.o1').style.transform = `translate(${x}px, ${y}px)`;
-            document.querySelector('.o2').style.transform = `translate(${-x}px, ${-y}px)`;
-        });
-    </script>
 </body>
 </html>
