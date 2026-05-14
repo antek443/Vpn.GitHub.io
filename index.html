@@ -3,50 +3,158 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mój Profil</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <title>Moja Gra Słowna</title>
+    <style>
+        body {
+            background-color: #121213;
+            color: white;
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+        }
+        #grid {
+            display: grid;
+            grid-template-rows: repeat(6, 1fr);
+            gap: 5px;
+            margin-bottom: 20px;
+        }
+        .row {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 5px;
+        }
+        .tile {
+            width: 60px;
+            height: 60px;
+            border: 2px solid #3a3a3c;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2rem;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        .correct { background-color: #538d4e; border-color: #538d4e; }
+        .present { background-color: #b59f3b; border-color: #b59f3b; }
+        .absent { background-color: #3a3a3c; border-color: #3a3a3c; }
+        #message {
+            height: 30px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #ff4a4a;
+        }
+    </style>
 </head>
 <body>
 
-    <header>
-        <div class="logo">MojaStrefa🚀</div>
-        <nav>
-            <a href="#home">Start</a>
-            <a href="#socials">Sociale</a>
-            <a href="#about">O mnie</a>
-        </nav>
-    </header>
+    <h1>GRA SŁOWNA</h1>
+    <div id="grid"></div>
+    <div id="message"></div>
 
-    <section class="hero" id="home">
-        <h1>Siema, tu Twój Nick! 👋</h1>
-        <p>Wpadnij na moje profile, sprawdź co robię i pogadajmy na Discordzie.</p>
-        <a href="#socials" class="btn">Sprawdź moje linki</a>
-    </section>
+    <script>
+        // Słowo do odgadnięcia (Możesz je zmienić na dowolne 5-literowe)
+        const SECRET_WORD = "TRAWA"; 
+        const MAX_ATTEMPTS = 6;
+        const WORD_LENGTH = 5;
 
-    <section class="social-section" id="socials">
-        <div class="card discord">
-            <h3>Discord</h3>
-            <p>TwójNick#0000</p>
-            <a href="https://discord.com/users/TWÓJ_ID" target="_blank" class="social-btn">Dodaj mnie</a>
-        </div>
+        let currentRow = 0;
+        let currentTile = 0;
+        let guesses = Array(MAX_ATTEMPTS).fill().map(() => Array(WORD_LENGTH).fill(""));
 
-        <div class="card instagram">
-            <h3>Instagram</h3>
-            <p>@twój_ig</p>
-            <a href="https://instagram.com/twój_ig" target="_blank" class="social-btn">Obserwuj</a>
-        </div>
+        const grid = document.getElementById("grid");
+        const messageDiv = document.getElementById("message");
 
-        <div class="card tiktok">
-            <h3>TikTok</h3>
-            <p>@twój_tiktok</p>
-            <a href="https://tiktok.com/@twój_tiktok" target="_blank" class="social-btn">Zobacz filmy</a>
-        </div>
-    </section>
+        // Generowanie planszy
+        for (let i = 0; i < MAX_ATTEMPTS; i++) {
+            const rowDiv = document.createElement("div");
+            rowDiv.className = "row";
+            for (let j = 0; j < WORD_LENGTH; j++) {
+                const tileDiv = document.createElement("div");
+                tileDiv.className = "tile";
+                tileDiv.id = `tile-${i}-${j}`;
+                rowDiv.appendChild(tileDiv);
+            }
+            grid.appendChild(rowDiv);
+        }
 
-    <footer>
-        <p>&copy; 2026 Wszystkie prawa zastrzeżone | Twój Nick</p>
-    </footer>
+        // Obsługa wpisywania liter z klawiatury
+        document.addEventListener("keydown", (e) => {
+            if (currentRow >= MAX_ATTEMPTS) return;
 
+            const key = e.key.toUpperCase();
+
+            if (key === "ENTER") {
+                if (currentTile === WORD_LENGTH) {
+                    checkWord();
+                } else {
+                    showMessage("Za krótkie słowo!");
+                }
+            } else if (key === "BACKSPACE") {
+                if (currentTile > 0) {
+                    currentTile--;
+                    guesses[currentRow][currentTile] = "";
+                    updateGrid();
+                }
+            } else if (/^[A-ZĄĆĘŁŃÓŚŹŻ]$/.test(key)) {
+                if (currentTile < WORD_LENGTH) {
+                    guesses[currentRow][currentTile] = key;
+                    updateGrid();
+                    currentTile++;
+                }
+            }
+        });
+
+        function updateGrid() {
+            for (let j = 0; j < WORD_LENGTH; j++) {
+                const tile = document.getElementById(`tile-${currentRow}-${j}`);
+                tile.innerText = guesses[currentRow][j];
+            }
+        }
+
+        function checkWord() {
+            const guess = guesses[currentRow].join("");
+            
+            // Kolorowanie kafelków
+            for (let j = 0; j < WORD_LENGTH; j++) {
+                const tile = document.getElementById(`tile-${currentRow}-${j}`);
+                const letter = guess[j];
+
+                if (SECRET_WORD[j] === letter) {
+                    tile.classList.add("correct"); // Zielony - dobra litera, dobre miejsce
+                } else if (SECRET_WORD.includes(letter)) {
+                    tile.classList.add("present"); // Żółty - dobra litera, złe miejsce
+                } else {
+                    tile.classList.add("absent");  // Szary - brak litery w słowie
+                }
+            }
+
+            if (guess === SECRET_WORD) {
+                showMessage("Gratulacje! Wygrałeś! 🎉");
+                currentRow = MAX_ATTEMPTS;
+                return;
+            }
+
+            currentRow++;
+            currentTile = 0;
+
+            if (currentRow === MAX_ATTEMPTS) {
+                showMessage(`Koniec gry! Hasło to: ${SECRET_WORD}`);
+            }
+        }
+
+        function showMessage(text) {
+            messageDiv.innerText = text;
+            if(text !== "Gratulacje! Wygrałeś! 🎉" && !text.includes("Koniec gry")) {
+                setTimeout(() => messageDiv.innerText = "", 2000);
+            }
+        }
+    </script>
 </body>
 </html>
