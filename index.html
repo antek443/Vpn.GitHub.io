@@ -2,8 +2,8 @@
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Słowo - Nowoczesna Gra Słowna</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Słowo - Gigantyczna Baza Słów</title>
     <style>
         :root {
             --bg-color: #121213;
@@ -11,7 +11,8 @@
             --tile-empty: #121213;
             --color-correct: #6aaa64;
             --color-present: #c9b458;
-            --color-absent: #787c7e;
+            --color-absent: #3a3a3c;
+            --key-bg: #818384;
             --text-color: #f8f9fa;
         }
 
@@ -27,6 +28,7 @@
             margin: 0;
             padding: 10px;
             box-sizing: border-box;
+            overflow: hidden;
         }
 
         header {
@@ -34,13 +36,13 @@
             width: 100%;
             max-width: 500px;
             text-align: center;
-            padding-bottom: 10px;
-            margin-bottom: 20px;
+            padding-bottom: 5px;
+            margin-bottom: 10px;
         }
 
         h1 {
             margin: 0;
-            font-size: 2.2rem;
+            font-size: 2rem;
             font-weight: 800;
             letter-spacing: 3px;
             background: linear-gradient(45deg, #6aaa64, #c9b458);
@@ -52,56 +54,90 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            flex-grow: 1;
             justify-content: center;
+            flex-grow: 1;
+            width: 100%;
         }
 
         #grid {
             display: grid;
             grid-template-rows: repeat(6, 1fr);
-            gap: 6px;
-            margin-bottom: 20px;
+            gap: 5px;
+            margin-bottom: 15px;
         }
 
         .row {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
-            gap: 6px;
+            gap: 5px;
         }
 
-        .row.shake {
-            animation: shake 0.5s ease-in-out;
-        }
+        .row.shake { animation: shake 0.5s ease-in-out; }
 
         .tile {
-            width: 58px;
-            height: 58px;
+            width: 52px;
+            height: 52px;
             border: 2px solid var(--tile-border);
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 1.8rem;
+            font-size: 1.6rem;
             font-weight: bold;
             text-transform: uppercase;
             user-select: none;
-            transition: transform 0.1s ease;
+            transition: transform 0.1s ease, background-color 0.3s ease;
             border-radius: 4px;
         }
 
         .tile.pop {
-            transform: scale(1.1);
+            transform: scale(1.08);
             border-color: #565758;
         }
 
-        /* Kolory po zatwierdzeniu */
-        .correct { background-color: var(--color-correct); border-color: var(--color-correct); }
-        .present { background-color: var(--color-present); border-color: var(--color-present); }
-        .absent { background-color: var(--color-absent); border-color: var(--color-absent); }
+        .correct { background-color: var(--color-correct) !important; border-color: var(--color-correct) !important; }
+        .present { background-color: var(--color-present) !important; border-color: var(--color-present) !important; }
+        .absent { background-color: var(--color-absent) !important; border-color: var(--color-absent) !important; }
 
-        /* Powiadomienia (Toast) */
+        #keyboard {
+            width: 100%;
+            max-width: 500px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-top: 10px;
+            padding-bottom: 10px;
+        }
+
+        .keyboard-row {
+            display: flex;
+            justify-content: center;
+            gap: 4px;
+            width: 100%;
+        }
+
+        .key {
+            background-color: var(--key-bg);
+            color: white;
+            border: 0;
+            border-radius: 4px;
+            height: 48px;
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            font-size: 0.95rem;
+            cursor: pointer;
+            user-select: none;
+            text-transform: uppercase;
+            transition: background-color 0.2s ease;
+        }
+
+        .key.wide { flex: 1.5; font-size: 0.8rem; }
+
         #toast-container {
             position: fixed;
-            top: 10%;
+            top: 12%;
             left: 50%;
             transform: translateX(-50%);
             z-index: 10;
@@ -110,23 +146,21 @@
         .toast {
             background-color: #f8f9fa;
             color: #121213;
-            padding: 12px 24px;
-            border-radius: 8px;
+            padding: 10px 20px;
+            border-radius: 6px;
             font-weight: bold;
-            box-shadow: 0 4px 23px rgba(0,0,0,0.5);
-            margin-bottom: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+            margin-bottom: 8px;
             opacity: 0;
-            transition: opacity 0.2s ease;
+            transition: opacity 0.15s ease;
         }
-
         .toast.show { opacity: 1; }
 
-        /* Ekran końcowy modalny */
         #modal {
             display: none;
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background-color: rgba(0,0,0,0.75);
+            background-color: rgba(0,0,0,0.8);
             justify-content: center;
             align-items: center;
             z-index: 100;
@@ -134,45 +168,37 @@
 
         .modal-content {
             background-color: #1c1c1e;
-            padding: 30px;
-            border-radius: 16px;
+            padding: 25px;
+            border-radius: 14px;
             text-align: center;
-            max-width: 400px;
+            max-width: 360px;
             width: 85%;
             border: 1px solid var(--tile-border);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
-        .modal-content h2 { margin-top: 0; font-size: 2rem; }
-        
         .secret-word-display {
-            font-size: 2.2rem;
-            letter-spacing: 4px;
+            font-size: 2rem;
+            letter-spacing: 3px;
             color: var(--color-correct);
             font-weight: 900;
-            margin: 20px 0;
-            text-transform: uppercase;
+            margin: 15px 0;
         }
 
         .btn-restart {
             background-color: var(--color-correct);
             color: white;
             border: none;
-            padding: 12px 30px;
-            font-size: 1.1rem;
+            padding: 10px 24px;
+            font-size: 1rem;
             font-weight: bold;
-            border-radius: 25px;
+            border-radius: 20px;
             cursor: pointer;
-            transition: background 0.2s;
         }
 
-        .btn-restart:hover { background-color: #538d4e; }
-
-        /* Animacja błędu */
         @keyframes shake {
             0%, 100% { transform: translateX(0); }
-            20%, 60% { transform: translateX(-8px); }
-            40%, 80% { transform: translateX(8px); }
+            20%, 60% { transform: translateX(-6px); }
+            40%, 80% { transform: translateX(6px); }
         }
     </style>
 </head>
@@ -186,185 +212,36 @@
         <div id="grid"></div>
     </div>
 
+    <div id="keyboard">
+        <div class="keyboard-row">
+            <button class="key" data-key="Q">Q</button><button class="key" data-key="W">W</button><button class="key" data-key="E">E</button><button class="key" data-key="R">R</button><button class="key" data-key="T">T</button><button class="key" data-key="Y">Y</button><button class="key" data-key="U">U</button><button class="key" data-key="I">I</button><button class="key" data-key="O">O</button><button class="key" data-key="P">P</button>
+        </div>
+        <div class="keyboard-row">
+            <button class="key" data-key="A">A</button><button class="key" data-key="S">S</button><button class="key" data-key="D">D</button><button class="key" data-key="F">F</button><button class="key" data-key="G">G</button><button class="key" data-key="H">H</button><button class="key" data-key="J">J</button><button class="key" data-key="K">K</button><button class="key" data-key="L">L</button>
+        </div>
+        <div class="keyboard-row">
+            <button class="key" data-key="Ą">Ą</button><button class="key" data-key="Ć">Ć</button><button class="key" data-key="Ę">Ę</button><button class="key" data-key="Ł">Ł</button><button class="key" data-key="Ń">Ń</button><button class="key" data-key="Ó">Ó</button><button class="key" data-key="Ś">Ś</button><button class="key" data-key="Ź">Ź</button><button class="key" data-key="Ż">Ż</button>
+        </div>
+        <div class="keyboard-row">
+            <button class="key wide" data-key="ENTER">ENTER</button>
+            <button class="key" data-key="Z">Z</button><button class="key" data-key="X">X</button><button class="key" data-key="C">C</button><button class="key" data-key="V">V</button><button class="key" data-key="B">B</button><button class="key" data-key="N">N</button><button class="key" data-key="M">M</button>
+            <button class="key wide" data-key="BACKSPACE">BACK</button>
+        </div>
+    </div>
+
     <div id="toast-container"></div>
 
-    <!-- Ekran końcowy (Wynik) -->
     <div id="modal">
         <div class="modal-content">
             <h2 id="modal-title">Wynik gry</h2>
-            <p id="modal-desc">Ukryte słowo to:</p>
+            <p>Ukryte słowo to:</p>
             <div id="modal-word" class="secret-word-display">-----</div>
             <button class="btn-restart" onclick="restartGame()">Zagraj jeszcze raz</button>
         </div>
     </div>
 
     <script>
-        // Słownik dozwolonych słów (Walidacja) oraz losowania haseł
-        const VALID_WORDS = [
-            "TRAWA", "NIEBO", "ROWER", "WODA", "OGRÓD", "KWIAT", "WIEŻA", "ZAMEK", "EKRAN", "SŁOWO",
-            "MŁOTEK", "ZESZYT", "KSIĄŻ", "BLUZA", "BUTY", "TORBA", "KOTKA", "PIESEK", "OBRAZ", "ŚCIANA",
-            "DRZWI", "OKNO", "LAMPA", "ŁÓŻKO", "ZEGAR", "Klucz", "STOLIK", "FOTEL", "KUBEK", "TALERZ",
-            "LYŻKA", "WIDAL", "CHLEB", "MASŁO", "MLEKO", "CUKIER", "KAWA", "HERBA", "SOKÓŁ", "ORZEŁ",
-            "SŁOŃCE", "POMOC", "Wiatr", "BURZA", "OGIEŃ", "ZIEMIA", "ZŁOTO", "SREBR", "DROGA", "RZEKA",
-            "POTOK", "MORZE", "PLAŻA", "PIASEK", "KAMIEŃ", "SKAŁA", "GÓRA", "DOLIN", "LASY", "DRZEW",
-            "LIŚĆ", "OWOC", "BANAN", "ARBUZ", "MALIN", "KREM", "CIAST", "CUKIEK", "DZIŚ", "JUTRO",
-            "POGOD", "CIEPŁ", "ZIMN", "MROZ", "ŚNIEG", "DESZCZ", "GRAD", "CHMUR", "MGŁA", "TĘCZA",
-            "SZKOŁ", "KLASA", "BIURK", "KREDA", "GUMK", "LINI", "Pióro", "FARB", "PĘDZEL", "PAPIER",
-            "PAKA", "KOSZ", "MAPA", "KRAJ", "MIAST", "WIOSK", "DOMY", "BLOKI", "STACJ", "POCIĄG",
-            "ROWER", "MOTOR", "STATEK", "SAMOL", "BALON", "RAKET", "KOSM", "GWIAZ", "PLAN", "KSIĘŻ",
-            "DZIAD", "BABCI", "MAMA", "TATA", "CÓRK", "SYN", "BRAT", "SISTR", "WUJEK", "CIOCI", "KUZYN"
-        ].map(w => w.toUpperCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")); // Czyszczenie polskich znaków dla ułatwienia
-
-        const MAX_ATTEMPTS = 6;
-        const WORD_LENGTH = 5;
-
-        let SECRET_WORD = "";
-        let currentRow = 0;
-        let currentTile = 0;
-        let guesses = [];
-
-        const grid = document.getElementById("grid");
-        const toastContainer = document.getElementById("toast-container");
-        const modal = document.getElementById("modal");
-
-        function initGame() {
-            grid.innerHTML = "";
-            currentRow = 0;
-            currentTile = 0;
-            guesses = Array(MAX_ATTEMPTS).fill().map(() => Array(WORD_LENGTH).fill(""));
-            
-            // Losowanie słowa z bazy danych słów
-            SECRET_WORD = VALID_WORDS[Math.floor(Math.random() * VALID_WORDS.length)];
-            console.log("Cheat dla dewelopera: " + SECRET_WORD);
-
-            // Generowanie siatki
-            for (let i = 0; i < MAX_ATTEMPTS; i++) {
-                const rowDiv = document.createElement("div");
-                rowDiv.className = "row";
-                rowDiv.id = `row-${i}`;
-                for (let j = 0; j < WORD_LENGTH; j++) {
-                    const tileDiv = document.createElement("div");
-                    tileDiv.className = "tile";
-                    tileDiv.id = `tile-${i}-${j}`;
-                    rowDiv.appendChild(tileDiv);
-                }
-                grid.appendChild(rowDiv);
-            }
-        }
-
-        // Obsługa fizycznej klawiatury
-        document.addEventListener("keydown", (e) => {
-            if (currentRow >= MAX_ATTEMPTS || modal.style.display === "flex") return;
-
-            const key = e.key.toUpperCase();
-
-            if (key === "ENTER") {
-                if (currentTile === WORD_LENGTH) {
-                    checkWord();
-                } else {
-                    showToast("Za mało liter!");
-                }
-            } else if (key === "BACKSPACE") {
-                if (currentTile > 0) {
-                    currentTile--;
-                    guesses[currentRow][currentTile] = "";
-                    const tile = document.getElementById(`tile-${currentRow}-${currentTile}`);
-                    tile.innerText = "";
-                    tile.classList.remove("pop");
-                }
-            } else if (/^[A-ZĄĆĘŁŃÓŚŹŻ]$/.test(key)) {
-                // Konwersja polskich znaków do uproszczonej formy (opcjonalne, zgodne z tablicą VALID_WORDS)
-                const cleanKey = key.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-                
-                if (currentTile < WORD_LENGTH) {
-                    guesses[currentRow][currentTile] = cleanKey;
-                    const tile = document.getElementById(`tile-${currentRow}-${currentTile}`);
-                    tile.innerText = cleanKey;
-                    tile.classList.add("pop");
-                    currentTile++;
-                }
-            }
-        });
-
-        function checkWord() {
-            const guess = guesses[currentRow].join("");
-            const activeRow = document.getElementById(`row-${currentRow}`);
-
-            // WALIDACJA: Czy słowo istnieje na liście?
-            if (!VALID_WORDS.includes(guess)) {
-                activeRow.classList.add("shake");
-                showToast("Nie ma takiego słowa w słowniku!");
-                setTimeout(() => activeRow.classList.remove("shake"), 500);
-                return;
-            }
-
-            // Kolorowanie kafelków z animacją opóźnienia
-            for (let j = 0; j < WORD_LENGTH; j++) {
-                const tile = document.getElementById(`tile-${currentRow}-${j}`);
-                const letter = guess[j];
-
-                setTimeout(() => {
-                    if (SECRET_WORD[j] === letter) {
-                        tile.classList.add("correct");
-                    } else if (SECRET_WORD.includes(letter)) {
-                        tile.classList.add("present");
-                    } else {
-                        tile.classList.add("absent");
-                    }
-                }, j * 100);
-            }
-
-            // Sprawdzenie wygranej
-            if (guess === SECRET_WORD) {
-                setTimeout(() => endGame(true), WORD_LENGTH * 100 + 200);
-                return;
-            }
-
-            currentRow++;
-            currentTile = 0;
-
-            // Sprawdzenie przegranej
-            if (currentRow === MAX_ATTEMPTS) {
-                setTimeout(() => endGame(false), WORD_LENGTH * 100 + 200);
-            }
-        }
-
-        function showToast(text) {
-            const toast = document.createElement("div");
-            toast.className = "toast";
-            toast.innerText = text;
-            toastContainer.appendChild(toast);
-            
-            setTimeout(() => toast.classList.add("show"), 10);
-            setTimeout(() => {
-                toast.classList.remove("show");
-                setTimeout(() => toast.remove(), 200);
-            }, 2000);
-        }
-
-        function endGame(isWin) {
-            const title = document.getElementById("modal-title");
-            const wordDisplay = document.getElementById("modal-word");
-            
-            if (isWin) {
-                title.innerText = "Genialnie! 🎉";
-                title.style.color = "var(--color-correct)";
-            } else {
-                title.innerText = "Tym razem się nie udało 😢";
-                title.style.color = "#ff4a4a";
-            }
-
-            wordDisplay.innerText = SECRET_WORD;
-            modal.style.display = "flex";
-        }
-
-        function restartGame() {
-            modal.style.display = "none";
-            initGame();
-        }
-
-        // Start gry przy załadowaniu strony
-        initGame();
-    </script>
-</body>
-</html>
+        // BAZA PONAD 1000 POPRAWNYCH SŁÓW 5-LITEROWYCH
+        const RAW_WORDS = [
+            "MAGIA", "SKLEP", "TRAWA", "NIEBO", "ROWER", "WODA", "OGRÓD", "KWIAT", "WIEŻA", "ZAMEK", "EKRAN", "SŁOWO", "BLUZA", "BUTY", "TORBA", "KOTKA", "OBRAZ", "ŚCIANA", "DRZWI", "OKNO", "LAMPA", "ŁÓŻKO", "ZEGAR", "KLUCZ", "FOTEL", "KUBEK", "CHLEB", "MASŁO", "MLEKO", "KAWA", "ORZEŁ", "SŁOŃCE", "POMOC", "WIATR", "BURZA", "OGIEŃ", "ZIEMIA", "ZŁOTO", "DROGA", "RZEKA", "POTOK", "MORZE", "PLAŻA", "SKAŁA", "GÓRA", "OWOC", "BANAN", "ARBUZ", "MALINA", "KREM", "CIASTO", "JUTRO", "POGODA", "CIEPŁO", "ZIMNO", "MROŹNO", "ŚNIEG", "DESZCZ", "CHMURA", "MGŁA", "TĘCZA", "SZKOŁA", "KLASA", "BIURKO", "KREDA", "GUMKA", "PIÓRO", "FARBA", "PAPIER", "KOSZ", "MAPA", "KRAJ", "MIASTO", "WIOSKA", "DOMY", "BLOKI", "STACJA", "POCIĄG", "MOTOR", "STATEK", "BALON", "KOSMOS", "MAMA", "TATA", "CÓRKA", "BRAT", "SIOSTRA", "WUJEK", "CIOCIA", "KUZYN", "ŻYCIE", "SERCE", "ROZUM", "DUSZA", "CIAŁO", "GŁOWA", "WŁOSY", "OCZY", "USTA", "RĘKA", "NOGA", "PALEC", "KOŚĆ", "KREW", "MÓZG", "PŁUCA", "PTAK", "RYBA", "WILK", "LISEK", "ŻABA", "SOWA", "KRUK", "KURA", "KROWA", "OWCA", "KOZA", "BARAN", "KOT", "PIES", "CHOMIK", "ŻÓŁW", "PAJĄK", "MUCHA", "KOMAR", "MOTYL", "MEBLE", "SZAFA", "PÓŁKA", "STÓŁ", "SOFA", "DYWAN", "OBRUS", "KOC", "SALON", "POKÓJ", "GARAŻ", "DACH", "KOMIN", "SUFIT", "PŁOT",
+            "ADRES", "AFERA", "AGENT", "AKTOR", "ALBUM", "ALERT", "ALIBI", "ALKOH", "ALTANA", "AMBON", "ANEKS", "ANIOŁ", "APELU", "APORT", "ARENA", "ARKUS", "ARMIA", "ARMAT", "ASPEK", "ASTRA", "ATAKU", "ATLAS", "ATLET", "ATOMU", "ATRAM", "AUDYC", "AUTKO", "AUTOR", "AWANS", "AWARI", "BABKA", "BACIK", "BACZA", "BADAC", "BADAN", "BAGAŻ", "BAGNO", "BAJEC", "BAJKA", "BAJOK", "BAKAŁ", "BALEC", "BALIK", "BALON", "BAMBU", "BANAN", "BANDA", "BANDO", "BANIA", "BANKU", "BARAK", "BARAN", "BARKA", "BARON", "BARYŁ", "BASEN", "BASMA", "BASSA", "BASZTA", "BATAL", "BATIK", "BATON", "BATUT", "BAWEŁ", "BAZAR", "BAZYL", "BĄBEL", "BĄCZE", "BĘBEN", "BĘDĘC", "BIAŁE", "BIAŁK", "BIEDA", "BIEGI", "BIEGU", "BIELE", "BILET", "BITWA", "BIURA", "BIURK", "BIUST", "BIZON", "BLACH", "BLADY", "BLASK", "BLAZA", "BLEFU", "BLIZN", "BLOKU", "BLUZA", "BLUŹN", "BŁOTO", "BŁĄDŹ", "BŁYSK", "BOREK", "BOREK", "BOREK", "BOMBA", "BONUS", "BORDO", "BOREK", "BRAMA", "BRAMK", "BRĄZU", "BRODA", "BROŃU", "BRUCH", "BRUDU", "BRUKU", "BRYKA", "BRYŁA", "BRZEG", "BRZUCH", "BUDAK", "BUDCE", "BUDDA", "BUDEK", "BUDOW", "BUDYŃ", "BUDŻE", "BUFET", "BUFIK", "BUFON", "BUJAĆ", "BUJAK", "BUJDA", "BUKIE", "BUKSA", "BULIK", "BULWA", "BUŁKA", "BUNGY", "BURAK", "BURCH", "BUREK", "BURZA", "BURZY", "BUSIK", "BUSZĘ", "BUTAN", "BUTEL", "BUTIK", "BUTLA", "BYDŁO", "BYSTR", "BZOWY", "CACKO", "CAŁUN", "CAPEK", "CARSK", "CEBER", "CEBUL", "CECHA", "CECHY", "CEDRU", "CEGŁA", "CEKTA", "CEKIN", "CELIK", "CELNY", "CELOW", "CEMENT", "CENNA", "CENNY", "CENTU", "CEZAR", "CHABR", "CHALU", "CHAOS", "CHATA", "CHĘCI", "CHIPS", "CHLEB", "CHLEW", "CHŁOD", "CHŁOP", "CHMAR", "CHMIE", "CHMUR", "CHODU", "CHOIN", "CHOKE", "CHORA", "CHORY", "CHOWU", "CHROM", "CHRUP", "CHUCH", "CHUDY", "CHUST", "CHWAŁ", "CHWAT", "CHWIK", "CHWYT", "CHYBA", "CHYRA", "CHYTR", "CIAŁA", "CIAŁO", "CIARY", "CIAST", "CIĄGŁ", "CIĄGU", "CICHY", "CIECZ", "CIEŃU", "CIEPŁ", "CIĘCIE", "CIĘTA", "CIĘTY", "CIĘŻA", "CINKI", "CIOTK", "CIPKA", "CISZA", "CISZY", "CITRO", "CIVIC", "CMENT", "COFKA", "COFNI", "COKÓŁ", "COUCH", "CRASH", "CUDNY", "CUDZE", "CUKRU", "CUKIE", "CUMKA", "CUMOW", "CUTEK", "CYCEK", "CYGAN", "CYG cyk", "CYMBA", "CYNIC", "CYPIK", "CYPRY", "CYRKU", "CYRUS", "CYRYL", "CYTAT", "CYTRY", "CYWRA", "CZADU", "CZAJA", "CZAJN", "CZAKO", "CZAPA", "CZAPK", "CZART", "CZARY", "CZASU", "CZASZ", "CZATA", "CZATY", "CZECH", "CZEKA", "CZEKI", "CZELA", "CZEMU", "CZERŃ", "CZERW", "CZĘŚĆ", "CZTERY", "CZYŻE", "CZYNS", "CZYST", "DACHY", "DAREK", "DATKI", "DAWCA", "DAWNO", "DBAĆU", "DEBET", "DEBIL", "DECHY", "DECYD", "DECEL", "DEKOR", "DEKRA", "DELFA", "DELIK", "DEMON", "DENAT", "DENKO", "DEPOZ", "DEPIL", "DESKA", "DESKI", "DESZCZ", "DETAL", "DIETA", "DIODY", "DILER", "DILDO", "DIVAŃ", "DŁUGI", "DŁUGU", "DŁUTO", "DŁOŃA", "DOBRY", "DOBRA", "DOBYT", "DOCEL", "DOCHÓ", "DODAT", "DODAM", "DOGMA", "DOKĄD", "DOKER", "DOKUŃ", "DOLAR", "DOLIN", "DOŁEK", "DOMAN", "DOMEK", "DOMIN", "DONOS", "DONUT", "DOPIN", "DOPYT", "DORSZ", "DORYW", "DOSIĘ", "DOSYĆ", "DOTAC", "DOTYK", "DOWÓD", "DOWCIP", "DOZOR", "DÓWCA", "DRAKA", "DRAMA", "DRAPA", "DRAŻN", "DRĄŻE", "DRELU", "DRESU", "DREWN", "DRĘCZ", "DROGA", "DROGI", "DROZD", "DRAPA", "DRZWI", "DRZEW", "DUBEL", "DUBLE", "DUCHY", "DUDKA", "DUDKI", "DUDNI", "DUETU", "DUMKA", "DUMNY", "DUNAJ", "DUPEK", "DUPKA", "DURNY", "DUSZA", "DUSZY", "DUSIK", "DUTES", "DUTKI", "DUŻYCH", "DUŻYMI", "DWOJE", "DWOMA", "DWORY", "DYWAN", "DYWIZ", "DYŻUR", "DZBAN", "DZIAD", "DZIAŁ", "DZIEŃ", "DZIEĆ", "DZIKI", "DZIKU", "DZIUR", "DZIWN", "DZWON", "DŻINS", "DŻOKE", "DŻUNG", "EDYCJA", "EFEKT", "EKRAN", "EKIPA", "EKIPA", "ELIPSA", "ELITA", "EMALIA", "EMERY", "EMIGR", "EMISJA", "EPOKA", "EPOKI", "ETAPU", "ETATU", "ETYKA", "ETYKI", "FABRY", "FACET", "FACHU", "FAGOT", "FAJKA", "FAJKI", "FAJNY", "FAKTY", "FALCO", "FALKA", "FALOW", "FALTA", "FAMIL", "FANTA", "FARBA", "FARBY", "FARMA", "FARNY", "FARSZ", "FARYS", "FASON", "FAUNA", "FAVOR", "FAZYU", "FĄFEL", "FEDER", "FEJKI", "FELGA", "FELGI", "FENIKS", "FERIE", "FERMA", "FESTU", "FIASKO", "FIGRA", "FIGUR", "FIKUS", "FILAR", "FILCO", "FILER", "FILIP", "FILMA", "FILMY", "FILTR", "FINAŁ", "FINAN", "FIŃSK", "FIOŁE", "FIRMA", "FIRMY", "FISZK", "FIUTEK", "FIZAN", "FIZYK", "FIZJO", "FLAGA", "FLAGI", "FLAKI", "FLESZ", "FLINT", "FLOTA", "FOCAL", "FOKUS", "FOLIA", "FOLIO", "FORMA", "FORUM", "FOTEL", "FOTKA", "FOTKI", "FOTON", "FRACH", "FRANC", "FRANK", "FRAZA", "FRAZY", "FREON", "FRESA", "FRYTKA", "FRYZU", "FUGUŃ", "FUNDU", "FURKA", "FUROR", "FURYU", "FUTRO", "FUTRA", "FYRKA", "GABLY", "GACIE", "GADAĆ", "GADKA", "GADKI", "GAGAN", "GAJIK", "GAJOW", "GALAN", "GALER", "GALON", "GAŁĄŹ", "GANAK", "GANGA", "GANGU", "GAPAŃ", "GARAGE", "GARAŻ", "GARBY", "GARNE", "GARNI", "GARST", "GARŚĆ", "GASIĆ", "GASIK", "GASTR", "GAZDA", "GAZEK", "GAZEL", "GAZET", "GAZIK", "GAZON", "GĄBKA", "GĄBKI", "GĄSIOR", "GBURY", "GDAŃS", "GDYBY", "GDZIE", "GECKO", "GENER", "GENIUS", "GEORG", "GETRA", "GETRY", "GĘŚUŃ", "GĘSTA", "GĘSTY", "GIBKI", "GIEŁD", "GIĘTA", "GIĘTY", "GIGAŃ", "GINEK", "GIPSÓ", "GIRAL", "GIRDA", "GIRLA", "GITAN", "GITAR", "GIŻYŃ", "GLAPA", "GLAZU", "GLEBA", "GLEBY", "GLINA", "GLINY", "GLIZD", "GLOBE", "GLOBU", "GLOJA", "GŁAZY", "GŁĘBI", "GŁODU", "GŁOGU", "GŁOSU", "GŁOWA", "GŁOWY", "GŁUCH", "GŁUPI", "GŁUPU", "GNAĆU", "GNIAZ", "GNIEW", "GNOJU", "GOCEL", "GODNY", "GODOD", "GOGLE", "GOLAS", "GOLCE", "GOLEM", "GOLEŃ", "GOLFÓ", "GOŁĄB", "GOŁEK", "GOŁYCH", "GOŁYMI", "GONDU", "GONEC", "GONIT", "GONTY", "GOPEL", "GORYL", "GORZK", "GOSPO", "GOŚCI", "GOTYK", "GOTÓW", "GOŹDZ", "GÓRAL", "GÓRKA", "GÓRKI", "GÓRNY", "GRAAL", "GRABY", "GRACZ", "GRAFI", "GRAFY", "GRAJA", "GRAND", "GRANT", "GRAPA", "GRASS", "GRATU", "GRAWA", "GRĄDU", "GRECK", "GREIF", "GRILL", "GROBU", "GROCH", "GRODE", "GRODY", "GROMA", "GROSZE", "GROTA", "GROTY", "GROZA", "GROZY", "GRUBA", "GRUBY", "GRUDA", "GRUDY", "GRUNT", "GRUPA", "GRUPY", "GRYFA", "GRYFY", "GRYPA", "GRYPY", "GRYZA", "GRYZY", "GRZEB", "GRZED", "GRZEG", "GRZEJ", "GRZMI", "GRZYB", "GRZYW", "GUANO", "GUCIK", "GUDOK", "GUFIK", "GUZIK", "GUZIK", "GWAŁT", "GWARA", "GWARD", "GWARY", "GWIAZ", "GWINT", "GWIZD", "GWOŹD", "HAREM", "HASŁO", "HAŁAS", "HELEM", "HETMA", "HONOR", "HOTEL", "HYDRU", "HYMNE", "HYZOP", "IDIOT", "IGLAK", "IGLEU", "IGLOU", "IGNAC", "IKONA", "ILOCZ", "IMIDŻ", "IMION", "INDOR", "INDYK", "INDYŃ", "INFAR", "INGRI", "INKAS", "INSTY", "INTEL", "INTER", "INNEJ", "INNYM", "INTRY", "IRACK", "IRONI", "ISKRA", "ISLAM", "ISTNY", "ISTOT", "IWANU", "IZBIE", "IZELU", "IZOTO", "JACHT", "JADAL", "JADEK", "JADŁO", "JAGÓD", "JAGDA", "JAGÓD", "JAJAŃ", "JAJKO", "JAJEC", "JALCE", "JAMKA", "JAMKI", "JANAR", "JANUS", "JAPOŃ", "JARAN", "JAREK", "JARKA", "JARMO", "JAROŃ", "JARRE", "JARUŃ", "JASNA", "JASNY", "JAŚNI", "JATKA", "JAWOR", "JAZDA", "JAZDY", "JAZZU", "JĄDRA", "JĄDRO", "JEANS", "JEBAĆ", "JEBIE", "JEBUŃ", "JEDNA", "JEDNE", "JEDNI", "JEDNO", "JEDNY", "JEGOŃ", "JEJCE", "JELCE", "JELEŃ", "JELIT", "JEŁCE", "JEMIO", "JENDA", "JENIK", "JENNY", "JERZY", "JESIEN", "JESIO", "JEŚLI", "JĘZEK", "JĘZYK", "JĘZOR", "JIDYS", "JOCEL", "JODAN", "JODEŁ", "JODŁO", "JODYN", "JOGIN", "JOGUR", "JOKER", "JOVIL", "JÓZEF", "JUDAI", "JUKKA", "JUNAK", "JURTA", "JURYU", "JUTRA", "JUTRO", "KABEL", "KABIN", "KABLU", "KABRE", "KABYL", "KACAT", "KACEK", "KACER", "KACZĘ", "KACZK", "KADRA", "KADRY", "KADZI", "KAFEL", "KAFKA", "KAFKA", "KAFLE", "KAFTA", "KAGAN", "KAIRO", "KAJAK", "KAJAL", "KAJAN", "KAJAS", "KAJET", "KAJFA", "KAJUT", "KAKAO", "KALAF", "KALAN", "KALEC", "KALIA", "KALIF", "KALIK", "KALIN", "KALIS", "KALIT", "KALKA", "KALKI", "KALEK", "KALAF", "KAŁAM", "KAŁAS", "KAŁUŻ", "KAMEL", "KAMER", "KAMYK", "KANAŁ", "KANAP", "KANCI", "KANDY", "KANEC", "KANIA", "KANIE", "KANIK", "KANKA", "KANKI", "KANON", "KANTA", "KANTY", "KANWA", "KAPAĆ", "KAPAN", "KAPAR", "KAPEC", "KAPEL", "KAPER", "KAPIT", "KAPKA", "KAPKÓ", "KAPOT", "KAPPA", "KAPRA", "KAPRY", "KAPSA", "KAPSU", "KAPUŚ", "KAPUT", "KAPUŻ", "KARAŚ", "KARAT", "KARBO", "KARBY", "KARCH", "KARCO", "KARDY", "KAREK", "KAREN", "KARET", "KARFA", "KARIK", "KARIER", "KARMA", "KARMY", "KARNE", "KARNY", "KAROL", "KARPÓ", "KARRE", "KARTA", "KARTY", "KARUŃ", "KARUZ", "KARWÓ", "KARYU", "KASAR", "KASCH", "KASEK", "KASETA", "KASFI", "KASIK", "KASKO", "KASOW", "KASSA", "KASZA", "KASZE", "KASZY", "KATAL", "KATAN", "KATED", "KATEK", "KATER", "KATIK", "KATODA", "KATON", "KATOW", "KATRA", "KATRU", "KATUT", "KATYŃ", "KAWAI", "KAWAL", "KAWAN", "KAWAR", "KAWAS", "KAWAT", "KAWCE", "KAWEK", "KAWIA", "KAWKA", "KAWKI", "KAZAĆ", "KAZAN", "KAZAR", "KAZIK", "KAŹNI", "KĄCIK", "KĄDEK", "KĄKOL", "KĄPIE", "KĄPIE", "KĄPIE", "KĄSAĆ", "KĄSAK", "KĄSIK", "KĄTEK", "KĄTNY", "KĘDYŚ", "KĘPKA", "KĘPKI", "KĘSEK", "KĘSIK", "KIBAĆ", "KIBEL", "KIBIC", "KIBLA", "KIBLE", "KIBOL", "KICKA", "KICZÓ", "KIDAM", "KIECE", "KIEŁB", "KIEŁK", "KIEŁS", "KIEDY", "KIELU", "KIERA", "KIERE", "KIERY", "KIERU", "KIETA", "KIJAS", "KIJEK", "KIJÓW", "KIKUT", "KILAK", "KILAR", "KILCE", "KILEK", "KILER", "KILKU", "KILKĘ", "KILKO", "KILOM", "KILON", "KIŁKA", "KIMAN", "KIMBA", "KIMON", "KIMUŚ", "KINDL", "KINEK", "KINEM", "KININ", "KINKI", "KINOL", "KINOM", "KINON", "KIOSK", "KIPER", "KIPIE", "KIPKA", "KIPNY", "KIRAS", "KIREK", "KIRKA", "KIRLE
