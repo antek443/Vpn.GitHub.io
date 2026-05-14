@@ -3,90 +3,258 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Moja Gra Słowna</title>
+    <title>Słowo - Nowoczesna Gra Słowna</title>
     <style>
+        :root {
+            --bg-color: #121213;
+            --tile-border: #3a3a3c;
+            --tile-empty: #121213;
+            --color-correct: #6aaa64;
+            --color-present: #c9b458;
+            --color-absent: #787c7e;
+            --text-color: #f8f9fa;
+        }
+
         body {
-            background-color: #121213;
-            color: white;
-            font-family: 'Arial', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: space-between;
+            min-height: 100vh;
             margin: 0;
-            padding: 20px;
+            padding: 10px;
+            box-sizing: border-box;
         }
-        h1 {
+
+        header {
+            border-bottom: 1px solid var(--tile-border);
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+            padding-bottom: 10px;
             margin-bottom: 20px;
-            letter-spacing: 2px;
         }
+
+        h1 {
+            margin: 0;
+            font-size: 2.2rem;
+            font-weight: 800;
+            letter-spacing: 3px;
+            background: linear-gradient(45deg, #6aaa64, #c9b458);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        #game-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex-grow: 1;
+            justify-content: center;
+        }
+
         #grid {
             display: grid;
             grid-template-rows: repeat(6, 1fr);
-            gap: 5px;
+            gap: 6px;
             margin-bottom: 20px;
         }
+
         .row {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
-            gap: 5px;
+            gap: 6px;
         }
+
+        .row.shake {
+            animation: shake 0.5s ease-in-out;
+        }
+
         .tile {
-            width: 60px;
-            height: 60px;
-            border: 2px solid #3a3a3c;
+            width: 58px;
+            height: 58px;
+            border: 2px solid var(--tile-border);
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 2rem;
+            font-size: 1.8rem;
             font-weight: bold;
             text-transform: uppercase;
+            user-select: none;
+            transition: transform 0.1s ease;
+            border-radius: 4px;
         }
-        .correct { background-color: #538d4e; border-color: #538d4e; }
-        .present { background-color: #b59f3b; border-color: #b59f3b; }
-        .absent { background-color: #3a3a3c; border-color: #3a3a3c; }
-        #message {
-            height: 30px;
-            font-size: 1.2rem;
+
+        .tile.pop {
+            transform: scale(1.1);
+            border-color: #565758;
+        }
+
+        /* Kolory po zatwierdzeniu */
+        .correct { background-color: var(--color-correct); border-color: var(--color-correct); }
+        .present { background-color: var(--color-present); border-color: var(--color-present); }
+        .absent { background-color: var(--color-absent); border-color: var(--color-absent); }
+
+        /* Powiadomienia (Toast) */
+        #toast-container {
+            position: fixed;
+            top: 10%;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+        }
+
+        .toast {
+            background-color: #f8f9fa;
+            color: #121213;
+            padding: 12px 24px;
+            border-radius: 8px;
             font-weight: bold;
-            color: #ff4a4a;
+            box-shadow: 0 4px 23px rgba(0,0,0,0.5);
+            margin-bottom: 10px;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+
+        .toast.show { opacity: 1; }
+
+        /* Ekran końcowy modalny */
+        #modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.75);
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .modal-content {
+            background-color: #1c1c1e;
+            padding: 30px;
+            border-radius: 16px;
+            text-align: center;
+            max-width: 400px;
+            width: 85%;
+            border: 1px solid var(--tile-border);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .modal-content h2 { margin-top: 0; font-size: 2rem; }
+        
+        .secret-word-display {
+            font-size: 2.2rem;
+            letter-spacing: 4px;
+            color: var(--color-correct);
+            font-weight: 900;
+            margin: 20px 0;
+            text-transform: uppercase;
+        }
+
+        .btn-restart {
+            background-color: var(--color-correct);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-restart:hover { background-color: #538d4e; }
+
+        /* Animacja błędu */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-8px); }
+            40%, 80% { transform: translateX(8px); }
         }
     </style>
 </head>
 <body>
 
-    <h1>GRA SŁOWNA</h1>
-    <div id="grid"></div>
-    <div id="message"></div>
+    <header>
+        <h1>SŁOWO</h1>
+    </header>
+
+    <div id="game-container">
+        <div id="grid"></div>
+    </div>
+
+    <div id="toast-container"></div>
+
+    <!-- Ekran końcowy (Wynik) -->
+    <div id="modal">
+        <div class="modal-content">
+            <h2 id="modal-title">Wynik gry</h2>
+            <p id="modal-desc">Ukryte słowo to:</p>
+            <div id="modal-word" class="secret-word-display">-----</div>
+            <button class="btn-restart" onclick="restartGame()">Zagraj jeszcze raz</button>
+        </div>
+    </div>
 
     <script>
-        // Słowo do odgadnięcia (Możesz je zmienić na dowolne 5-literowe)
-        const SECRET_WORD = "TRAWA"; 
+        // Słownik dozwolonych słów (Walidacja) oraz losowania haseł
+        const VALID_WORDS = [
+            "TRAWA", "NIEBO", "ROWER", "WODA", "OGRÓD", "KWIAT", "WIEŻA", "ZAMEK", "EKRAN", "SŁOWO",
+            "MŁOTEK", "ZESZYT", "KSIĄŻ", "BLUZA", "BUTY", "TORBA", "KOTKA", "PIESEK", "OBRAZ", "ŚCIANA",
+            "DRZWI", "OKNO", "LAMPA", "ŁÓŻKO", "ZEGAR", "Klucz", "STOLIK", "FOTEL", "KUBEK", "TALERZ",
+            "LYŻKA", "WIDAL", "CHLEB", "MASŁO", "MLEKO", "CUKIER", "KAWA", "HERBA", "SOKÓŁ", "ORZEŁ",
+            "SŁOŃCE", "POMOC", "Wiatr", "BURZA", "OGIEŃ", "ZIEMIA", "ZŁOTO", "SREBR", "DROGA", "RZEKA",
+            "POTOK", "MORZE", "PLAŻA", "PIASEK", "KAMIEŃ", "SKAŁA", "GÓRA", "DOLIN", "LASY", "DRZEW",
+            "LIŚĆ", "OWOC", "BANAN", "ARBUZ", "MALIN", "KREM", "CIAST", "CUKIEK", "DZIŚ", "JUTRO",
+            "POGOD", "CIEPŁ", "ZIMN", "MROZ", "ŚNIEG", "DESZCZ", "GRAD", "CHMUR", "MGŁA", "TĘCZA",
+            "SZKOŁ", "KLASA", "BIURK", "KREDA", "GUMK", "LINI", "Pióro", "FARB", "PĘDZEL", "PAPIER",
+            "PAKA", "KOSZ", "MAPA", "KRAJ", "MIAST", "WIOSK", "DOMY", "BLOKI", "STACJ", "POCIĄG",
+            "ROWER", "MOTOR", "STATEK", "SAMOL", "BALON", "RAKET", "KOSM", "GWIAZ", "PLAN", "KSIĘŻ",
+            "DZIAD", "BABCI", "MAMA", "TATA", "CÓRK", "SYN", "BRAT", "SISTR", "WUJEK", "CIOCI", "KUZYN"
+        ].map(w => w.toUpperCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")); // Czyszczenie polskich znaków dla ułatwienia
+
         const MAX_ATTEMPTS = 6;
         const WORD_LENGTH = 5;
 
+        let SECRET_WORD = "";
         let currentRow = 0;
         let currentTile = 0;
-        let guesses = Array(MAX_ATTEMPTS).fill().map(() => Array(WORD_LENGTH).fill(""));
+        let guesses = [];
 
         const grid = document.getElementById("grid");
-        const messageDiv = document.getElementById("message");
+        const toastContainer = document.getElementById("toast-container");
+        const modal = document.getElementById("modal");
 
-        // Generowanie planszy
-        for (let i = 0; i < MAX_ATTEMPTS; i++) {
-            const rowDiv = document.createElement("div");
-            rowDiv.className = "row";
-            for (let j = 0; j < WORD_LENGTH; j++) {
-                const tileDiv = document.createElement("div");
-                tileDiv.className = "tile";
-                tileDiv.id = `tile-${i}-${j}`;
-                rowDiv.appendChild(tileDiv);
+        function initGame() {
+            grid.innerHTML = "";
+            currentRow = 0;
+            currentTile = 0;
+            guesses = Array(MAX_ATTEMPTS).fill().map(() => Array(WORD_LENGTH).fill(""));
+            
+            // Losowanie słowa z bazy danych słów
+            SECRET_WORD = VALID_WORDS[Math.floor(Math.random() * VALID_WORDS.length)];
+            console.log("Cheat dla dewelopera: " + SECRET_WORD);
+
+            // Generowanie siatki
+            for (let i = 0; i < MAX_ATTEMPTS; i++) {
+                const rowDiv = document.createElement("div");
+                rowDiv.className = "row";
+                rowDiv.id = `row-${i}`;
+                for (let j = 0; j < WORD_LENGTH; j++) {
+                    const tileDiv = document.createElement("div");
+                    tileDiv.className = "tile";
+                    tileDiv.id = `tile-${i}-${j}`;
+                    rowDiv.appendChild(tileDiv);
+                }
+                grid.appendChild(rowDiv);
             }
-            grid.appendChild(rowDiv);
         }
 
-        // Obsługa wpisywania liter z klawiatury
+        // Obsługa fizycznej klawiatury
         document.addEventListener("keydown", (e) => {
-            if (currentRow >= MAX_ATTEMPTS) return;
+            if (currentRow >= MAX_ATTEMPTS || modal.style.display === "flex") return;
 
             const key = e.key.toUpperCase();
 
@@ -94,67 +262,109 @@
                 if (currentTile === WORD_LENGTH) {
                     checkWord();
                 } else {
-                    showMessage("Za krótkie słowo!");
+                    showToast("Za mało liter!");
                 }
             } else if (key === "BACKSPACE") {
                 if (currentTile > 0) {
                     currentTile--;
                     guesses[currentRow][currentTile] = "";
-                    updateGrid();
+                    const tile = document.getElementById(`tile-${currentRow}-${currentTile}`);
+                    tile.innerText = "";
+                    tile.classList.remove("pop");
                 }
             } else if (/^[A-ZĄĆĘŁŃÓŚŹŻ]$/.test(key)) {
+                // Konwersja polskich znaków do uproszczonej formy (opcjonalne, zgodne z tablicą VALID_WORDS)
+                const cleanKey = key.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+                
                 if (currentTile < WORD_LENGTH) {
-                    guesses[currentRow][currentTile] = key;
-                    updateGrid();
+                    guesses[currentRow][currentTile] = cleanKey;
+                    const tile = document.getElementById(`tile-${currentRow}-${currentTile}`);
+                    tile.innerText = cleanKey;
+                    tile.classList.add("pop");
                     currentTile++;
                 }
             }
         });
 
-        function updateGrid() {
-            for (let j = 0; j < WORD_LENGTH; j++) {
-                const tile = document.getElementById(`tile-${currentRow}-${j}`);
-                tile.innerText = guesses[currentRow][j];
-            }
-        }
-
         function checkWord() {
             const guess = guesses[currentRow].join("");
-            
-            // Kolorowanie kafelków
+            const activeRow = document.getElementById(`row-${currentRow}`);
+
+            // WALIDACJA: Czy słowo istnieje na liście?
+            if (!VALID_WORDS.includes(guess)) {
+                activeRow.classList.add("shake");
+                showToast("Nie ma takiego słowa w słowniku!");
+                setTimeout(() => activeRow.classList.remove("shake"), 500);
+                return;
+            }
+
+            // Kolorowanie kafelków z animacją opóźnienia
             for (let j = 0; j < WORD_LENGTH; j++) {
                 const tile = document.getElementById(`tile-${currentRow}-${j}`);
                 const letter = guess[j];
 
-                if (SECRET_WORD[j] === letter) {
-                    tile.classList.add("correct"); // Zielony - dobra litera, dobre miejsce
-                } else if (SECRET_WORD.includes(letter)) {
-                    tile.classList.add("present"); // Żółty - dobra litera, złe miejsce
-                } else {
-                    tile.classList.add("absent");  // Szary - brak litery w słowie
-                }
+                setTimeout(() => {
+                    if (SECRET_WORD[j] === letter) {
+                        tile.classList.add("correct");
+                    } else if (SECRET_WORD.includes(letter)) {
+                        tile.classList.add("present");
+                    } else {
+                        tile.classList.add("absent");
+                    }
+                }, j * 100);
             }
 
+            // Sprawdzenie wygranej
             if (guess === SECRET_WORD) {
-                showMessage("Gratulacje! Wygrałeś! 🎉");
-                currentRow = MAX_ATTEMPTS;
+                setTimeout(() => endGame(true), WORD_LENGTH * 100 + 200);
                 return;
             }
 
             currentRow++;
             currentTile = 0;
 
+            // Sprawdzenie przegranej
             if (currentRow === MAX_ATTEMPTS) {
-                showMessage(`Koniec gry! Hasło to: ${SECRET_WORD}`);
+                setTimeout(() => endGame(false), WORD_LENGTH * 100 + 200);
             }
         }
 
-        function showMessage(text) {
-            messageDiv.innerText = text;
-            if(text !== "Gratulacje! Wygrałeś! 🎉" && !text.includes("Koniec gry")) {
-                setTimeout(() => messageDiv.innerText = "", 2000);
-            }
+        function showToast(text) {
+            const toast = document.createElement("div");
+            toast.className = "toast";
+            toast.innerText = text;
+            toastContainer.appendChild(toast);
+            
+            setTimeout(() => toast.classList.add("show"), 10);
+            setTimeout(() => {
+                toast.classList.remove("show");
+                setTimeout(() => toast.remove(), 200);
+            }, 2000);
         }
+
+        function endGame(isWin) {
+            const title = document.getElementById("modal-title");
+            const wordDisplay = document.getElementById("modal-word");
+            
+            if (isWin) {
+                title.innerText = "Genialnie! 🎉";
+                title.style.color = "var(--color-correct)";
+            } else {
+                title.innerText = "Tym razem się nie udało 😢";
+                title.style.color = "#ff4a4a";
+            }
+
+            wordDisplay.innerText = SECRET_WORD;
+            modal.style.display = "flex";
+        }
+
+        function restartGame() {
+            modal.style.display = "none";
+            initGame();
+        }
+
+        // Start gry przy załadowaniu strony
+        initGame();
     </script>
 </body>
 </html>
