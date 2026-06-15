@@ -83,41 +83,39 @@
             box-shadow: 0 0 10px rgba(255, 62, 62, 0.1);
         }
 
-        /* NAPRAWIONE GŁÓWNE PRZYCISKI */
-        .btn-main, .download-btn {
+        /* NAPRAWIONE DUŻE PRZYCISKI */
+        button.btn-main, a.download-btn {
             display: block;
             width: 100%;
             padding: 14px;
             background: var(--accent);
             border: none;
-            color: #ffffff;
+            color: #ffffff !important;
             font-weight: bold;
             border-radius: 8px;
             cursor: pointer;
             font-size: 15px;
             letter-spacing: 0.5px;
             box-sizing: border-box;
-            margin-top: 10px;
-            margin-bottom: 10px;
-            position: relative;
-            z-index: 10;
+            margin: 12px 0;
+            text-decoration: none;
             transition: transform 0.2s cubic-bezier(0.25, 0.8, 0.25, 1), background 0.2s ease, box-shadow 0.2s ease;
             box-shadow: 0 4px 12px rgba(255, 62, 62, 0.2);
         }
 
-        .btn-main:hover, .download-btn:hover { 
+        button.btn-main:hover, a.download-btn:hover { 
             background: var(--accent-hover);
-            transform: translateY(-4px); /* Efekt podnoszenia */
+            transform: translateY(-4px); /* Podnoszenie */
             box-shadow: 0 8px 20px rgba(255, 62, 62, 0.4);
         }
         
-        .btn-main:active, .download-btn:active {
+        button.btn-main:active, a.download-btn:active {
             transform: translateY(-1px);
             box-shadow: 0 4px 8px rgba(255, 62, 62, 0.3);
         }
 
-        /* PRZYCISKI PANELU ADMINA (SZARE) */
-        .admin-btn { 
+        /* PRZYCISKI SZARE */
+        button.admin-btn { 
             background: #252533; 
             margin-top: 20px; 
             color: #ffffff;
@@ -125,7 +123,7 @@
             border: 1px solid rgba(255, 255, 255, 0.05);
         }
         
-        .admin-btn:hover {
+        button.admin-btn:hover {
             background: #333344;
             box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
         }
@@ -160,34 +158,28 @@
         
         .code-item:last-child { margin-bottom: 0; }
         
-        /* MAŁY PRZYCISK USUWANIA */
-        .delete-btn { 
+        /* CAŁKOWICIE NOWY PRZYCISK USUWANIA - BEZ KONFLIKTÓW CSS */
+        .del-action { 
             color: var(--accent); 
             cursor: pointer; 
-            background: none; 
-            border: none; 
-            width: auto; 
-            padding: 5px 10px; 
             font-size: 13px; 
             font-weight: bold;
-            position: relative;
-            z-index: 15;
+            padding: 2px 6px;
+            user-select: none;
             transition: color 0.2s, transform 0.2s;
         }
         
-        .delete-btn:hover { 
+        .del-action:hover { 
             color: #ff6b6b; 
-            transform: translateY(-2px);
+            transform: translateY(-1px);
         }
 
-        .download-btn {
+        a.download-btn {
             background: #28a745;
             box-shadow: 0 4px 12px rgba(40, 167, 69, 0.2);
-            text-decoration: none;
-            margin-top: 15px;
         }
 
-        .download-btn:hover {
+        a.download-btn:hover {
             background: #2fb94e;
             box-shadow: 0 8px 20px rgba(40, 167, 69, 0.4);
         }
@@ -294,3 +286,8 @@
         function renderCodes() {
             const listDiv = document.getElementById('active-codes');
             listDiv.innerHTML = '';
+            if (codes.length === 0) {
+                listDiv.innerHTML = '<span style="color:#555566; font-size:13px; display:block; text-align:center;">Brak wygenerowanych kodów</span>';
+                return;
+            }
+    
