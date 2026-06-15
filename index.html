@@ -2,246 +2,218 @@
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Słowo - Gigantyczna Baza Słów</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GrimClient - Pobierz Cheaty</title>
     <style>
         :root {
-            --bg-color: #121213;
-            --tile-border: #3a3a3c;
-            --tile-empty: #121213;
-            --color-correct: #6aaa64;
-            --color-present: #c9b458;
-            --color-absent: #3a3a3c;
-            --key-bg: #818384;
-            --text-color: #f8f9fa;
+            --bg-color: #0d0d11;
+            --card-bg: #16161f;
+            --accent: #ff3e3e;
+            --text: #ffffff;
+            --text-muted: #8a8a98;
         }
-
         body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: var(--bg-color);
-            color: var(--text-color);
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            color: var(--text);
+            margin: 0;
+            padding: 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: space-between;
             min-height: 100vh;
-            margin: 0;
-            padding: 10px;
-            box-sizing: border-box;
-            overflow: hidden;
         }
-
-        header {
-            border-bottom: 1px solid var(--tile-border);
+        .container {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
             width: 100%;
-            max-width: 500px;
+            max-width: 450px;
             text-align: center;
-            padding-bottom: 5px;
-            margin-bottom: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #252533;
         }
-
-        h1 {
-            margin: 0;
-            font-size: 2rem;
-            font-weight: 800;
-            letter-spacing: 3px;
-            background: linear-gradient(45deg, #6aaa64, #c9b458);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        #game-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            flex-grow: 1;
+        h1 { color: var(--accent); margin-top: 0; font-size: 28px; }
+        h2 { font-size: 20px; margin-bottom: 20px; }
+        input {
             width: 100%;
-        }
-
-        #grid {
-            display: grid;
-            grid-template-rows: repeat(6, 1fr);
-            gap: 5px;
-            margin-bottom: 15px;
-        }
-
-        .row {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 5px;
-        }
-
-        .row.shake { animation: shake 0.5s ease-in-out; }
-
-        .tile {
-            width: 52px;
-            height: 52px;
-            border: 2px solid var(--tile-border);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 1.6rem;
-            font-weight: bold;
-            text-transform: uppercase;
-            user-select: none;
-            transition: transform 0.1s ease, background-color 0.3s ease;
-            border-radius: 4px;
-        }
-
-        .tile.pop {
-            transform: scale(1.08);
-            border-color: #565758;
-        }
-
-        .correct { background-color: var(--color-correct) !important; border-color: var(--color-correct) !important; }
-        .present { background-color: var(--color-present) !important; border-color: var(--color-present) !important; }
-        .absent { background-color: var(--color-absent) !important; border-color: var(--color-absent) !important; }
-
-        #keyboard {
-            width: 100%;
-            max-width: 500px;
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-            margin-top: 10px;
-            padding-bottom: 10px;
-        }
-
-        .keyboard-row {
-            display: flex;
-            justify-content: center;
-            gap: 4px;
-            width: 100%;
-        }
-
-        .key {
-            background-color: var(--key-bg);
-            color: white;
-            border: 0;
-            border-radius: 4px;
-            height: 48px;
-            flex: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-weight: bold;
-            font-size: 0.95rem;
-            cursor: pointer;
-            user-select: none;
-            text-transform: uppercase;
-            transition: background-color 0.2s ease;
-        }
-
-        .key.wide { flex: 1.5; font-size: 0.8rem; }
-
-        #toast-container {
-            position: fixed;
-            top: 12%;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 10;
-        }
-
-        .toast {
-            background-color: #f8f9fa;
-            color: #121213;
-            padding: 10px 20px;
+            padding: 12px;
+            margin: 10px 0;
             border-radius: 6px;
-            font-weight: bold;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
-            margin-bottom: 8px;
-            opacity: 0;
-            transition: opacity 0.15s ease;
+            border: 1px solid #333344;
+            background: #09090d;
+            color: #fff;
+            box-sizing: border-box;
+            font-size: 16px;
         }
-        .toast.show { opacity: 1; }
-
-        #modal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background-color: rgba(0,0,0,0.8);
-            justify-content: center;
-            align-items: center;
-            z-index: 100;
-        }
-
-        .modal-content {
-            background-color: #1c1c1e;
-            padding: 25px;
-            border-radius: 14px;
-            text-align: center;
-            max-width: 360px;
-            width: 85%;
-            border: 1px solid var(--tile-border);
-        }
-
-        .secret-word-display {
-            font-size: 2rem;
-            letter-spacing: 3px;
-            color: var(--color-correct);
-            font-weight: 900;
-            margin: 15px 0;
-        }
-
-        .btn-restart {
-            background-color: var(--color-correct);
-            color: white;
+        button {
+            width: 100%;
+            padding: 12px;
+            background: var(--accent);
             border: none;
-            padding: 10px 24px;
-            font-size: 1rem;
+            color: white;
             font-weight: bold;
-            border-radius: 20px;
+            border-radius: 6px;
             cursor: pointer;
+            font-size: 16px;
+            transition: background 0.2s;
         }
-
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            20%, 60% { transform: translateX(-6px); }
-            40%, 80% { transform: translateX(6px); }
-        }
+        button:hover { background: #cc3232; }
+        .admin-btn { background: #333344; margin-top: 15px; }
+        .admin-btn:hover { background: #444455; }
+        .hidden { display: none; }
+        .error { color: #ff4a4a; margin-top: 10px; font-weight: bold; }
+        .success { color: #4aff4a; margin-top: 10px; font-weight: bold; }
+        .code-list { text-align: left; max-height: 150px; overflow-y: auto; background: #09090d; padding: 10px; border-radius: 6px; font-family: monospace; }
+        .code-item { display: flex; justify-content: space-between; margin-bottom: 5px; font-size: 14px; }
+        .delete-btn { color: var(--accent); cursor: pointer; background: none; border: none; width: auto; padding: 0; font-size: 14px; }
     </style>
 </head>
 <body>
 
-    <header>
-        <h1>SŁOWO</h1>
-    </header>
-
-    <div id="game-container">
-        <div id="grid"></div>
+    <!-- PANEL UŻYTKOWNIKA -->
+    <div id="user-panel" class="container">
+        <h1>GrimClient</h1>
+        <p style="color: var(--text-muted)">Wprowadź wygenerowany kod, aby odebrać dostęp.</p>
+        <input type="text" id="user-code" placeholder="Gcl-XXX-XXX-XXX">
+        <button onclick="redeemCode()">Odbierz cheaty</button>
+        <div id="user-msg"></div>
+        <button class="admin-btn" onclick="showAdminLogin()">Panel Admina</button>
     </div>
 
-    <div id="keyboard">
-        <div class="keyboard-row">
-            <button class="key" data-key="Q">Q</button><button class="key" data-key="W">W</button><button class="key" data-key="E">E</button><button class="key" data-key="R">R</button><button class="key" data-key="T">T</button><button class="key" data-key="Y">Y</button><button class="key" data-key="U">U</button><button class="key" data-key="I">I</button><button class="key" data-key="O">O</button><button class="key" data-key="P">P</button>
-        </div>
-        <div class="keyboard-row">
-            <button class="key" data-key="A">A</button><button class="key" data-key="S">S</button><button class="key" data-key="D">D</button><button class="key" data-key="F">F</button><button class="key" data-key="G">G</button><button class="key" data-key="H">H</button><button class="key" data-key="J">J</button><button class="key" data-key="K">K</button><button class="key" data-key="L">L</button>
-        </div>
-        <div class="keyboard-row">
-            <button class="key" data-key="Ą">Ą</button><button class="key" data-key="Ć">Ć</button><button class="key" data-key="Ę">Ę</button><button class="key" data-key="Ł">Ł</button><button class="key" data-key="Ń">Ń</button><button class="key" data-key="Ó">Ó</button><button class="key" data-key="Ś">Ś</button><button class="key" data-key="Ź">Ź</button><button class="key" data-key="Ż">Ż</button>
-        </div>
-        <div class="keyboard-row">
-            <button class="key wide" data-key="ENTER">ENTER</button>
-            <button class="key" data-key="Z">Z</button><button class="key" data-key="X">X</button><button class="key" data-key="C">C</button><button class="key" data-key="V">V</button><button class="key" data-key="B">B</button><button class="key" data-key="N">N</button><button class="key" data-key="M">M</button>
-            <button class="key wide" data-key="BACKSPACE">BACK</button>
-        </div>
+    <!-- LOGOWANIE ADMINA -->
+    <div id="admin-login" class="container hidden">
+        <h2>Logowanie Admina</h2>
+        <input type="password" id="admin-pass" placeholder="Hasło">
+        <button onclick="loginAdmin()">Zaloguj</button>
+        <div id="login-msg" class="error"></div>
+        <button class="admin-btn" onclick="showUserPanel()">Powrót</button>
     </div>
 
-    <div id="toast-container"></div>
-
-    <div id="modal">
-        <div class="modal-content">
-            <h2 id="modal-title">Wynik gry</h2>
-            <p>Ukryte słowo to:</p>
-            <div id="modal-word" class="secret-word-display">-----</div>
-            <button class="btn-restart" onclick="restartGame()">Zagraj jeszcze raz</button>
-        </div>
+    <!-- PANEL ADMINA -->
+    <div id="admin-panel" class="container hidden">
+        <h2>Panel Administratora</h2>
+        
+        <label style="display:block; text-align:left; font-size:14px; color:var(--text-muted)">Link do cheatów:</label>
+        <input type="text" id="cheat-link" placeholder="https://twoj-link-do-pobrania.com" onchange="saveLink()">
+        
+        <button onclick="generateCode()" style="background: #28a745; margin-top: 10px;">Generuj kod Gcl</button>
+        
+        <h3 style="text-align: left; margin-top: 20px; font-size: 16px;">Aktywne kody:</h3>
+        <div class="code-list" id="active-codes"></div>
+        
+        <button class="admin-btn" onclick="logoutAdmin()">Wyloguj</button>
     </div>
 
     <script>
-        // Olbrzymia baza ponad 1000 słów
-        const RAW_WORDS = [
-            "MAGIA", "SKLEP","SYNEK", "TRAWA", "NIEBO", "ROWER", "WODA", "OGRÓD", "KWIAT", "WIEŻA", "ZAMEK", "EKRAN", "SŁOWO", "BLUZA", "BUTY", "TORBA", "KOTKA", "OBRAZ", "ŚCIANA", "DRZWI", "OKNO", "LAMPA", "ŁÓŻKO", "ZEGAR", "KLUCZ", "FOTEL", "KUBEK", "CHLEB", "MASŁO", "MLEKO", "KAWA", "ORZEŁ", "SŁOŃCE", "POMOC", "WIATR", "BURZA", "OGIEŃ", "ZIEMIA", "ZŁOTO", "DROGA", "RZEKA", "POTOK", "MORZE", "PLAŻA", "SKAŁA", "GÓRA", "OWOC", "BANAN", "ARBUZ", "MALINA", "KREM", "CIASTO", "JUTRO", "POGODA", "CIEPŁO", "ZIMNO", "MROŹNO", "ŚNIEG", "DESZCZ", "CHMURA", "MGŁA", "TĘCZA", "SZKOŁA", "KLASA", "BIURKO", "KREDA", "GUMKA", "PIÓRO", "FARBA", "PAPIER", "KOSZ", "MAPA", "KRAJ", "MIASTO", "WIOSKA", "DOMY", "BLOKI", "STACJA", "POCIĄG", "MOTOR", "STATEK", "BALON", "KOSMOS", "MAMA", "TATA", "CÓRKA", "BRAT", "SIOSTRA", "WUJEK", "CIOCIA", "KUZYN", "ŻYCIE", "SERCE", "ROZUM", "DUSZA", "CIAŁO", "GŁOWA", "WŁOSY", "OCZY", "USTA", "RĘKA", "NOGA", "PALEC", "KOŚĆ", "KREW", "MÓZG", "PŁUCA", "PTAK", "RYBA", "WILK", "LISEK", "ŻABA", "SOWA", "KRUK", "KURA", "KROWA", "OWCA", "KOZA", "BARAN", "KOT", "PIES", "CHOMIK", "ŻÓŁW", "PAJĄK", "MUCHA", "KOMAR", "MOTYL", "MEBLE", "SZAFA", "PÓŁKA", "STÓŁ", "SOFA", "DYWAN", "OBRUS", "KOC", "SALON", "POKÓJ", "GARAŻ", "DACH", "KOMIN", "SUFIT", "PŁOT",
-            "ADRES", "AFERA", "AGENT", "AKORD", "AKTOR", "ALBUM", "ALEJA", "ALERT", "ALIBI", "ALTAN", "AMANT", "AMBER", "AMBRA", "ANECK", "ANIOŁ", "ANEKS", "ANODA", "ANTEN", "APART", "APELU", "APLAUZ", "APTEK", "ARENA", "ARESZ", "ARGON", "ARAKU", "ARMIA", "AROMAT", "ARTUR", "ASPEKT", "ASTRA", "ATLAS", "ATLET", "ATOMU", "ATRAP", "AUDYT", "AUTOR", "AWANS", "AWERS", "AWARI", "BABKA", "BACCA", "BACAŃ", "BACIK", "BADAC", "BADAN", "BAGNO", "BAJAK", "BAJCE", "BAJKA", "BAJOC", "BAJTE", "BAKAN", "BALET", "BALIA", "BALIK", "BALON", "BALSA", "BAŁTI", "BANAN", "BANDA", "BANER", "BANIA", "BANKU", "BARAK", "BARAN", "BARKA", "BARON", "BARWA", "BARYŁ", "BASEK", "BASEN", "BASMA", "BASSA", "BASZTA", "BATAT", "BATIK", "BATON", "BATUT", "BAWEŁ", "BAZAR", "BAZYL", "BĄBEL", "BĄKÓW", "BECZE", "BECZK", "BEDER", "BEGAN", "BEGEL", "BEJCA", "BEJCE", "BEKAC", "BEKAS", "BEKON", "BELKA", "BELCE", "BELKÓ", "BELON", "BEMOL", "BENZY", "BERET", "BERŁO", "BESTI", "BETON", "BEZAN", "BEZIK", "BĘBEN", "BĘBNI", "BIAŁE", "BIAŁY", "BIBAK", "BIBLI", "BIBUŁ", "BICIA", "BICIE", "BICZU", "BIDAŚ", "BIDEK", "BIDET", "BIEGI", "BIEGU", "BIELU", "BIELE", "BIERZ", "BIESA", "BIESI", "BIEŻY", "BIGOS", "BIGOT", "BIJAĆ", "BIJAK", "BIJĄC", "BIKSA", "BILET", "BILON", "BINGO", "BIODR", "BIOLĘ", "BIOMA", "BIORĄ", "BIORĘ", "BIOTY", "BIRRA", "BISON", "BITER", "BITKA", "BITCE", "BITNY", "BITUM", "BITWA", "BITWY", "BIURK", "BIURO", "BIUST", "BIWAK", "BIZON", "BIZUN", "BLADY", "BLAGI", "BLAKU", "BLANX", "BLANK", "BLANT", "BLASK", "BLATU", "BLAZA", "BLAZA", "BLEDY", "BLEDŹ", "BLEFU", "BLIND", "BLINI", "BLIZU", "BLIZA", "BLIŻY", "BLOKU", "BLOND", "BLUES", "BLUZA", "BLUZY", "BŁADO", "BŁAGI", "BŁAMU", "BŁAWAT", "BŁAZEN", "BŁĄDŹ", "BŁĘDU", "BŁOGI", "BŁONA", "BŁONĘ", "BŁOTA", "BŁOTO", "BŁYSK", "BOASY", "BOBER", "BOBRA", "BOBRE", "BOBUŚ", "BOCEK", "BOCZN", "BOCZE", "BOĆKI", "BODAJ", "BODEC", "BODNĄ", "BODNĘ", "BODNY", "BODŹS", "BODŹC", "BOFIK", "BOGAC", "BOGAT", "BOGDA", "BOGIŃ", "BOGOM", "BOJAR", "BOJĄC", "BOJCE", "BOJEK", "BOJKA", "BOJOM", "BOJOW", "BOJIS", "BOKOM", "BOKSU", "BOKSY", "BOLAĆ", "BOLAŁ", "BOLEĆ", "BOLEK", "BOLEŚ", "BOLEJ", "BOLID", "BOMBA", "BOMBY", "BOMBU", "BOMEM", "BONEM", "BONDA", "BONGO", "BONUS", "BONZA", "BOREK", "BORKU", "BOROW", "BORTU", "BORUŃ", "BORYS", "BORYS", "BOSAK", "BOSKI", "BOSKO", "BOSTON", "BOSOM", "BOTEK", "BOTKI", "BOTOM", "BOŻEK", "BOŻKI", "BÓLOM", "BÓSTW", "BRAMA", "BRAMY", "BRANŻ", "BRAKU", "BRAVO", "BRAWA", "BRAWO", "BRECH", "BREJA", "BREKI", "BREND", "BREVA", "BRING", "BRNAT", "BRODA", "BRODĘ", "BRODY", "BROIĆ", "BROJĄ", "BROJU", "BROKU", "BROMU", "BRONA", "BRONY", "BRONT", "BROSS", "BROWAR", "BROŻA", "BRUDU", "BRUDY", "BRUKS", "BRUND", "BRUSA", "BRUTT", "BRUŻD", "BRYJA", "BRYKA", "BRYKI", "BRYŁA", "BRYŁY", "BRYZA", "BRYZG", "BRYŻU", "BRZAK", "BRZANK", "BRZDĄC", "BRZEG", "BRZEŻ", "BRZĘK", "BRZMI", "BRZUCH", "BRZYD", "BUBBL", "BUBEL", "BUBLA", "BUBUŚ", "BUCHA", "BUCHY", "BUCIK", "BUCZE", "BUCZY", "BUDAK", "BUDDY", "BUDEK", "BUDKA", "BUDKI", "BUDOW", "BUDUJ", "BUDYŃ", "BUDŻE", "BUFAL", "BUFEL", "BUFET", "BUFOR", "BUFON", "BUGAJ", "BUGGY", "BUJAK", "BUJAĆ", "BUJAŁ", "BUJAM", "BUJDA", "BUJDY", "BUJNE", "BUJNY", "BUKAF", "BUKAN", "BUKET", "BUKIE", "BUKOW", "BUKSI", "BULAI", "BULAĆ", "BULAR", "BULBA", "BULIĆ", "BULIK", "BULON", "BULWA", "BULWY", "BUŁKA", "BUŁKI", "BUMER", "BUMOM", "BUNCH", "BUNCE", "BANDA", "BUNGY", "BUNKA", "BURAK", "BURAN", "BURAS", "BURCA", "BURDA", "BURDY", "BUREK", "BURKI", "BURSA", "BURSY", "BURTA", "BURTY", "BURZĄ", "BURZĘ", "BURZY", "BURŻU", "BUSAK", "BUSEM", "BUSIK", "BUSKA", "BUSKU", "BUSTO", "BUSOLA", "BUTEK", "BUTEL", "BUTIK", "BUTLA", "BUTLE", "BUTLI", "BUTNY", "BUTOM", "BUTON", "BUTOR", "BUTUT", "BUZIA", "BUZIĘ", "BUZIE", "BUZIO", "BUZZY", "BUŻKA", "BYBYĆ", "BYCZA", "BYCZE", "BYCZY", "BYDŁA", "BYDŁO", "BYKAŃ", "BYKÓW", "BYLEJ", "BYLIN", "BYŁBY", "BYŁAM", "BYŁEŚ", "BYŁYM", "BYSTR", "BYTEM", "BYTÓW", "BYWAĆ", "BYWAŁ", "BYWAM", "BZDUR", "BZIEŃ", "BZIKU", "BZYCZ", "CACKO", "CACUŚ", "CADET", "CAŁEK", "CAŁEJ", "CAŁKI", "CAŁOŚ", "CAŁUŃ", "CAŁUS", "CAŁYM", "CAMEL", "CARAT", "CAREK", "CAROM", "CARYC", "CASIO", "CASTE", "CATCH", "CEBER", "CEBRA", "CEBUL", "CECHA", "CECHĘ", "CECHY", "CEDRU", "CEDRÓ", "CEDZĄ", "CEDZĘ", "CEDZI", "CEGŁA", "CEGŁY", "CEKIN", "CELIK", "CELKA", "CELKI", "CELNA", "CELNE", "CELNY", "CELOM", "CELON", "CELTA", "CELUJ", "CEMENT", "CENNA", "CENNE", "CENNY", "CENOM", "CENTA", "CENTO", "CENTA", "CENTU", "CEPER", "CEPEM", "CEPRA", "CERAM", "CERAT", "CEREK", "CERKA", "CERKÓ", "CERUJ", "CESAR", "CESJA", "CESJĘ", "CESJI", "CESTĘ", "CETAN", "CEWKA", "CEWKI", "CEZAR", "CEZEM", "CHABR", "CHATA", "CHATĘ", "CHATY", "CHAOS", "CHAPS", "CHATA", "CHCIĆ", "CHCIK", "CHCĄC", "CHCĄY", "CHECH", "CHEFU", "CHEŁM", "CHEMI", "CHERU", "CHĘCI", "CHĘĆO", "CHIŃS", "CHIPS", "CHITY", "CHLEB", "CHLEW", "CHLIP", "CHLOR", "CHLUB", "CHŁAP", "CHŁOD", "CHŁOP", "CHMAR", "CHMEL", "CHMUR", "CHODU", "CHODY", "CHODŹ", "CHOIR", "CHOJA", "CHOJK", "CHOKE", "CHOMIK", "CHOPY", "CHORA", "CHORE", "CHORO", "CHORY", "CHOWU", "CHOWY", "CHÓRU", "CHÓRY", "CHRAM", "CHRAP", "CHREI", "CHRIS", "CHROM", "CHROŃ", "CHRUŚ", "CHRYP", "CHUCH", "CHUDY", "CHUDO", "CHUPA", "CHUST", "CHUTY", "CHWAL", "CHWAŁ", "CHWAT", "CHWAŚ", "CHWIE", "CHWIL", "CHWYT", "CHYBA", "CHYBI", "CHYRA", "CHYRE", "CHYRO", "CHYRY", "CHYŻE", "CIOTA", "CIOCI", "CMENT", "CUDNY", "CYCKI", "CYFRA", "CYFRY", "CYGAN", "CYNIC", "CYTAT", "CYTRU", "CYWIL", "CZAPA", "CZART", "CZASU", "CZASY", "CZATA", "CZECH", "CZEKA", "CZEKI", "CZEKÓ", "CZELU", "CZEMU", "CZERŃ", "CZERW", "CZĘŚĆ", "CZTERY", "CZYLI", "CZYNY", "CZYST", "CZYTA", "ĆWIEK", "ĆWIRK", "DACZA", "DACZE", "DACHU", "DACHY", "DAWCA", "DAWNE", "DAWNY", "DEBAT", "DEBET", "DEBIL", "DECEL", "DECOR", "DEKAD", "DEKAN", "DEKOR", "DEKRA", "DELTA", "DEMON", "DENIM", "DESKA", "DESKI", "DETAL", "DIETA", "DIETY", "DILDO", "DINGO", "DIODA", "DIODY", "DŁUGI", "DŁUGO", "DOBRA", "DOBRE", "DOBRO", "DOBRY", "DOBAŃ", "DOBÓR", "DODAM", "DODAJ", "DODOT", "DOGMA", "DOLAR", "DOLIN", "DOŁEM", "DOŁÓW", "DOMEN", "DOMEK", "DOMKI", "DOMEM", "DOMÓW", "DONOS", "DOROD", "DOSYĆ", "DOTYK", "DOZOR", "DÓWÓD", "DRAMA", "DRANK", "DRAST", "DRAKA", "DRAPA", "DRAŻE", "DRECH", "DREFF", "DREPT", "DRINK", "DROGA", "DROGI", "DROGO", "DRUKU", "DRUKY", "DRUTU", "DRUTY", "DRWAL", "DRZAZ", "DRZEW", "DRZWI", "DUKAT", "DUMAŃ", "DUNES", "DUPEK", "DUPKA", "DURNY", "DUSZA", "DUSZĘ", "DUSZY", "DUŻEŃ", "DUŻYM", "DWOJE", "DWOMA", "DWORU", "DWORY", "DYDYM", "DYDYŚ", "DYGAC", "DYGÓW", "DYLAN", "DYMKA", "DYMEM", "DYMÓW", "DYNAŚ", "DYNIA", "DYPLI", "DYSKA", "DYSKI", "DYSKU", "DYSZA", "DYSZY", "DYWAN", "DYWIZ", "DZBAN", "DZIAD", "DZIAŁ", "DZIEŃ", "DZIEĆ", "DZIKI", "DZIKO", "DZIUR", "DZIWN", "DZWON", "DŻINS", "DŻOKE", "ECRAN", "EDUKY", "EDWAR", "EDYTA", "EFEKT", "EFTAL", "EGIDA", "EGIPT", "EKIPA", "EKIPY", "EKRAN", "ELAST", "ELEKT", "ELIPS", "ELITA", "ELITY", "ELIZA", "EMAIL", "EMIRU", "EMISJ", "EMPIK", "EPOKA", "EPOKI", "ERAZM", "ESKOR", "ESEJU", "ESEMA", "ETANU", "ETAPU", "ETAPY", "ETATU", "ETATY", "ETERY", "ETIKA", "ETNOS", "ETIUD", "ETOLA", "FABUŁ", "FACET", "FACHÓ", "FADYŚ", "FAJKA", "FAJKI", "FAJNY", "FAKIR", "FAKTI", "FAKTY", "FALCO", "FALDA", "FALDY", "FALEŃ", "FALOM", "FALUJ", "FALUS", "FAMEU", "FAMIL", "FANEM", "FANYŚ", "FANKA", "FANTA", "FANTY", "FARAO", "FARBA", "FARBY", "FARMA", "FARMY", "FARSA", "FARSZ", "FARYS", "FASON", "FASOL", "FAUNA", "FAUNY", "FAWÓR", "FAZOM", "FAZYŚ", "FĄFEL", "FEDER", "FELEK", "FELGA", "FELGI", "FENEM", "FENIX", "FESTU", "FETEM", "FEZEM", "FIARY", "FIASK", "FIATU", "FIBRA", "FICUS", "FIDEL", "FIDŻI", "FIGAR", "FIGAŃ", "FIGLE", "FIGUŃ", "FIGUR", "FIKAC", "FIKUS", "FILAR", "FILCO", "FILET", "FILIA", "FILIĘ", "FILIO", "FILIP", "FILMA", "FILMY", "FILTR", "FINAŁ", "FINAN", "FINEM", "FINKA", "FIORD", "FIOŁE", "FIRMA", "FIRMY", "FIZYK", "FLAGA", "FLAGI", "FLAKU", "FLAMB", "FLANK", "FLARA", "FLARY", "FLASH", "FLECI", "FLESZ", "FLINT", "FLIRT", "FLOTA", "FLOTY", "FLUID", "FLUKU", "FLUOR", "FOBIA", "FOBIĘ", "FOBII", "FOKUS", "FOLIA", "FOLIĘ", "FOLII", "FOLKU", "FOLIO", "FORUM", "FORSA", "FORSY", "FORTA", "FORTU", "FORTY", "FORYŚ", "FOSOM", "FOSSA", "FOTEL", "FOTKA", "FOTKI", "FOTON", "FOUSA", "FRACH", "FRANC", "FRANU", "FRANK", "FRAZA", "FRAZY", "FREON", "FRESA", "FRESK", "FREZÓ", "FRUWA", "FRYTA", "FRYTE", "FRYTY", "FRYZU", "FUCZĘ", "FULAR", "FUNDU", "FURIA", "FURIE", "FURKA", "FURKI", "FUROR", "FURYŚ", "FUSOM", "FUTRO", "FUTRA", "FUTUR", "FUZJA", "GABAT", "GABOR", "GABRO", "GACEK", "GACKA", "GACKI", "GADAC", "GADAŃ", "GADŻE", "GAFAŃ", "GAFOM", "GAGEM", "GAGÓW", "GAIKU", "GAJEM", "GAJÓW", "GALON", "GALOP", "GAŁĄŹ", "GANIA", "GANID", "GANKU", "GAPAŃ", "GAPOM", "GARAŻ", "GARDŁ", "GARNE", "GARNI", "GARST", "GARŚĆ", "GARUŃ", "GARYŚ", "GASEM", "GASIK", "GASZĘ", "GATUN", "GAWRA", "GAWĘD", "GAZDA", "GAZEL", "GAZEM", "GAZÓW", "GĄBKA", "GĄBKI", "GĄSIO", "GCIEŃ", "GDYBY", "GDZIE", "GEJEM", "GEMAŃ", "GEMEM", "GENER", "GENIUS", "GENOM", "GENYŚ", "GERBER", "GETRA", "GETTO", "GĘGAĆ", "GĘŚLĘ", "GIĄĆS", "GIBAC", "GIBKI", "GIEŁD", "GIERM", "GIĘTE", "GIĘTY", "GIGAK", "GIGANT", "GILDIA", "GILLE", "GIPSU", "GIRAL", "GITUŃ", "GITYŚ", "GIZMO", "GLAZU", "GLINA", "GLINY", "GLIPH", "GLONÓ", "GLOBE", "GLOBU", "GLOZA", "GŁADK", "GŁAZU", "GŁAZY", "GŁĘBI", "GŁOGU", "GŁOSU", "GŁOSY", "GŁOWA", "GŁOWĘ", "GŁOWY", "GŁUCH", "GŁUPI", "GŁUPO", "GMINA", "GMINY", "GNIEW", "GNIEŹ", "GNOJU", "GNOZY", "GNAĆS", "GNIAZ", "GNIDA", "GNIDY", "GNOJU", "GOLAS", "GOLEC", "GOLFÓ", "GOLOM", "GOLUŃ", "GOŁĄB
+        // Inicjalizacja danych z localStorage
+        let codes = JSON.parse(localStorage.getItem('grim_codes')) || [];
+        let downloadLink = localStorage.getItem('grim_link') || '';
+
+        document.getElementById('cheat-link').value = downloadLink;
+
+        function showAdminLogin() {
+            hideAll();
+            document.getElementById('admin-login').classList.remove('hidden');
+        }
+
+        function showUserPanel() {
+            hideAll();
+            document.getElementById('user-panel').classList.remove('hidden');
+        }
+
+        function hideAll() {
+            document.getElementById('user-panel').classList.add('hidden');
+            document.getElementById('admin-login').classList.add('hidden');
+            document.getElementById('admin-panel').classList.add('hidden');
+            document.getElementById('user-msg').innerHTML = '';
+            document.getElementById('login-msg').innerHTML = '';
+        }
+
+        function loginAdmin() {
+            const pass = document.getElementById('admin-pass').value;
+            if (pass === '12345') {
+                hideAll();
+                document.getElementById('admin-panel').classList.remove('hidden');
+                renderCodes();
+            } else {
+                document.getElementById('login-msg').innerText = 'Błędne hasło!';
+            }
+            document.getElementById('admin-pass').value = '';
+        }
+
+        function logoutAdmin() {
+            showUserPanel();
+        }
+
+        function saveLink() {
+            downloadLink = document.getElementById('cheat-link').value;
+            localStorage.setItem('grim_link', downloadLink);
+        }
+
+        function getRandomSegment() {
+            return Math.floor(100 + Math.random() * 900).toString(); // Losuje 3 cyfry (100-999)
+        }
+
+        function generateCode() {
+            const newCode = `Gcl-${getRandomSegment()}-${getRandomSegment()}-${getRandomSegment()}`;
+            codes.push(newCode);
+            localStorage.setItem('grim_codes', JSON.stringify(codes));
+            renderCodes();
+        }
+
+        function deleteCode(index) {
+            codes.splice(index, 1);
+            localStorage.setItem('grim_codes', JSON.stringify(codes));
+            renderCodes();
+        }
+
+        function renderCodes() {
+            const listDiv = document.getElementById('active-codes');
+            listDiv.innerHTML = '';
+            if (codes.length === 0) {
+                listDiv.innerHTML = '<span style="color:#555">Brak wygenerowanych kodów</span>';
+                return;
+            }
+            codes.forEach((code, index) => {
+                listDiv.innerHTML += `
+                    <div class="code-item">
+                        <span>${code}</span>
+                        <button class="delete-btn" onclick="deleteCode(${index})">Usuń</button>
+                    </div>
+                `;
+            });
+        }
+
+        function redeemCode() {
+            const inputCode = document.getElementById('user-code').value.trim();
+            const msgDiv = document.getElementById('user-msg');
+            
+            if (!inputCode) {
+                msgDiv.innerHTML = '<p class="error">Wpisz kod!</p>';
+                return;
+            }
+
+            const codeIndex = codes.indexOf(inputCode);
+
+            if (codeIndex !== -1) {
+                if (!downloadLink) {
+                    msgDiv.innerHTML = '<p class="error">Kod poprawny, ale admin nie ustawił jeszcze linku do pobrania!</p>';
+                    return;
+                }
+                msgDiv.innerHTML = `
+                    <p class="success">Kod poprawny!</p>
+                    <a href="${downloadLink}" target="_blank" style="color:#fff; background:#28a745; display:block; padding:12px; text-decoration:none; font-weight:bold; border-radius:6px; margin-top:10px;">POBIERZ GRIMCLIENT</a>
+                `;
+                // Usuwa kod po użyciu, żeby nikt go nie użył drugi raz
+                codes.splice(codeIndex, 1);
+                localStorage.setItem('grim_codes', JSON.stringify(codes));
+            } else {
+                msgDiv.innerHTML = '<p class="error">Nieprawidłowy lub zużyty kod!</p>';
+            }
+            document.getElementById('user-code').value = '';
+        }
+    </script>
+</body>
+</html>
