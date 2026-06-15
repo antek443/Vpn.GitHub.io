@@ -7,8 +7,8 @@
     <style>
         :root {
             --bg-color: #08080c;
-            --card-bg: rgba(20, 20, 28, 0.85);
-            --border-color: rgba(255, 62, 62, 0.15);
+            --card-bg: #14141c;
+            --border-color: rgba(255, 62, 62, 0.2);
             --accent: #ff3e3e;
             --accent-hover: #ff5c5c;
             --text: #f1f1f4;
@@ -19,9 +19,6 @@
         body {
             font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             background-color: var(--bg-color);
-            background-image: 
-                radial-gradient(circle at 20% 20%, rgba(255, 62, 62, 0.05) 0%, transparent 40%),
-                radial-gradient(circle at 80% 80%, rgba(255, 62, 62, 0.03) 0%, transparent 50%);
             color: var(--text);
             margin: 0;
             padding: 20px;
@@ -35,21 +32,14 @@
 
         .container {
             background: var(--card-bg);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
             padding: 40px 30px;
             border-radius: 16px;
             box-shadow: var(--shadow);
             width: 100%;
             max-width: 420px;
             text-align: center;
-            margin-bottom: 20px;
+            box-sizing: border-box;
             border: 1px solid var(--border-color);
-            transition: border-color 0.3s ease;
-        }
-        
-        .container:hover {
-            border-color: rgba(255, 62, 62, 0.3);
         }
 
         h1 { 
@@ -80,42 +70,44 @@
             margin: 15px 0;
             border-radius: 8px;
             border: 1px solid rgba(255, 255, 255, 0.08);
-            background: rgba(0, 0, 0, 0.4);
+            background: #000000;
             color: #fff;
             box-sizing: border-box;
             font-size: 15px;
-            transition: all 0.2s ease;
             text-align: center;
         }
 
         input:focus {
             outline: none;
             border-color: var(--accent);
-            background: rgba(0, 0, 0, 0.6);
             box-shadow: 0 0 10px rgba(255, 62, 62, 0.1);
         }
 
-        /* GŁÓWNE PRZYCISKI - EFEKT UNOSZENIA */
+        /* NAPRAWIONE GŁÓWNE PRZYCISKI */
         .btn-main, .download-btn {
             display: block;
             width: 100%;
             padding: 14px;
             background: var(--accent);
             border: none;
-            color: white;
+            color: #ffffff;
             font-weight: bold;
             border-radius: 8px;
             cursor: pointer;
             font-size: 15px;
             letter-spacing: 0.5px;
             box-sizing: border-box;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 10;
             transition: transform 0.2s cubic-bezier(0.25, 0.8, 0.25, 1), background 0.2s ease, box-shadow 0.2s ease;
             box-shadow: 0 4px 12px rgba(255, 62, 62, 0.2);
         }
 
         .btn-main:hover, .download-btn:hover { 
             background: var(--accent-hover);
-            transform: translateY(-4px);
+            transform: translateY(-4px); /* Efekt podnoszenia */
             box-shadow: 0 8px 20px rgba(255, 62, 62, 0.4);
         }
         
@@ -124,22 +116,21 @@
             box-shadow: 0 4px 8px rgba(255, 62, 62, 0.3);
         }
 
-        /* PRZYCISKI PANELU ADMINA (POZOSTAŁE) */
+        /* PRZYCISKI PANELU ADMINA (SZARE) */
         .admin-btn { 
-            background: rgba(255, 255, 255, 0.06); 
+            background: #252533; 
             margin-top: 20px; 
-            color: var(--text-muted);
+            color: #ffffff;
             box-shadow: none;
-            border: 1px solid rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
         
         .admin-btn:hover {
-            background: rgba(255, 255, 255, 0.1);
-            color: #fff;
+            background: #333344;
             box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
         }
 
-        .hidden { display: none; }
+        .hidden { display: none !important; }
         
         .error { color: #ff4a4a; margin-top: 15px; font-weight: 600; font-size: 14px; }
         .success { color: #4aff4a; margin-top: 15px; font-weight: 600; font-size: 14px; }
@@ -148,7 +139,7 @@
             text-align: left; 
             max-height: 180px; 
             overflow-y: auto; 
-            background: rgba(0, 0, 0, 0.3); 
+            background: #000000; 
             padding: 12px; 
             border-radius: 8px; 
             font-family: 'Courier New', monospace;
@@ -169,16 +160,18 @@
         
         .code-item:last-child { margin-bottom: 0; }
         
-        /* MAŁY PRZYCISK USUWANIA - BEZ POPSUCIA UKŁADU */
+        /* MAŁY PRZYCISK USUWANIA */
         .delete-btn { 
             color: var(--accent); 
             cursor: pointer; 
             background: none; 
             border: none; 
             width: auto; 
-            padding: 2px 5px; 
+            padding: 5px 10px; 
             font-size: 13px; 
             font-weight: bold;
+            position: relative;
+            z-index: 15;
             transition: color 0.2s, transform 0.2s;
         }
         
@@ -228,7 +221,7 @@
         <label style="display:block; text-align:left; font-size:13px; color:var(--text-muted); padding-left: 2px;">Link do pliku cheatów:</label>
         <input type="text" id="cheat-link" placeholder="https://strona.com" onchange="saveLink()">
         
-        <button class="btn-main" onclick="generateCode()" style="background: #007bff; box-shadow: 0 4px 12px rgba(0, 123, 255, 0.2); margin-top: 10px;">Generuj kod Gcl</button>
+        <button class="btn-main" onclick="generateCode()" style="background: #007bff; box-shadow: 0 4px 12px rgba(0, 123, 255, 0.2);">Generuj kod Gcl</button>
         
         <h3 style="text-align: left; margin-top: 25px; margin-bottom: 10px; font-size: 15px; color: var(--text-muted);">Aktywne kody w bazie:</h3>
         <div class="code-list" id="active-codes"></div>
@@ -240,7 +233,6 @@
         let codes = JSON.parse(localStorage.getItem('grim_codes')) || [];
         let downloadLink = localStorage.getItem('grim_link') || '';
 
-        // Załaduj link przy starcie strony
         document.getElementById('cheat-link').value = downloadLink;
 
         function showAdminLogin() {
@@ -287,3 +279,18 @@
         }
 
         function generateCode() {
+            const newCode = `Gcl-${getRandomSegment()}-${getRandomSegment()}-${getRandomSegment()}`;
+            codes.push(newCode);
+            localStorage.setItem('grim_codes', JSON.stringify(codes));
+            renderCodes();
+        }
+
+        function deleteCode(index) {
+            codes.splice(index, 1);
+            localStorage.setItem('grim_codes', JSON.stringify(codes));
+            renderCodes();
+        }
+
+        function renderCodes() {
+            const listDiv = document.getElementById('active-codes');
+            listDiv.innerHTML = '';
