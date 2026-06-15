@@ -3,71 +3,201 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GrimClient - Pobierz Cheaty</title>
+    <title>GrimClient - Premium Access</title>
     <style>
         :root {
-            --bg-color: #0d0d11;
-            --card-bg: #16161f;
+            --bg-color: #08080c;
+            --card-bg: rgba(20, 20, 28, 0.6);
+            --border-color: rgba(255, 62, 62, 0.15);
             --accent: #ff3e3e;
-            --text: #ffffff;
-            --text-muted: #8a8a98;
+            --accent-hover: #ff5c5c;
+            --text: #f1f1f4;
+            --text-muted: #767685;
+            --shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
         }
+        
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             background-color: var(--bg-color);
+            background-image: 
+                radial-gradient(circle at 20% 20%, rgba(255, 62, 62, 0.05) 0%, transparent 40%),
+                radial-gradient(circle at 80% 80%, rgba(255, 62, 62, 0.03) 0%, transparent 50%);
             color: var(--text);
             margin: 0;
             padding: 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: center;
             min-height: 100vh;
+            box-sizing: border-box;
         }
+
         .container {
             background: var(--card-bg);
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            padding: 40px 30px;
+            border-radius: 16px;
+            box-shadow: var(--shadow);
             width: 100%;
-            max-width: 450px;
+            max-width: 420px;
             text-align: center;
             margin-bottom: 20px;
-            border: 1px solid #252533;
+            border: 1px solid var(--border-color);
+            transform: translateY(0);
+            transition: transform 0.3s ease, border-color 0.3s ease;
         }
-        h1 { color: var(--accent); margin-top: 0; font-size: 28px; }
-        h2 { font-size: 20px; margin-bottom: 20px; }
+        
+        .container:hover {
+            border-color: rgba(255, 62, 62, 0.3);
+        }
+
+        h1 { 
+            color: var(--accent); 
+            margin-top: 0; 
+            font-size: 32px; 
+            font-weight: 800;
+            letter-spacing: 1px;
+            text-shadow: 0 0 15px rgba(255, 62, 62, 0.3);
+            margin-bottom: 10px;
+        }
+        
+        h2 { 
+            font-size: 22px; 
+            margin-top: 0;
+            margin-bottom: 25px; 
+            font-weight: 600;
+        }
+
+        p {
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
         input {
             width: 100%;
-            padding: 12px;
-            margin: 10px 0;
-            border-radius: 6px;
-            border: 1px solid #333344;
-            background: #09090d;
+            padding: 14px 16px;
+            margin: 15px 0;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(0, 0, 0, 0.4);
             color: #fff;
             box-sizing: border-box;
-            font-size: 16px;
+            font-size: 15px;
+            transition: all 0.2s ease;
+            text-align: center;
         }
-        button {
+
+        input:focus {
+            outline: none;
+            border-color: var(--accent);
+            background: rgba(0, 0, 0, 0.6);
+            box-shadow: 0 0 10px rgba(255, 62, 62, 0.1);
+        }
+
+        /* EFEKT UNOSZENIA PRZYCISKÓW */
+        button, .download-btn {
             width: 100%;
-            padding: 12px;
+            padding: 14px;
             background: var(--accent);
             border: none;
             color: white;
             font-weight: bold;
-            border-radius: 6px;
+            border-radius: 8px;
             cursor: pointer;
-            font-size: 16px;
-            transition: background 0.2s;
+            font-size: 15px;
+            letter-spacing: 0.5px;
+            transition: transform 0.2s cubic-bezier(0.25, 0.8, 0.25, 1), background 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 4px 12px rgba(255, 62, 62, 0.2);
         }
-        button:hover { background: #cc3232; }
-        .admin-btn { background: #333344; margin-top: 15px; }
-        .admin-btn:hover { background: #444455; }
+
+        button:hover, .download-btn:hover { 
+            background: var(--accent-hover);
+            transform: translateY(-4px); /* Podnoszenie w górę */
+            box-shadow: 0 8px 20px rgba(255, 62, 62, 0.4); /* Większy cień pod podniesionym przyciskiem */
+        }
+        
+        button:active, .download-btn:active {
+            transform: translateY(-1px); /* Lekkie opuszczenie przy kliknięciu */
+            box-shadow: 0 4px 8px rgba(255, 62, 62, 0.3);
+        }
+
+        .admin-btn { 
+            background: rgba(255, 255, 255, 0.06); 
+            margin-top: 20px; 
+            color: var(--text-muted);
+            box-shadow: none;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+        }
+        
+        .admin-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+        }
+
         .hidden { display: none; }
-        .error { color: #ff4a4a; margin-top: 10px; font-weight: bold; }
-        .success { color: #4aff4a; margin-top: 10px; font-weight: bold; }
-        .code-list { text-align: left; max-height: 150px; overflow-y: auto; background: #09090d; padding: 10px; border-radius: 6px; font-family: monospace; }
-        .code-item { display: flex; justify-content: space-between; margin-bottom: 5px; font-size: 14px; }
-        .delete-btn { color: var(--accent); cursor: pointer; background: none; border: none; width: auto; padding: 0; font-size: 14px; }
+        
+        .error { color: #ff4a4a; margin-top: 15px; font-weight: 600; font-size: 14px; }
+        .success { color: #4aff4a; margin-top: 15px; font-weight: 600; font-size: 14px; }
+        
+        .code-list { 
+            text-align: left; 
+            max-height: 180px; 
+            overflow-y: auto; 
+            background: rgba(0, 0, 0, 0.3); 
+            padding: 12px; 
+            border-radius: 8px; 
+            font-family: 'Courier New', monospace;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            margin-top: 15px;
+        }
+        
+        .code-item { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            margin-bottom: 8px; 
+            font-size: 14px; 
+            background: rgba(255, 255, 255, 0.03);
+            padding: 8px 12px;
+            border-radius: 6px;
+        }
+        
+        .code-item:last-child { margin-bottom: 0; }
+        
+        .delete-btn { 
+            color: var(--accent); 
+            cursor: pointer; 
+            background: none; 
+            border: none; 
+            width: auto; 
+            padding: 0; 
+            font-size: 13px; 
+            box-shadow: none;
+        }
+        
+        .delete-btn:hover { 
+            background: none; 
+            color: #ff6b6b; 
+            transform: translateY(-1px); 
+            box-shadow: none;
+        }
+
+        .download-btn {
+            display: block;
+            background: #28a745;
+            box-shadow: 0 4px 12px rgba(40, 167, 69, 0.2);
+            text-decoration: none;
+            box-sizing: border-box;
+            margin-top: 15px;
+        }
+
+        .download-btn:hover {
+            background: #2fb94e;
+            box-shadow: 0 8px 20px rgba(40, 167, 69, 0.4);
+        }
     </style>
 </head>
 <body>
@@ -75,7 +205,7 @@
     <!-- PANEL UŻYTKOWNIKA -->
     <div id="user-panel" class="container">
         <h1>GrimClient</h1>
-        <p style="color: var(--text-muted)">Wprowadź wygenerowany kod, aby odebrać dostęp.</p>
+        <p style="color: var(--text-muted); margin-bottom: 20px;">Wpisz wygenerowany kod, aby pobrać cheaty.</p>
         <input type="text" id="user-code" placeholder="Gcl-XXX-XXX-XXX">
         <button onclick="redeemCode()">Odbierz cheaty</button>
         <div id="user-msg"></div>
@@ -84,30 +214,29 @@
 
     <!-- LOGOWANIE ADMINA -->
     <div id="admin-login" class="container hidden">
-        <h2>Logowanie Admina</h2>
-        <input type="password" id="admin-pass" placeholder="Hasło">
-        <button onclick="loginAdmin()">Zaloguj</button>
+        <h2>Zaloguj się jako Admin</h2>
+        <input type="password" id="admin-pass" placeholder="Hasło zabezpieczające">
+        <button onclick="loginAdmin()">Zaloguj panel</button>
         <div id="login-msg" class="error"></div>
-        <button class="admin-btn" onclick="showUserPanel()">Powrót</button>
+        <button class="admin-btn" onclick="showUserPanel()">Powrót na główną</button>
     </div>
 
     <!-- PANEL ADMINA -->
     <div id="admin-panel" class="container hidden">
         <h2>Panel Administratora</h2>
         
-        <label style="display:block; text-align:left; font-size:14px; color:var(--text-muted)">Link do cheatów:</label>
-        <input type="text" id="cheat-link" placeholder="https://twoj-link-do-pobrania.com" onchange="saveLink()">
+        <label style="display:block; text-align:left; font-size:13px; color:var(--text-muted); padding-left: 2px;">Link do pliku cheatów:</label>
+        <input type="text" id="cheat-link" placeholder="https://strona.com" onchange="saveLink()">
         
-        <button onclick="generateCode()" style="background: #28a745; margin-top: 10px;">Generuj kod Gcl</button>
+        <button onclick="generateCode()" style="background: #007bff; box-shadow: 0 4px 12px rgba(0, 123, 255, 0.2); margin-top: 10px;">Generuj kod Gcl</button>
         
-        <h3 style="text-align: left; margin-top: 20px; font-size: 16px;">Aktywne kody:</h3>
+        <h3 style="text-align: left; margin-top: 25px; margin-bottom: 10px; font-size: 15px; color: var(--text-muted);">Aktywne kody w bazie:</h3>
         <div class="code-list" id="active-codes"></div>
         
-        <button class="admin-btn" onclick="logoutAdmin()">Wyloguj</button>
+        <button class="admin-btn" onclick="logoutAdmin()">Wyloguj i zamknij</button>
     </div>
 
     <script>
-        // Inicjalizacja danych z localStorage
         let codes = JSON.parse(localStorage.getItem('grim_codes')) || [];
         let downloadLink = localStorage.getItem('grim_link') || '';
 
@@ -153,67 +282,8 @@
         }
 
         function getRandomSegment() {
-            return Math.floor(100 + Math.random() * 900).toString(); // Losuje 3 cyfry (100-999)
+            return Math.floor(100 + Math.random() * 900).toString();
         }
 
         function generateCode() {
             const newCode = `Gcl-${getRandomSegment()}-${getRandomSegment()}-${getRandomSegment()}`;
-            codes.push(newCode);
-            localStorage.setItem('grim_codes', JSON.stringify(codes));
-            renderCodes();
-        }
-
-        function deleteCode(index) {
-            codes.splice(index, 1);
-            localStorage.setItem('grim_codes', JSON.stringify(codes));
-            renderCodes();
-        }
-
-        function renderCodes() {
-            const listDiv = document.getElementById('active-codes');
-            listDiv.innerHTML = '';
-            if (codes.length === 0) {
-                listDiv.innerHTML = '<span style="color:#555">Brak wygenerowanych kodów</span>';
-                return;
-            }
-            codes.forEach((code, index) => {
-                listDiv.innerHTML += `
-                    <div class="code-item">
-                        <span>${code}</span>
-                        <button class="delete-btn" onclick="deleteCode(${index})">Usuń</button>
-                    </div>
-                `;
-            });
-        }
-
-        function redeemCode() {
-            const inputCode = document.getElementById('user-code').value.trim();
-            const msgDiv = document.getElementById('user-msg');
-            
-            if (!inputCode) {
-                msgDiv.innerHTML = '<p class="error">Wpisz kod!</p>';
-                return;
-            }
-
-            const codeIndex = codes.indexOf(inputCode);
-
-            if (codeIndex !== -1) {
-                if (!downloadLink) {
-                    msgDiv.innerHTML = '<p class="error">Kod poprawny, ale admin nie ustawił jeszcze linku do pobrania!</p>';
-                    return;
-                }
-                msgDiv.innerHTML = `
-                    <p class="success">Kod poprawny!</p>
-                    <a href="${downloadLink}" target="_blank" style="color:#fff; background:#28a745; display:block; padding:12px; text-decoration:none; font-weight:bold; border-radius:6px; margin-top:10px;">POBIERZ GRIMCLIENT</a>
-                `;
-                // Usuwa kod po użyciu, żeby nikt go nie użył drugi raz
-                codes.splice(codeIndex, 1);
-                localStorage.setItem('grim_codes', JSON.stringify(codes));
-            } else {
-                msgDiv.innerHTML = '<p class="error">Nieprawidłowy lub zużyty kod!</p>';
-            }
-            document.getElementById('user-code').value = '';
-        }
-    </script>
-</body>
-</html>
