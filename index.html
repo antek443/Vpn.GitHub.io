@@ -7,7 +7,7 @@
     <style>
         :root {
             --bg-color: #08080c;
-            --card-bg: rgba(20, 20, 28, 0.6);
+            --card-bg: rgba(20, 20, 28, 0.85);
             --border-color: rgba(255, 62, 62, 0.15);
             --accent: #ff3e3e;
             --accent-hover: #ff5c5c;
@@ -45,8 +45,7 @@
             text-align: center;
             margin-bottom: 20px;
             border: 1px solid var(--border-color);
-            transform: translateY(0);
-            transition: transform 0.3s ease, border-color 0.3s ease;
+            transition: border-color 0.3s ease;
         }
         
         .container:hover {
@@ -96,8 +95,9 @@
             box-shadow: 0 0 10px rgba(255, 62, 62, 0.1);
         }
 
-        /* EFEKT UNOSZENIA PRZYCISKÓW */
-        button, .download-btn {
+        /* GŁÓWNE PRZYCISKI - EFEKT UNOSZENIA */
+        .btn-main, .download-btn {
+            display: block;
             width: 100%;
             padding: 14px;
             background: var(--accent);
@@ -108,21 +108,23 @@
             cursor: pointer;
             font-size: 15px;
             letter-spacing: 0.5px;
+            box-sizing: border-box;
             transition: transform 0.2s cubic-bezier(0.25, 0.8, 0.25, 1), background 0.2s ease, box-shadow 0.2s ease;
             box-shadow: 0 4px 12px rgba(255, 62, 62, 0.2);
         }
 
-        button:hover, .download-btn:hover { 
+        .btn-main:hover, .download-btn:hover { 
             background: var(--accent-hover);
-            transform: translateY(-4px); /* Podnoszenie w górę */
-            box-shadow: 0 8px 20px rgba(255, 62, 62, 0.4); /* Większy cień pod podniesionym przyciskiem */
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(255, 62, 62, 0.4);
         }
         
-        button:active, .download-btn:active {
-            transform: translateY(-1px); /* Lekkie opuszczenie przy kliknięciu */
+        .btn-main:active, .download-btn:active {
+            transform: translateY(-1px);
             box-shadow: 0 4px 8px rgba(255, 62, 62, 0.3);
         }
 
+        /* PRZYCISKI PANELU ADMINA (POZOSTAŁE) */
         .admin-btn { 
             background: rgba(255, 255, 255, 0.06); 
             margin-top: 20px; 
@@ -167,30 +169,28 @@
         
         .code-item:last-child { margin-bottom: 0; }
         
+        /* MAŁY PRZYCISK USUWANIA - BEZ POPSUCIA UKŁADU */
         .delete-btn { 
             color: var(--accent); 
             cursor: pointer; 
             background: none; 
             border: none; 
             width: auto; 
-            padding: 0; 
+            padding: 2px 5px; 
             font-size: 13px; 
-            box-shadow: none;
+            font-weight: bold;
+            transition: color 0.2s, transform 0.2s;
         }
         
         .delete-btn:hover { 
-            background: none; 
             color: #ff6b6b; 
-            transform: translateY(-1px); 
-            box-shadow: none;
+            transform: translateY(-2px);
         }
 
         .download-btn {
-            display: block;
             background: #28a745;
             box-shadow: 0 4px 12px rgba(40, 167, 69, 0.2);
             text-decoration: none;
-            box-sizing: border-box;
             margin-top: 15px;
         }
 
@@ -207,18 +207,18 @@
         <h1>GrimClient</h1>
         <p style="color: var(--text-muted); margin-bottom: 20px;">Wpisz wygenerowany kod, aby pobrać cheaty.</p>
         <input type="text" id="user-code" placeholder="Gcl-XXX-XXX-XXX">
-        <button onclick="redeemCode()">Odbierz cheaty</button>
+        <button class="btn-main" onclick="redeemCode()">Odbierz cheaty</button>
         <div id="user-msg"></div>
-        <button class="admin-btn" onclick="showAdminLogin()">Panel Admina</button>
+        <button class="btn-main admin-btn" onclick="showAdminLogin()">Panel Admina</button>
     </div>
 
     <!-- LOGOWANIE ADMINA -->
     <div id="admin-login" class="container hidden">
         <h2>Zaloguj się jako Admin</h2>
         <input type="password" id="admin-pass" placeholder="Hasło zabezpieczające">
-        <button onclick="loginAdmin()">Zaloguj panel</button>
+        <button class="btn-main" onclick="loginAdmin()">Zaloguj panel</button>
         <div id="login-msg" class="error"></div>
-        <button class="admin-btn" onclick="showUserPanel()">Powrót na główną</button>
+        <button class="btn-main admin-btn" onclick="showUserPanel()">Powrót na główną</button>
     </div>
 
     <!-- PANEL ADMINA -->
@@ -228,18 +228,19 @@
         <label style="display:block; text-align:left; font-size:13px; color:var(--text-muted); padding-left: 2px;">Link do pliku cheatów:</label>
         <input type="text" id="cheat-link" placeholder="https://strona.com" onchange="saveLink()">
         
-        <button onclick="generateCode()" style="background: #007bff; box-shadow: 0 4px 12px rgba(0, 123, 255, 0.2); margin-top: 10px;">Generuj kod Gcl</button>
+        <button class="btn-main" onclick="generateCode()" style="background: #007bff; box-shadow: 0 4px 12px rgba(0, 123, 255, 0.2); margin-top: 10px;">Generuj kod Gcl</button>
         
         <h3 style="text-align: left; margin-top: 25px; margin-bottom: 10px; font-size: 15px; color: var(--text-muted);">Aktywne kody w bazie:</h3>
         <div class="code-list" id="active-codes"></div>
         
-        <button class="admin-btn" onclick="logoutAdmin()">Wyloguj i zamknij</button>
+        <button class="btn-main admin-btn" onclick="logoutAdmin()">Wyloguj i zamknij</button>
     </div>
 
     <script>
         let codes = JSON.parse(localStorage.getItem('grim_codes')) || [];
         let downloadLink = localStorage.getItem('grim_link') || '';
 
+        // Załaduj link przy starcie strony
         document.getElementById('cheat-link').value = downloadLink;
 
         function showAdminLogin() {
@@ -286,4 +287,3 @@
         }
 
         function generateCode() {
-            const newCode = `Gcl-${getRandomSegment()}-${getRandomSegment()}-${getRandomSegment()}`;
