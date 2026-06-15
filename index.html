@@ -3,291 +3,257 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GrimClient - Premium Access</title>
+    <title>GrimClient</title>
     <style>
-        :root {
-            --bg-color: #08080c;
-            --card-bg: #14141c;
-            --border-color: rgba(255, 62, 62, 0.2);
-            --accent: #ff3e3e;
-            --accent-hover: #ff5c5c;
-            --text: #f1f1f4;
-            --text-muted: #767685;
-            --shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
-        }
-        
         body {
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text);
+            font-family: sans-serif;
+            background-color: #0c0c12;
+            color: #ffffff;
             margin: 0;
-            padding: 20px;
+            padding: 40px 20px;
             display: flex;
-            flex-direction: column;
-            align-items: center;
             justify-content: center;
-            min-height: 100vh;
-            box-sizing: border-box;
         }
-
-        .container {
-            background: var(--card-bg);
-            padding: 40px 30px;
-            border-radius: 16px;
-            box-shadow: var(--shadow);
+        .box {
+            background-color: #171722;
+            padding: 30px;
+            border-radius: 12px;
             width: 100%;
-            max-width: 420px;
+            max-width: 380px;
             text-align: center;
-            box-sizing: border-box;
-            border: 1px solid var(--border-color);
+            border: 2px solid #ff3e3e;
         }
-
-        h1 { 
-            color: var(--accent); 
-            margin-top: 0; 
-            font-size: 32px; 
-            font-weight: 800;
-            letter-spacing: 1px;
-            text-shadow: 0 0 15px rgba(255, 62, 62, 0.3);
-            margin-bottom: 10px;
-        }
-        
-        h2 { 
-            font-size: 22px; 
-            margin-top: 0;
-            margin-bottom: 25px; 
-            font-weight: 600;
-        }
-
-        p {
-            font-size: 14px;
-            line-height: 1.5;
-        }
-
+        h1 { color: #ff3e3e; margin-bottom: 20px; }
         input {
             width: 100%;
-            padding: 14px 16px;
-            margin: 15px 0;
-            border-radius: 8px;
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 12px;
+            margin: 10px 0;
             background: #000000;
-            color: #fff;
+            color: #ffffff;
+            border: 1px solid #444;
+            border-radius: 6px;
             box-sizing: border-box;
-            font-size: 15px;
-            text-align: center;
+            font-size: 16px;
         }
-
-        input:focus {
-            outline: none;
-            border-color: var(--accent);
-            box-shadow: 0 0 10px rgba(255, 62, 62, 0.1);
-        }
-
-        /* NAPRAWIONE DUŻE PRZYCISKI */
-        button.btn-main, a.download-btn {
+        /* Nowe, bezpieczne przyciski z prostym efektem uniesienia */
+        .przycisk {
             display: block;
             width: 100%;
             padding: 14px;
-            background: var(--accent);
+            background-color: #ff3e3e;
+            color: white;
             border: none;
-            color: #ffffff !important;
-            font-weight: bold;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 15px;
-            letter-spacing: 0.5px;
-            box-sizing: border-box;
-            margin: 12px 0;
-            text-decoration: none;
-            transition: transform 0.2s cubic-bezier(0.25, 0.8, 0.25, 1), background 0.2s ease, box-shadow 0.2s ease;
-            box-shadow: 0 4px 12px rgba(255, 62, 62, 0.2);
-        }
-
-        button.btn-main:hover, a.download-btn:hover { 
-            background: var(--accent-hover);
-            transform: translateY(-4px); /* Podnoszenie */
-            box-shadow: 0 8px 20px rgba(255, 62, 62, 0.4);
-        }
-        
-        button.btn-main:active, a.download-btn:active {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 8px rgba(255, 62, 62, 0.3);
-        }
-
-        /* PRZYCISKI SZARE */
-        button.admin-btn { 
-            background: #252533; 
-            margin-top: 20px; 
-            color: #ffffff;
-            box-shadow: none;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-        
-        button.admin-btn:hover {
-            background: #333344;
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
-        }
-
-        .hidden { display: none !important; }
-        
-        .error { color: #ff4a4a; margin-top: 15px; font-weight: 600; font-size: 14px; }
-        .success { color: #4aff4a; margin-top: 15px; font-weight: 600; font-size: 14px; }
-        
-        .code-list { 
-            text-align: left; 
-            max-height: 180px; 
-            overflow-y: auto; 
-            background: #000000; 
-            padding: 12px; 
-            border-radius: 8px; 
-            font-family: 'Courier New', monospace;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            margin-top: 15px;
-        }
-        
-        .code-item { 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center;
-            margin-bottom: 8px; 
-            font-size: 14px; 
-            background: rgba(255, 255, 255, 0.03);
-            padding: 8px 12px;
             border-radius: 6px;
-        }
-        
-        .code-item:last-child { margin-bottom: 0; }
-        
-        /* CAŁKOWICIE NOWY PRZYCISK USUWANIA - BEZ KONFLIKTÓW CSS */
-        .del-action { 
-            color: var(--accent); 
-            cursor: pointer; 
-            font-size: 13px; 
             font-weight: bold;
-            padding: 2px 6px;
-            user-select: none;
-            transition: color 0.2s, transform 0.2s;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 15px 0;
+            box-sizing: border-box;
+            transition: transform 0.1s ease;
         }
-        
-        .del-action:hover { 
-            color: #ff6b6b; 
-            transform: translateY(-1px);
+        .przycisk:hover {
+            transform: translateY(-3px); /* Efekt podniesienia */
+            background-color: #ff5555;
         }
-
-        a.download-btn {
-            background: #28a745;
-            box-shadow: 0 4px 12px rgba(40, 167, 69, 0.2);
+        .szary-btn {
+            background-color: #333344;
         }
-
-        a.download-btn:hover {
-            background: #2fb94e;
-            box-shadow: 0 8px 20px rgba(40, 167, 69, 0.4);
+        .szary-btn:hover {
+            background-color: #444455;
+        }
+        .niebieski-btn {
+            background-color: #007bff;
+        }
+        .niebieski-btn:hover {
+            background-color: #1a8cff;
+        }
+        .zielony-btn {
+            background-color: #28a745;
+            text-decoration: none;
+        }
+        .zielony-btn:hover {
+            background-color: #2fc952;
+        }
+        .ukryty {
+            display: none !important;
+        }
+        .error { color: #ff4a4a; font-weight: bold; margin: 10px 0; }
+        .success { color: #4aff4a; font-weight: bold; margin: 10px 0; }
+        .lista-kodow {
+            text-align: left;
+            background: #000;
+            padding: 10px;
+            border-radius: 6px;
+            max-height: 150px;
+            overflow-y: auto;
+        }
+        .linia-kodu {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+        .usun-btn {
+            color: #ff3e3e;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
 
-    <!-- PANEL UŻYTKOWNIKA -->
-    <div id="user-panel" class="container">
+    <!-- 1. PANEL UŻYTKOWNIKA -->
+    <div id="panel-user" class="box">
         <h1>GrimClient</h1>
-        <p style="color: var(--text-muted); margin-bottom: 20px;">Wpisz wygenerowany kod, aby pobrać cheaty.</p>
-        <input type="text" id="user-code" placeholder="Gcl-XXX-XXX-XXX">
-        <button class="btn-main" onclick="redeemCode()">Odbierz cheaty</button>
-        <div id="user-msg"></div>
-        <button class="btn-main admin-btn" onclick="showAdminLogin()">Panel Admina</button>
+        <p>Wpisz kod, aby odebrać cheaty:</p>
+        <input type="text" id="kod-user" placeholder="Gcl-XXX-XXX-XXX">
+        <button class="przycisk" onclick="odbierzCheaty()">Odbierz cheaty</button>
+        <div id="komunikat-user"></div>
+        <button class="przycisk szary-btn" onclick="pokazLogowanie()">Panel Admina</button>
     </div>
 
-    <!-- LOGOWANIE ADMINA -->
-    <div id="admin-login" class="container hidden">
-        <h2>Zaloguj się jako Admin</h2>
-        <input type="password" id="admin-pass" placeholder="Hasło zabezpieczające">
-        <button class="btn-main" onclick="loginAdmin()">Zaloguj panel</button>
-        <div id="login-msg" class="error"></div>
-        <button class="btn-main admin-btn" onclick="showUserPanel()">Powrót na główną</button>
+    <!-- 2. LOGOWANIE ADMINA -->
+    <div id="panel-login" class="box ukryty">
+        <h2>Logowanie Admina</h2>
+        <input type="password" id="haslo-admin" placeholder="Wpisz hasło">
+        <button class="przycisk" onclick="zalogujAdmina()">Zaloguj się</button>
+        <div id="komunikat-login" class="error"></div>
+        <button class="przycisk szary-btn" onclick="pokazUsera()">Powrót</button>
     </div>
 
-    <!-- PANEL ADMINA -->
-    <div id="admin-panel" class="container hidden">
+    <!-- 3. PANEL GLOWNY ADMINA -->
+    <div id="panel-admin" class="box ukryty">
         <h2>Panel Administratora</h2>
+        <p>Link do pobrania cheatów:</p>
+        <input type="text" id="link-input" placeholder="https://..." onchange="zapiszLink()">
         
-        <label style="display:block; text-align:left; font-size:13px; color:var(--text-muted); padding-left: 2px;">Link do pliku cheatów:</label>
-        <input type="text" id="cheat-link" placeholder="https://strona.com" onchange="saveLink()">
+        <button class="przycisk niebieski-btn" onclick="generujKod()">Generuj kod Gcl</button>
         
-        <button class="btn-main" onclick="generateCode()" style="background: #007bff; box-shadow: 0 4px 12px rgba(0, 123, 255, 0.2);">Generuj kod Gcl</button>
+        <p style="text-align: left; color: #888;">Aktywne kody:</p>
+        <div class="lista-kodow" id="widok-kodow"></div>
         
-        <h3 style="text-align: left; margin-top: 25px; margin-bottom: 10px; font-size: 15px; color: var(--text-muted);">Aktywne kody w bazie:</h3>
-        <div class="code-list" id="active-codes"></div>
-        
-        <button class="btn-main admin-btn" onclick="logoutAdmin()">Wyloguj i zamknij</button>
+        <button class="przycisk szary-btn" onclick="wylogujAdmina()">Wyloguj</button>
     </div>
 
     <script>
-        let codes = JSON.parse(localStorage.getItem('grim_codes')) || [];
-        let downloadLink = localStorage.getItem('grim_link') || '';
+        // Tablica na kody i zmienna na link
+        let kody = [];
+        let plikLink = "";
 
-        document.getElementById('cheat-link').value = downloadLink;
-
-        function showAdminLogin() {
-            hideAll();
-            document.getElementById('admin-login').classList.remove('hidden');
+        // Próba wczytania danych z pamięci przeglądarki przy starcie
+        if(localStorage.getItem('grim_kody')) {
+            kody = JSON.parse(localStorage.getItem('grim_kody'));
+        }
+        if(localStorage.getItem('grim_link')) {
+            plikLink = localStorage.getItem('grim_link');
+            document.getElementById('link-input').value = plikLink;
         }
 
-        function showUserPanel() {
-            hideAll();
-            document.getElementById('user-panel').classList.remove('hidden');
+        // Funkcje przełączania widoków
+        function pokazLogowanie() {
+            document.getElementById('panel-user').classList.add('ukryty');
+            document.getElementById('panel-login').classList.remove('ukryty');
+            document.getElementById('panel-admin').classList.add('ukryty');
         }
 
-        function hideAll() {
-            document.getElementById('user-panel').classList.add('hidden');
-            document.getElementById('admin-login').classList.add('hidden');
-            document.getElementById('admin-panel').classList.add('hidden');
-            document.getElementById('user-msg').innerHTML = '';
-            document.getElementById('login-msg').innerHTML = '';
+        function pokazUsera() {
+            document.getElementById('panel-user').classList.remove('ukryty');
+            document.getElementById('panel-login').classList.add('ukryty');
+            document.getElementById('panel-admin').classList.add('ukryty');
+            document.getElementById('komunikat-user').innerHTML = "";
+            document.getElementById('komunikat-login').innerHTML = "";
         }
 
-        function loginAdmin() {
-            const pass = document.getElementById('admin-pass').value;
-            if (pass === '12345') {
-                hideAll();
-                document.getElementById('admin-panel').classList.remove('hidden');
-                renderCodes();
+        function zalogujAdmina() {
+            let wpisaneHaslo = document.getElementById('haslo-admin').value;
+            if (wpisaneHaslo === "12345") {
+                document.getElementById('panel-login').classList.add('ukryty');
+                document.getElementById('panel-admin').classList.remove('ukryty');
+                odswiezListeKodow();
             } else {
-                document.getElementById('login-msg').innerText = 'Błędne hasło!';
+                document.getElementById('komunikat-login').innerText = "Błędne hasło! (Wpisz: 12345)";
             }
-            document.getElementById('admin-pass').value = '';
+            document.getElementById('haslo-admin').value = "";
         }
 
-        function logoutAdmin() {
-            showUserPanel();
+        function wylogujAdmina() {
+            pokazUsera();
         }
 
-        function saveLink() {
-            downloadLink = document.getElementById('cheat-link').value;
-            localStorage.setItem('grim_link', downloadLink);
+        // Funkcje Admina
+        function zapiszLink() {
+            plikLink = document.getElementById('link-input').value;
+            localStorage.setItem('grim_link', plikLink);
         }
 
-        function getRandomSegment() {
-            return Math.floor(100 + Math.random() * 900).toString();
+        function generujKod() {
+            let n1 = Math.floor(100 + Math.random() * 900);
+            let n2 = Math.floor(100 + Math.random() * 900);
+            let n3 = Math.floor(100 + Math.random() * 900);
+            let nowyKod = "Gcl-" + n1 + "-" + n2 + "-" + n3;
+            
+            kody.push(nowyKod);
+            localStorage.setItem('grim_kody', JSON.stringify(kody));
+            odswiezListeKodow();
         }
 
-        function generateCode() {
-            const newCode = `Gcl-${getRandomSegment()}-${getRandomSegment()}-${getRandomSegment()}`;
-            codes.push(newCode);
-            localStorage.setItem('grim_codes', JSON.stringify(codes));
-            renderCodes();
+        function usunKod(index) {
+            kody.splice(index, 1);
+            localStorage.setItem('grim_kody', JSON.stringify(kody));
+            odswiezListeKodow();
         }
 
-        function deleteCode(index) {
-            codes.splice(index, 1);
-            localStorage.setItem('grim_codes', JSON.stringify(codes));
-            renderCodes();
-        }
-
-        function renderCodes() {
-            const listDiv = document.getElementById('active-codes');
-            listDiv.innerHTML = '';
-            if (codes.length === 0) {
-                listDiv.innerHTML = '<span style="color:#555566; font-size:13px; display:block; text-align:center;">Brak wygenerowanych kodów</span>';
+        function odswiezListeKodow() {
+            let kontener = document.getElementById('widok-kodow');
+            kontener.innerHTML = "";
+            
+            if (kody.length === 0) {
+                kontener.innerHTML = "<span style='color:#666;'>Brak kodów</span>";
                 return;
             }
-    
+
+            for (let i = 0; i < kody.length; i++) {
+                kontener.innerHTML += `
+                    <div class="linia-kodu">
+                        <span>${kody[i]}</span>
+                        <button class="usun-btn" onclick="usunKod(${i})">Usuń</button>
+                    </div>
+                `;
+            }
+        }
+
+        // Odbieranie kodów przez Użytkownika
+        function odbierzCheaty() {
+            let wpisanyKod = document.getElementById('kod-user').value.trim();
+            let miejsceNaKomunikat = document.getElementById('komunikat-user');
+            
+            if (wpisanyKod === "") {
+                miejsceNaKomunikat.innerHTML = "<p class='error'>Wpisz kod!</p>";
+                return;
+            }
+
+            let pozycja = kody.indexOf(wpisanyKod);
+
+            if (pozycja !== -1) {
+                if (plikLink === "") {
+                    miejsceNaKomunikat.innerHTML = "<p class='error'>Kod poprawny, ale admin nie dodał jeszcze linku do pobrania!</p>";
+                    return;
+                }
+                
+                miejsceNaKomunikat.innerHTML = `
+                    <p class="success">Kod poprawny!</p>
+                    <a href="${plikLink}" target="_blank" class="przycisk zielony-btn">POBIERZ CHEATY</a>
+                `;
+                
+                // Usuń kod z bazy, aby był jednorazowy
+                kody.splice(pozycja, 1);
+                localStorage.setItem('grim_kody', JSON.stringify(kody));
+            } else {
+                miejsceNaKomunikat.innerHTML = "<p class='error'>Nieprawidłowy lub zużyty kod!</p>";
+            }
+            document.getElementById('kod-user').value = "";
+        }
+    </script>
+</body>
+</html>
