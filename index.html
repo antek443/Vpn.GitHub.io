@@ -3,257 +3,284 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GrimClient</title>
+    <title>Sklep z hulajnogami</title>
     <style>
         body {
-            font-family: sans-serif;
-            background-color: #0c0c12;
-            color: #ffffff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f0f0;
             margin: 0;
-            padding: 40px 20px;
             display: flex;
             justify-content: center;
         }
-        .box {
-            background-color: #171722;
-            padding: 30px;
-            border-radius: 12px;
+
+        .container {
             width: 100%;
-            max-width: 380px;
+            max-width: 400px;
+            background-color: #ffffff;
+            min-height: 100vh;
+            position: relative;
+            padding-bottom: 70px; /* Miejsce na dolny pasek */
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        /* Nagłówki */
+        .header-box {
             text-align: center;
-            border: 2px solid #ff3e3e;
+            padding: 20px 0;
         }
-        h1 { color: #ff3e3e; margin-bottom: 20px; }
-        input {
-            width: 100%;
-            padding: 12px;
-            margin: 10px 0;
-            background: #000000;
-            color: #ffffff;
-            border: 1px solid #444;
-            border-radius: 6px;
-            box-sizing: border-box;
-            font-size: 16px;
-        }
-        /* Nowe, bezpieczne przyciski z prostym efektem uniesienia */
-        .przycisk {
-            display: block;
-            width: 100%;
-            padding: 14px;
-            background-color: #ff3e3e;
+
+        .header-green-bg {
+            display: inline-block;
+            background-color: #32cd32;
             color: white;
-            border: none;
-            border-radius: 6px;
+            padding: 5px 10px;
             font-weight: bold;
-            font-size: 16px;
-            cursor: pointer;
-            margin: 15px 0;
-            box-sizing: border-box;
-            transition: transform 0.1s ease;
+            font-size: 18px;
+            transform: skew(-5deg);
         }
-        .przycisk:hover {
-            transform: translateY(-3px); /* Efekt podniesienia */
-            background-color: #ff5555;
+
+        .header-flota {
+            text-align: center;
+            font-size: 24px;
+            font-weight: 800;
+            margin: 20px 0;
+            letter-spacing: 1px;
         }
-        .szary-btn {
-            background-color: #333344;
+
+        .header-flota span {
+            background-color: #32cd32;
+            color: white;
+            padding: 2px 8px;
+            transform: skew(-5deg);
+            display: inline-block;
         }
-        .szary-btn:hover {
-            background-color: #444455;
+
+        /* Siatka produktów */
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            padding: 0 15px;
         }
-        .niebieski-btn {
-            background-color: #007bff;
-        }
-        .niebieski-btn:hover {
-            background-color: #1a8cff;
-        }
-        .zielony-btn {
-            background-color: #28a745;
-            text-decoration: none;
-        }
-        .zielony-btn:hover {
-            background-color: #2fc952;
-        }
-        .ukryty {
-            display: none !important;
-        }
-        .error { color: #ff4a4a; font-weight: bold; margin: 10px 0; }
-        .success { color: #4aff4a; font-weight: bold; margin: 10px 0; }
-        .lista-kodow {
-            text-align: left;
-            background: #000;
+
+        /* Karta produktu */
+        .card {
+            border: 2px solid #32cd32;
+            border-radius: 10px;
             padding: 10px;
-            border-radius: 6px;
-            max-height: 150px;
-            overflow-y: auto;
-        }
-        .linia-kodu {
             display: flex;
-            justify-content: space-between;
-            margin-bottom: 8px;
+            flex-direction: column;
+            align-items: center;
+            background-color: white;
         }
-        .usun-btn {
-            color: #ff3e3e;
-            background: none;
-            border: none;
-            cursor: pointer;
+
+        .card img {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+            margin-bottom: 10px;
+        }
+
+        .card-title {
+            font-size: 13px;
             font-weight: bold;
+            text-align: center;
+            margin-bottom: 10px;
+            line-height: 1.3;
+            min-height: 34px; /* Wyrównanie cen */
         }
+
+        .card-price {
+            font-size: 16px;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+
+        .btn-buy {
+            background-color: #aaff00;
+            color: black;
+            border: none;
+            border-radius: 5px;
+            padding: 10px;
+            width: 100%;
+            font-weight: bold;
+            font-size: 13px;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .btn-buy:hover {
+            background-color: #99ee00;
+        }
+
+        /* Dolny pasek nawigacji */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 400px;
+            background-color: white;
+            border-top: 1px solid #ddd;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            font-size: 12px;
+            color: #555;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            gap: 5px;
+        }
+
+        .nav-icon {
+            font-size: 20px;
+        }
+
+        .nav-add {
+            width: 40px;
+            height: 40px;
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            margin-top: -20px;
+        }
+
+        /* Przycisk czatu */
+        .chat-btn {
+            position: fixed;
+            bottom: 70px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background-color: #333;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            cursor: pointer;
+        }
+
     </style>
 </head>
 <body>
 
-    <!-- 1. PANEL UŻYTKOWNIKA -->
-    <div id="panel-user" class="box">
-        <h1>GrimClient</h1>
-        <p>Wpisz kod, aby odebrać cheaty:</p>
-        <input type="text" id="kod-user" placeholder="Gcl-XXX-XXX-XXX">
-        <button class="przycisk" onclick="odbierzCheaty()">Odbierz cheaty</button>
-        <div id="komunikat-user"></div>
-        <button class="przycisk szary-btn" onclick="pokazLogowanie()">Panel Admina</button>
+<div class="container">
+
+    <!-- Nagłówek 1 -->
+    <div class="header-box">
+        <div class="header-green-bg">Jakby ci to powiedzieć...</div>
     </div>
 
-    <!-- 2. LOGOWANIE ADMINA -->
-    <div id="panel-login" class="box ukryty">
-        <h2>Logowanie Admina</h2>
-        <input type="password" id="haslo-admin" placeholder="Wpisz hasło">
-        <button class="przycisk" onclick="zalogujAdmina()">Zaloguj się</button>
-        <div id="komunikat-login" class="error"></div>
-        <button class="przycisk szary-btn" onclick="pokazUsera()">Powrót</button>
+    <!-- Sekcja 1 -->
+    <div class="grid">
+        <div class="card">
+            <img src="https://placehold.co/150x150/transparent/black?text=Surron+X" alt="Surron Light bee X">
+            <div class="card-title">Dostawca - Surron<br>Light bee X</div>
+            <div class="card-price">139,99 zł</div>
+            <button class="btn-buy">Zobacz produkt</button>
+        </div>
+        <div class="card">
+            <img src="https://placehold.co/150x150/transparent/black?text=Joyor+T10" alt="Joyor T10">
+            <div class="card-title">Dostawca - Joyor T10</div>
+            <div class="card-price">69,99 zł</div>
+            <button class="btn-buy">Zobacz produkt</button>
+        </div>
+        <div class="card">
+            <img src="https://placehold.co/150x150/transparent/black?text=Joyor+S10" alt="Joyor S10-S">
+            <div class="card-title">Dostawca - Joyor S10-S</div>
+            <div class="card-price">69,99 zł</div>
+            <button class="btn-buy">Zobacz produkt</button>
+        </div>
     </div>
 
-    <!-- 3. PANEL GLOWNY ADMINA -->
-    <div id="panel-admin" class="box ukryty">
-        <h2>Panel Administratora</h2>
-        <p>Link do pobrania cheatów:</p>
-        <input type="text" id="link-input" placeholder="https://..." onchange="zapiszLink()">
-        
-        <button class="przycisk niebieski-btn" onclick="generujKod()">Generuj kod Gcl</button>
-        
-        <p style="text-align: left; color: #888;">Aktywne kody:</p>
-        <div class="lista-kodow" id="widok-kodow"></div>
-        
-        <button class="przycisk szary-btn" onclick="wylogujAdmina()">Wyloguj</button>
+    <!-- Nagłówek 2 -->
+    <div class="header-flota">SURRON <span>FLOTA</span></div>
+
+    <!-- Sekcja 2 -->
+    <div class="grid">
+        <div class="card">
+            <img src="https://placehold.co/150x150/transparent/black?text=Vsectoi+MAX" alt="Vsectoi MAX">
+            <div class="card-title">Dostawca - Vsectoi MAX</div>
+            <div class="card-price">109,99 zł</div>
+            <button class="btn-buy">Zobacz produkt</button>
+        </div>
+        <div class="card">
+            <img src="https://placehold.co/150x150/transparent/black?text=Dualtron+MAX" alt="Dualtron MAX">
+            <div class="card-title">Dostawca - Dualtron Thunder MAX</div>
+            <div class="card-price">129,99 zł</div>
+            <button class="btn-buy">Zobacz produkt</button>
+        </div>
+        <div class="card">
+            <img src="https://placehold.co/150x150/transparent/red?text=Surron+Red" alt="Surron Red">
+            <div class="card-title">Dostawca - Surron Light bee X</div>
+            <div class="card-price">Brak ceny</div>
+            <button class="btn-buy">Zobacz produkt</button>
+        </div>
+        <div class="card">
+            <img src="https://placehold.co/150x150/transparent/black?text=Surron+Black" alt="Surron Black">
+            <div class="card-title">Dostawca - Surron Light bee X</div>
+            <div class="card-price">Brak ceny</div>
+            <button class="btn-buy">Zobacz produkt</button>
+        </div>
     </div>
 
-    <script>
-        // Tablica na kody i zmienna na link
-        let kody = [];
-        let plikLink = "";
+    <!-- Nagłówek 3 -->
+    <div class="header-flota">KUKIRIN <span>FLOTA</span></div>
 
-        // Próba wczytania danych z pamięci przeglądarki przy starcie
-        if(localStorage.getItem('grim_kody')) {
-            kody = JSON.parse(localStorage.getItem('grim_kody'));
-        }
-        if(localStorage.getItem('grim_link')) {
-            plikLink = localStorage.getItem('grim_link');
-            document.getElementById('link-input').value = plikLink;
-        }
+    <!-- Sekcja 3 -->
+    <div class="grid">
+        <div class="card">
+            <img src="https://placehold.co/150x150/transparent/orange?text=Kukirin+G2" alt="Kukirin G2">
+            <div class="card-title">Dostawca - Kukirin G2</div>
+            <div class="card-price">59,99 zł</div>
+            <button class="btn-buy">Zobacz produkt</button>
+        </div>
+        <div class="card">
+            <img src="https://placehold.co/150x150/transparent/orange?text=Kukirin+G2" alt="Kukirin G2">
+            <div class="card-title">Dostawca - Kukirin G2</div>
+            <div class="card-price">79,99 zł</div>
+            <button class="btn-buy">Zobacz produkt</button>
+        </div>
+        <div class="card">
+            <img src="https://placehold.co/150x150/transparent/orange?text=Kukirin+G3" alt="Kukirin G3 PRO">
+            <div class="card-title">Dostawca - Kukirin G3 PRO</div>
+            <div class="card-price">89,99 zł</div>
+            <button class="btn-buy">Zobacz produkt</button>
+        </div>
+        <div class="card">
+            <img src="https://placehold.co/150x150/transparent/orange?text=Kukirin+G2+M" alt="Kukirin G2 MASTER">
+            <div class="card-title">Dostawca - Kukirin G2 MASTER</div>
+            <div class="card-price">89,99 zł</div>
+            <button class="btn-buy">Zobacz produkt</button>
+        </div>
+    </div>
 
-        // Funkcje przełączania widoków
-        function pokazLogowanie() {
-            document.getElementById('panel-user').classList.add('ukryty');
-            document.getElementById('panel-login').classList.remove('ukryty');
-            document.getElementById('panel-admin').classList.add('ukryty');
-        }
+    <!-- Dolny pasek -->
+    <div class="bottom-nav">
+        <div class="nav-item"><span class="nav-icon">🏠</span>Główna</div>
+        <div class="nav-item"><span class="nav-icon">👥</span>Znajomi</div>
+        <div class="nav-item"><div class="nav-add">➕</div></div>
+        <div class="nav-item"><span class="nav-icon">💬</span>Przychodzące</div>
+        <div class="nav-item"><span class="nav-icon">👤</span>Profil</div>
+    </div>
 
-        function pokazUsera() {
-            document.getElementById('panel-user').classList.remove('ukryty');
-            document.getElementById('panel-login').classList.add('ukryty');
-            document.getElementById('panel-admin').classList.add('ukryty');
-            document.getElementById('komunikat-user').innerHTML = "";
-            document.getElementById('komunikat-login').innerHTML = "";
-        }
+    <!-- Przycisk czatu -->
+    <div class="chat-btn">💬</div>
 
-        function zalogujAdmina() {
-            let wpisaneHaslo = document.getElementById('haslo-admin').value;
-            if (wpisaneHaslo === "12345") {
-                document.getElementById('panel-login').classList.add('ukryty');
-                document.getElementById('panel-admin').classList.remove('ukryty');
-                odswiezListeKodow();
-            } else {
-                document.getElementById('komunikat-login').innerText = "Błędne hasło! (Wpisz: 12345)";
-            }
-            document.getElementById('haslo-admin').value = "";
-        }
+</div>
 
-        function wylogujAdmina() {
-            pokazUsera();
-        }
-
-        // Funkcje Admina
-        function zapiszLink() {
-            plikLink = document.getElementById('link-input').value;
-            localStorage.setItem('grim_link', plikLink);
-        }
-
-        function generujKod() {
-            let n1 = Math.floor(100 + Math.random() * 900);
-            let n2 = Math.floor(100 + Math.random() * 900);
-            let n3 = Math.floor(100 + Math.random() * 900);
-            let nowyKod = "Gcl-" + n1 + "-" + n2 + "-" + n3;
-            
-            kody.push(nowyKod);
-            localStorage.setItem('grim_kody', JSON.stringify(kody));
-            odswiezListeKodow();
-        }
-
-        function usunKod(index) {
-            kody.splice(index, 1);
-            localStorage.setItem('grim_kody', JSON.stringify(kody));
-            odswiezListeKodow();
-        }
-
-        function odswiezListeKodow() {
-            let kontener = document.getElementById('widok-kodow');
-            kontener.innerHTML = "";
-            
-            if (kody.length === 0) {
-                kontener.innerHTML = "<span style='color:#666;'>Brak kodów</span>";
-                return;
-            }
-
-            for (let i = 0; i < kody.length; i++) {
-                kontener.innerHTML += `
-                    <div class="linia-kodu">
-                        <span>${kody[i]}</span>
-                        <button class="usun-btn" onclick="usunKod(${i})">Usuń</button>
-                    </div>
-                `;
-            }
-        }
-
-        // Odbieranie kodów przez Użytkownika
-        function odbierzCheaty() {
-            let wpisanyKod = document.getElementById('kod-user').value.trim();
-            let miejsceNaKomunikat = document.getElementById('komunikat-user');
-            
-            if (wpisanyKod === "") {
-                miejsceNaKomunikat.innerHTML = "<p class='error'>Wpisz kod!</p>";
-                return;
-            }
-
-            let pozycja = kody.indexOf(wpisanyKod);
-
-            if (pozycja !== -1) {
-                if (plikLink === "") {
-                    miejsceNaKomunikat.innerHTML = "<p class='error'>Kod poprawny, ale admin nie dodał jeszcze linku do pobrania!</p>";
-                    return;
-                }
-                
-                miejsceNaKomunikat.innerHTML = `
-                    <p class="success">Kod poprawny!</p>
-                    <a href="${plikLink}" target="_blank" class="przycisk zielony-btn">POBIERZ CHEATY</a>
-                `;
-                
-                // Usuń kod z bazy, aby był jednorazowy
-                kody.splice(pozycja, 1);
-                localStorage.setItem('grim_kody', JSON.stringify(kody));
-            } else {
-                miejsceNaKomunikat.innerHTML = "<p class='error'>Nieprawidłowy lub zużyty kod!</p>";
-            }
-            document.getElementById('kod-user').value = "";
-        }
-    </script>
 </body>
 </html>
