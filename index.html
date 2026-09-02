@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sklep z hulajnogami</title>
+    <title>Sklep z hulajnogami - Działający prototyp</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -19,16 +19,11 @@
             background-color: #ffffff;
             min-height: 100vh;
             position: relative;
-            padding-bottom: 70px; /* Miejsce na dolny pasek */
+            padding-bottom: 70px;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
 
-        /* Nagłówki */
-        .header-box {
-            text-align: center;
-            padding: 20px 0;
-        }
-
+        .header-box { text-align: center; padding: 20px 0; }
         .header-green-bg {
             display: inline-block;
             background-color: #32cd32;
@@ -46,7 +41,6 @@
             margin: 20px 0;
             letter-spacing: 1px;
         }
-
         .header-flota span {
             background-color: #32cd32;
             color: white;
@@ -55,7 +49,6 @@
             display: inline-block;
         }
 
-        /* Siatka produktów */
         .grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -63,7 +56,6 @@
             padding: 0 15px;
         }
 
-        /* Karta produktu */
         .card {
             border: 2px solid #32cd32;
             border-radius: 10px;
@@ -76,7 +68,7 @@
 
         .card img {
             width: 100%;
-            height: auto;
+            height: 140px;
             object-fit: contain;
             margin-bottom: 10px;
         }
@@ -87,7 +79,7 @@
             text-align: center;
             margin-bottom: 10px;
             line-height: 1.3;
-            min-height: 34px; /* Wyrównanie cen */
+            min-height: 34px;
         }
 
         .card-price {
@@ -107,13 +99,12 @@
             font-size: 13px;
             cursor: pointer;
             text-align: center;
+            transition: 0.2s;
         }
 
-        .btn-buy:hover {
-            background-color: #99ee00;
-        }
+        .btn-buy:hover { background-color: #99ee00; transform: scale(0.98); }
 
-        /* Dolny pasek nawigacji */
+        /* Dolny pasek */
         .bottom-nav {
             position: fixed;
             bottom: 0;
@@ -129,146 +120,104 @@
             font-size: 12px;
             color: #555;
         }
+        .nav-item { display: flex; flex-direction: column; align-items: center; cursor: pointer; gap: 5px; }
+        .nav-icon { font-size: 20px; }
+        .nav-add { width: 40px; height: 40px; background-color: white; border: 1px solid #ddd; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; margin-top: -20px; }
 
-        .nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            cursor: pointer;
-            gap: 5px;
-        }
-
-        .nav-icon {
-            font-size: 20px;
-        }
-
-        .nav-add {
-            width: 40px;
-            height: 40px;
-            background-color: white;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            margin-top: -20px;
-        }
-
-        /* Przycisk czatu */
-        .chat-btn {
-            position: fixed;
-            bottom: 70px;
-            right: 20px;
-            width: 50px;
-            height: 50px;
+        /* Powiadomienie */
+        #toast {
+            visibility: hidden;
+            min-width: 250px;
             background-color: #333;
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-            cursor: pointer;
+            color: #fff;
+            text-align: center;
+            border-radius: 5px;
+            padding: 16px;
+            position: fixed;
+            z-index: 1;
+            left: 50%;
+            bottom: 30px;
+            transform: translateX(-50%);
+            font-size: 17px;
         }
-
+        #toast.show { visibility: visible; animation: fadein 0.5s, fadeout 0.5s 2.5s; }
+        @keyframes fadein { from {bottom: 0; opacity: 0;} to {bottom: 30px; opacity: 1;} }
+        @keyframes fadeout { from {bottom: 30px; opacity: 1;} to {bottom: 0; opacity: 0;} }
     </style>
 </head>
 <body>
 
 <div class="container">
 
-    <!-- Nagłówek 1 -->
-    <div class="header-box">
-        <div class="header-green-bg">Jakby ci to powiedzieć...</div>
-    </div>
+    <div class="header-box"><div class="header-green-bg">Jakby ci to powiedzieć...</div></div>
 
-    <!-- Sekcja 1 -->
     <div class="grid">
         <div class="card">
-            <img src="https://placehold.co/150x150/transparent/black?text=Surron+X" alt="Surron Light bee X">
-            <div class="card-title">Dostawca - Surron<br>Light bee X</div>
+            <img src="https://images.unsplash.com/photo-1571068316344-75bc76f77890?w=500&q=80" alt="Surron">
+            <div class="card-title">Dostawca - Surron Light bee X</div>
             <div class="card-price">139,99 zł</div>
-            <button class="btn-buy">Zobacz produkt</button>
+            <button class="btn-buy" onclick="addToCart('Surron Light bee X')">Zobacz produkt</button>
         </div>
         <div class="card">
-            <img src="https://placehold.co/150x150/transparent/black?text=Joyor+T10" alt="Joyor T10">
+            <img src="https://images.unsplash.com/photo-1605289355686-9c758eb7dca4?w=500&q=80" alt="Joyor T10">
             <div class="card-title">Dostawca - Joyor T10</div>
             <div class="card-price">69,99 zł</div>
-            <button class="btn-buy">Zobacz produkt</button>
+            <button class="btn-buy" onclick="addToCart('Joyor T10')">Zobacz produkt</button>
         </div>
         <div class="card">
-            <img src="https://placehold.co/150x150/transparent/black?text=Joyor+S10" alt="Joyor S10-S">
+            <img src="https://images.unsplash.com/photo-1614730341196-8d26f6b76e0a?w=500&q=80" alt="Joyor S10">
             <div class="card-title">Dostawca - Joyor S10-S</div>
             <div class="card-price">69,99 zł</div>
-            <button class="btn-buy">Zobacz produkt</button>
+            <button class="btn-buy" onclick="addToCart('Joyor S10-S')">Zobacz produkt</button>
         </div>
     </div>
 
-    <!-- Nagłówek 2 -->
     <div class="header-flota">SURRON <span>FLOTA</span></div>
 
-    <!-- Sekcja 2 -->
     <div class="grid">
         <div class="card">
-            <img src="https://placehold.co/150x150/transparent/black?text=Vsectoi+MAX" alt="Vsectoi MAX">
+            <img src="https://images.unsplash.com/photo-1558981403-c5f9899a28bc?w=500&q=80" alt="Vsectoi">
             <div class="card-title">Dostawca - Vsectoi MAX</div>
             <div class="card-price">109,99 zł</div>
-            <button class="btn-buy">Zobacz produkt</button>
+            <button class="btn-buy" onclick="addToCart('Vsectoi MAX')">Zobacz produkt</button>
         </div>
         <div class="card">
-            <img src="https://placehold.co/150x150/transparent/black?text=Dualtron+MAX" alt="Dualtron MAX">
+            <img src="https://images.unsplash.com/photo-1565129459740-2b61c5d0d72a?w=500&q=80" alt="Dualtron">
             <div class="card-title">Dostawca - Dualtron Thunder MAX</div>
             <div class="card-price">129,99 zł</div>
-            <button class="btn-buy">Zobacz produkt</button>
-        </div>
-        <div class="card">
-            <img src="https://placehold.co/150x150/transparent/red?text=Surron+Red" alt="Surron Red">
-            <div class="card-title">Dostawca - Surron Light bee X</div>
-            <div class="card-price">Brak ceny</div>
-            <button class="btn-buy">Zobacz produkt</button>
-        </div>
-        <div class="card">
-            <img src="https://placehold.co/150x150/transparent/black?text=Surron+Black" alt="Surron Black">
-            <div class="card-title">Dostawca - Surron Light bee X</div>
-            <div class="card-price">Brak ceny</div>
-            <button class="btn-buy">Zobacz produkt</button>
+            <button class="btn-buy" onclick="addToCart('Dualtron Thunder MAX')">Zobacz produkt</button>
         </div>
     </div>
 
-    <!-- Nagłówek 3 -->
     <div class="header-flota">KUKIRIN <span>FLOTA</span></div>
 
-    <!-- Sekcja 3 -->
     <div class="grid">
         <div class="card">
-            <img src="https://placehold.co/150x150/transparent/orange?text=Kukirin+G2" alt="Kukirin G2">
+            <img src="https://images.unsplash.com/photo-1605289355686-9c758eb7dca4?w=500&q=80" alt="Kukirin G2">
             <div class="card-title">Dostawca - Kukirin G2</div>
             <div class="card-price">59,99 zł</div>
-            <button class="btn-buy">Zobacz produkt</button>
+            <button class="btn-buy" onclick="addToCart('Kukirin G2')">Zobacz produkt</button>
         </div>
         <div class="card">
-            <img src="https://placehold.co/150x150/transparent/orange?text=Kukirin+G2" alt="Kukirin G2">
+            <img src="https://images.unsplash.com/photo-1565129459740-2b61c5d0d72a?w=500&q=80" alt="Kukirin G2">
             <div class="card-title">Dostawca - Kukirin G2</div>
             <div class="card-price">79,99 zł</div>
-            <button class="btn-buy">Zobacz produkt</button>
+            <button class="btn-buy" onclick="addToCart('Kukirin G2')">Zobacz produkt</button>
         </div>
         <div class="card">
-            <img src="https://placehold.co/150x150/transparent/orange?text=Kukirin+G3" alt="Kukirin G3 PRO">
+            <img src="https://images.unsplash.com/photo-1605289355686-9c758eb7dca4?w=500&q=80" alt="Kukirin G3">
             <div class="card-title">Dostawca - Kukirin G3 PRO</div>
             <div class="card-price">89,99 zł</div>
-            <button class="btn-buy">Zobacz produkt</button>
+            <button class="btn-buy" onclick="addToCart('Kukirin G3 PRO')">Zobacz produkt</button>
         </div>
         <div class="card">
-            <img src="https://placehold.co/150x150/transparent/orange?text=Kukirin+G2+M" alt="Kukirin G2 MASTER">
+            <img src="https://images.unsplash.com/photo-1614730341196-8d26f6b76e0a?w=500&q=80" alt="Kukirin G2 MASTER">
             <div class="card-title">Dostawca - Kukirin G2 MASTER</div>
             <div class="card-price">89,99 zł</div>
-            <button class="btn-buy">Zobacz produkt</button>
+            <button class="btn-buy" onclick="addToCart('Kukirin G2 MASTER')">Zobacz produkt</button>
         </div>
     </div>
 
-    <!-- Dolny pasek -->
     <div class="bottom-nav">
         <div class="nav-item"><span class="nav-icon">🏠</span>Główna</div>
         <div class="nav-item"><span class="nav-icon">👥</span>Znajomi</div>
@@ -277,10 +226,17 @@
         <div class="nav-item"><span class="nav-icon">👤</span>Profil</div>
     </div>
 
-    <!-- Przycisk czatu -->
-    <div class="chat-btn">💬</div>
-
+    <div id="toast">Dodano do koszyka!</div>
 </div>
+
+<script>
+    function addToCart(productName) {
+        var toast = document.getElementById("toast");
+        toast.innerText = "Dodano do koszyka: " + productName;
+        toast.className = "show";
+        setTimeout(function(){ toast.className = toast.className.replace("show", ""); }, 3000);
+    }
+</script>
 
 </body>
 </html>
