@@ -3,53 +3,153 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sklep z hulajnogami - Działający prototyp</title>
+    <meta name="description" content="Sklep z hulajnogami elektrycznymi Kukirin, Joyor, Surron. Najlepsze ceny i szybka dostawa.">
+    <title>Sklep z Hulajnogami Elektrycznymi | Kukirin, Joyor, Surron</title>
+    
+    <!-- Ikony (FontAwesome) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f0f0f0;
+        /* =========================================
+           RESET I PODSTAWOWE STYLE
+           ========================================= */
+        * {
             margin: 0;
-            display: flex;
-            justify-content: center;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
-        .container {
-            width: 100%;
-            max-width: 400px;
+        body {
+            background-color: #f4f4f4;
+            color: #333;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* =========================================
+           KONTENER GŁÓWNY (MOBILE-FIRST)
+           ========================================= */
+        .app-container {
+            max-width: 480px;
+            margin: 0 auto;
             background-color: #ffffff;
             min-height: 100vh;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
             position: relative;
-            padding-bottom: 70px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            padding-bottom: 80px; /* Miejsce na dolny pasek */
         }
 
-        .header-box { text-align: center; padding: 20px 0; }
-        .header-green-bg {
-            display: inline-block;
-            background-color: #32cd32;
+        /* =========================================
+           NAGŁÓWEK APLIKACJI
+           ========================================= */
+        .app-header {
+            background: linear-gradient(135deg, #32cd32, #aaff00);
             color: white;
-            padding: 5px 10px;
-            font-weight: bold;
-            font-size: 18px;
-            transform: skew(-5deg);
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
-        .header-flota {
-            text-align: center;
-            font-size: 24px;
+        .app-header h1 {
+            font-size: 20px;
             font-weight: 800;
-            margin: 20px 0;
+            text-transform: uppercase;
             letter-spacing: 1px;
         }
-        .header-flota span {
-            background-color: #32cd32;
-            color: white;
-            padding: 2px 8px;
-            transform: skew(-5deg);
-            display: inline-block;
+
+        .cart-icon {
+            position: relative;
+            cursor: pointer;
+            font-size: 24px;
         }
 
-        .grid {
+        .cart-badge {
+            position: absolute;
+            top: -5px;
+            right: -10px;
+            background-color: red;
+            color: white;
+            font-size: 10px;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+        }
+
+        /* =========================================
+           BANER REKLAMOWY
+           ========================================= */
+        .hero-banner {
+            background-color: #222;
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-banner::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(170,255,0,0.2) 0%, transparent 70%);
+            animation: rotateBg 10s linear infinite;
+        }
+
+        @keyframes rotateBg {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .hero-banner h2 {
+            font-size: 28px;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-banner p {
+            font-size: 16px;
+            opacity: 0.8;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* =========================================
+           NAGŁÓWKI SEKCJI
+           ========================================= */
+        .section-header {
+            text-align: center;
+            padding: 20px 0;
+            margin-top: 20px;
+        }
+
+        .section-title {
+            display: inline-block;
+            background-color: #32cd32;
+            color: white;
+            padding: 5px 15px;
+            font-weight: 800;
+            transform: skew(-5deg);
+            text-transform: uppercase;
+            box-shadow: 3px 3px 0px #1a8a1a;
+        }
+
+        /* =========================================
+           SIATKA PRODUKTÓW
+           ========================================= */
+        .product-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 15px;
@@ -58,185 +158,510 @@
 
         .card {
             border: 2px solid #32cd32;
-            border-radius: 10px;
-            padding: 10px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            border-radius: 12px;
             background-color: white;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
         }
 
-        .card img {
-            width: 100%;
-            height: 140px;
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            border-color: #aaff00;
+        }
+
+        .card-img-wrapper {
+            background-color: #f9f9f9;
+            padding: 20px;
+            position: relative;
+            height: 180px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .card-img-wrapper img {
+            max-width: 100%;
+            max-height: 100%;
             object-fit: contain;
-            margin-bottom: 10px;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover .card-img-wrapper img {
+            transform: scale(1.05);
+        }
+
+        .promo-tag {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: red;
+            color: white;
+            font-size: 10px;
+            font-weight: bold;
+            padding: 4px 8px;
+            border-radius: 4px;
+            z-index: 10;
+        }
+
+        .card-body {
+            padding: 15px;
+            text-align: center;
         }
 
         .card-title {
-            font-size: 13px;
-            font-weight: bold;
-            text-align: center;
-            margin-bottom: 10px;
-            line-height: 1.3;
-            min-height: 34px;
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 5px;
+            min-height: 40px;
         }
 
         .card-price {
-            font-size: 16px;
-            font-weight: 800;
-            margin-bottom: 10px;
+            font-size: 18px;
+            font-weight: 900;
+            color: #222;
+            margin-bottom: 15px;
         }
 
         .btn-buy {
             background-color: #aaff00;
             color: black;
             border: none;
-            border-radius: 5px;
-            padding: 10px;
+            border-radius: 6px;
+            padding: 12px;
             width: 100%;
             font-weight: bold;
-            font-size: 13px;
+            font-size: 14px;
             cursor: pointer;
-            text-align: center;
-            transition: 0.2s;
+            transition: background 0.2s, transform 0.1s;
         }
 
-        .btn-buy:hover { background-color: #99ee00; transform: scale(0.98); }
+        .btn-buy:hover {
+            background-color: #99ee00;
+        }
 
-        /* Dolny pasek */
+        .btn-buy:active {
+            transform: scale(0.95);
+        }
+
+        /* =========================================
+           SEKCJA "DLACZEGO MY"
+           ========================================= */
+        .why-us {
+            margin: 30px 15px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 12px;
+        }
+
+        .why-us h3 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .feature {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .feature i {
+            font-size: 24px;
+            color: #32cd32;
+            width: 30px;
+            text-align: center;
+        }
+
+        /* =========================================
+           MODAL REJESTRACJI
+           ========================================= */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.6);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background-color: white;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 400px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            position: relative;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 24px;
+            cursor: pointer;
+            color: #888;
+        }
+
+        .close-modal:hover {
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #32cd32;
+        }
+
+        .btn-register {
+            background-color: #32cd32;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 12px;
+            width: 100%;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .btn-register:hover {
+            background-color: #28a745;
+        }
+
+        /* =========================================
+           STOPKA
+           ========================================= */
+        .footer {
+            background-color: #222;
+            color: white;
+            padding: 30px 20px;
+            margin-top: 40px;
+            text-align: center;
+            font-size: 12px;
+        }
+
+        .social-icons {
+            margin-bottom: 15px;
+        }
+
+        .social-icons a {
+            color: white;
+            font-size: 20px;
+            margin: 0 10px;
+            transition: color 0.3s;
+        }
+
+        .social-icons a:hover {
+            color: #aaff00;
+        }
+
+        /* =========================================
+           DOLNY PASEK NAWIGACJI
+           ========================================= */
         .bottom-nav {
             position: fixed;
             bottom: 0;
             left: 50%;
             transform: translateX(-50%);
             width: 100%;
-            max-width: 400px;
+            max-width: 480px;
             background-color: white;
             border-top: 1px solid #ddd;
             display: flex;
             justify-content: space-around;
+            align-items: center;
             padding: 10px 0;
-            font-size: 12px;
-            color: #555;
+            z-index: 200;
+            box-shadow: 0 -5px 10px rgba(0,0,0,0.05);
         }
-        .nav-item { display: flex; flex-direction: column; align-items: center; cursor: pointer; gap: 5px; }
-        .nav-icon { font-size: 20px; }
-        .nav-add { width: 40px; height: 40px; background-color: white; border: 1px solid #ddd; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; margin-top: -20px; }
 
-        /* Powiadomienie */
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            font-size: 11px;
+            color: #777;
+            gap: 5px;
+            flex: 1;
+        }
+
+        .nav-item:hover {
+            color: #32cd32;
+        }
+
+        .nav-icon {
+            font-size: 20px;
+        }
+
+        .nav-add {
+            width: 45px;
+            height: 45px;
+            background-color: #32cd32;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-top: -25px;
+            border: 4px solid white;
+            box-shadow: 0 4px 10px rgba(50,205,50,0.4);
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .nav-add:hover {
+            transform: rotate(90deg);
+        }
+
+        /* =========================================
+           TOAST (POWIADOMIENIE)
+           ========================================= */
         #toast {
             visibility: hidden;
             min-width: 250px;
             background-color: #333;
             color: #fff;
             text-align: center;
-            border-radius: 5px;
+            border-radius: 8px;
             padding: 16px;
             position: fixed;
-            z-index: 1;
+            z-index: 1000;
             left: 50%;
-            bottom: 30px;
+            bottom: 80px;
             transform: translateX(-50%);
-            font-size: 17px;
+            font-size: 16px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
         }
-        #toast.show { visibility: visible; animation: fadein 0.5s, fadeout 0.5s 2.5s; }
-        @keyframes fadein { from {bottom: 0; opacity: 0;} to {bottom: 30px; opacity: 1;} }
-        @keyframes fadeout { from {bottom: 30px; opacity: 1;} to {bottom: 0; opacity: 0;} }
+
+        #toast.show {
+            visibility: visible;
+            animation: fadein 0.5s, fadeout 0.5s 2.5s;
+        }
+
+        @keyframes fadein {
+            from {bottom: 0; opacity: 0;}
+            to {bottom: 80px; opacity: 1;}
+        }
+
+        @keyframes fadeout {
+            from {bottom: 80px; opacity: 1;}
+            to {bottom: 0; opacity: 0;}
+        }
+
+        /* =========================================
+           RESPONSYWNOŚĆ (SZERSZE EKRANY)
+           ========================================= */
+        @media (min-width: 768px) {
+            .product-grid {
+                grid-template-columns: 1fr 1fr 1fr;
+                padding: 0 50px;
+            }
+            .app-container {
+                max-width: 800px;
+            }
+            .bottom-nav {
+                max-width: 800px;
+            }
+            .hero-banner h2 {
+                font-size: 36px;
+            }
+        }
+        
     </style>
 </head>
 <body>
 
-<div class="container">
-
-    <div class="header-box"><div class="header-green-bg">Jakby ci to powiedzieć...</div></div>
-
-    <div class="grid">
-        <div class="card">
-            <img src="https://images.unsplash.com/photo-1571068316344-75bc76f77890?w=500&q=80" alt="Surron">
-            <div class="card-title">Dostawca - Surron Light bee X</div>
-            <div class="card-price">139,99 zł</div>
-            <button class="btn-buy" onclick="addToCart('Surron Light bee X')">Zobacz produkt</button>
+<div class="app-container">
+    
+    <!-- Nagłówek -->
+    <header class="app-header">
+        <h1><i class="fas fa-bolt"></i> E-Scooter</h1>
+        <div class="cart-icon" onclick="showToast('Twój koszyk jest pusty!')">
+            <i class="fas fa-shopping-cart"></i>
+            <span class="cart-badge">0</span>
         </div>
+    </header>
+
+    <!-- Baner -->
+    <div class="hero-banner">
+        <h2>Letnia Wyprzedaż!</h2>
+        <p>Do -30% na wybrane modele Kukirin</p>
+    </div>
+
+    <!-- Sekcja 1: KUKIRIN -->
+    <div class="section-header">
+        <div class="section-title">KUKIRIN FLOTA</div>
+    </div>
+
+    <div class="product-grid">
+        <!-- Produkt 1 -->
         <div class="card">
-            <img src="https://images.unsplash.com/photo-1605289355686-9c758eb7dca4?w=500&q=80" alt="Joyor T10">
-            <div class="card-title">Dostawca - Joyor T10</div>
-            <div class="card-price">69,99 zł</div>
-            <button class="btn-buy" onclick="addToCart('Joyor T10')">Zobacz produkt</button>
+            <div class="card-img-wrapper">
+                <span class="promo-tag">-20%</span>
+                <img src="https://kukirin.co.uk/cdn/shop/files/kukirin-g2-black-1.jpg" alt="Kukirin G2">
+            </div>
+            <div class="card-body">
+                <div class="card-title">Kukirin G2</div>
+                <div class="card-price">59,99 zł</div>
+                <button class="btn-buy" onclick="addToCart('Kukirin G2')">Zobacz produkt</button>
+            </div>
         </div>
+
+        <!-- Produkt 2 -->
         <div class="card">
-            <img src="https://images.unsplash.com/photo-1614730341196-8d26f6b76e0a?w=500&q=80" alt="Joyor S10">
-            <div class="card-title">Dostawca - Joyor S10-S</div>
-            <div class="card-price">69,99 zł</div>
-            <button class="btn-buy" onclick="addToCart('Joyor S10-S')">Zobacz produkt</button>
+            <div class="card-img-wrapper">
+                <img src="https://kukirin.co.uk/cdn/shop/files/kukirin-g2-master-1.jpg" alt="Kukirin G2 Master">
+            </div>
+            <div class="card-body">
+                <div class="card-title">Kukirin G2 MASTER</div>
+                <div class="card-price">89,99 zł</div>
+                <button class="btn-buy" onclick="addToCart('Kukirin G2 MASTER')">Zobacz produkt</button>
+            </div>
+        </div>
+
+        <!-- Produkt 3 -->
+        <div class="card">
+            <div class="card-img-wrapper">
+                <span class="promo-tag">Nowość</span>
+                <img src="https://kukirin.co.uk/cdn/shop/files/kukirin-g3-pro-1.jpg" alt="Kukirin G3 Pro">
+            </div>
+            <div class="card-body">
+                <div class="card-title">Kukirin G3 PRO</div>
+                <div class="card-price">89,99 zł</div>
+                <button class="btn-buy" onclick="addToCart('Kukirin G3 PRO')">Zobacz produkt</button>
+            </div>
+        </div>
+        
+        <!-- Produkt 4 -->
+        <div class="card">
+            <div class="card-img-wrapper">
+                <img src="https://kukirin.co.uk/cdn/shop/files/kukirin-g2-pro-1.jpg" alt="Kukirin G2 Pro">
+            </div>
+            <div class="card-body">
+                <div class="card-title">Kukirin G2 PRO</div>
+                <div class="card-price">79,99 zł</div>
+                <button class="btn-buy" onclick="addToCart('Kukirin G2 PRO')">Zobacz produkt</button>
+            </div>
         </div>
     </div>
 
-    <div class="header-flota">SURRON <span>FLOTA</span></div>
+    <!-- Sekcja 2: SURRON -->
+    <div class="section-header">
+        <div class="section-title">SURRON FLOTA</div>
+    </div>
 
-    <div class="grid">
+    <div class="product-grid">
+        <!-- Produkt 5 -->
         <div class="card">
-            <img src="https://images.unsplash.com/photo-1558981403-c5f9899a28bc?w=500&q=80" alt="Vsectoi">
-            <div class="card-title">Dostawca - Vsectoi MAX</div>
-            <div class="card-price">109,99 zł</div>
-            <button class="btn-buy" onclick="addToCart('Vsectoi MAX')">Zobacz produkt</button>
+            <div class="card-img-wrapper">
+                <img src="https://images.unsplash.com/photo-1558981403-c5f9899a28bc?w=500&q=80" alt="Surron Light Bee X">
+            </div>
+            <div class="card-body">
+                <div class="card-title">Surron Light Bee X</div>
+                <div class="card-price">139,99 zł</div>
+                <button class="btn-buy" onclick="addToCart('Surron Light Bee X')">Zobacz produkt</button>
+            </div>
         </div>
+
+        <!-- Produkt 6 -->
         <div class="card">
-            <img src="https://images.unsplash.com/photo-1565129459740-2b61c5d0d72a?w=500&q=80" alt="Dualtron">
-            <div class="card-title">Dostawca - Dualtron Thunder MAX</div>
-            <div class="card-price">129,99 zł</div>
-            <button class="btn-buy" onclick="addToCart('Dualtron Thunder MAX')">Zobacz produkt</button>
+            <div class="card-img-wrapper">
+                <img src="https://images.unsplash.com/photo-1591637333184-19aa84b3e01f?w=500&q=80" alt="Surron Storm Bee">
+            </div>
+            <div class="card-body">
+                <div class="card-title">Surron Storm Bee</div>
+                <div class="card-price">129,99 zł</div>
+                <button class="btn-buy" onclick="addToCart('Surron Storm Bee')">Zobacz produkt</button>
+            </div>
         </div>
     </div>
 
-    <div class="header-flota">KUKIRIN <span>FLOTA</span></div>
-
-    <div class="grid">
-        <div class="card">
-            <img src="https://images.unsplash.com/photo-1605289355686-9c758eb7dca4?w=500&q=80" alt="Kukirin G2">
-            <div class="card-title">Dostawca - Kukirin G2</div>
-            <div class="card-price">59,99 zł</div>
-            <button class="btn-buy" onclick="addToCart('Kukirin G2')">Zobacz produkt</button>
+    <!-- Sekcja "Dlaczego my" -->
+    <div class="why-us">
+        <h3>Dlaczego warto nas wybrać?</h3>
+        <div class="feature">
+            <i class="fas fa-truck-fast"></i>
+            <span>Darmowa i szybka dostawa od 200 zł</span>
         </div>
-        <div class="card">
-            <img src="https://images.unsplash.com/photo-1565129459740-2b61c5d0d72a?w=500&q=80" alt="Kukirin G2">
-            <div class="card-title">Dostawca - Kukirin G2</div>
-            <div class="card-price">79,99 zł</div>
-            <button class="btn-buy" onclick="addToCart('Kukirin G2')">Zobacz produkt</button>
+        <div class="feature">
+            <i class="fas fa-shield-halved"></i>
+            <span>Oficjalna gwarancja 24 miesiące</span>
         </div>
-        <div class="card">
-            <img src="https://images.unsplash.com/photo-1605289355686-9c758eb7dca4?w=500&q=80" alt="Kukirin G3">
-            <div class="card-title">Dostawca - Kukirin G3 PRO</div>
-            <div class="card-price">89,99 zł</div>
-            <button class="btn-buy" onclick="addToCart('Kukirin G3 PRO')">Zobacz produkt</button>
-        </div>
-        <div class="card">
-            <img src="https://images.unsplash.com/photo-1614730341196-8d26f6b76e0a?w=500&q=80" alt="Kukirin G2 MASTER">
-            <div class="card-title">Dostawca - Kukirin G2 MASTER</div>
-            <div class="card-price">89,99 zł</div>
-            <button class="btn-buy" onclick="addToCart('Kukirin G2 MASTER')">Zobacz produkt</button>
+        <div class="feature">
+            <i class="fas fa-headset"></i>
+            <span>Wsparcie techniczne 7 dni w tygodniu</span>
         </div>
     </div>
 
-    <div class="bottom-nav">
-        <div class="nav-item"><span class="nav-icon">🏠</span>Główna</div>
-        <div class="nav-item"><span class="nav-icon">👥</span>Znajomi</div>
-        <div class="nav-item"><div class="nav-add">➕</div></div>
-        <div class="nav-item"><span class="nav-icon">💬</span>Przychodzące</div>
-        <div class="nav-item"><span class="nav-icon">👤</span>Profil</div>
+    <!-- Główny przycisk rejestracji -->
+    <div style="padding: 0 15px; margin-top: 30px;">
+        <button onclick="openModal()" style="background-color: #32cd32; color: white; border: none; padding: 15px; width: 100%; border-radius: 8px; font-size: 18px; font-weight: bold; cursor: pointer; box-shadow: 0 5px 15px rgba(50,205,50,0.3);">
+            <i class="fas fa-user-plus"></i> Zarejestruj się i otrzymaj maila
+        </button>
     </div>
 
-    <div id="toast">Dodano do koszyka!</div>
-</div>
+    <!-- Stopka -->
+    <footer class="footer">
+        <div class="social-icons">
+            <a href="#"><i class="fab fa-facebook"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-youtube"></i></a>
+        </div>
+        <p>&copy; 2026 E-Scooter Polska. Wszelkie prawa zastrzeżone.</p>
+        <p>Polityka prywatności | Regulamin sklepu</p>
+    </footer>
 
-<script>
-    function addToCart(productName) {
-        var toast = document.getElementById("toast");
-        toast.innerText = "Dodano do koszyka: " + productName;
-        toast.className = "show";
-        setTimeout(function(){ toast.className = toast.className.replace("show", ""); }, 3000);
-    }
-</script>
+    <!-- Dolny pasek -->
+    <nav class="bottom-nav">
+        <div class="nav-item"><i class="fas fa-home nav-icon"></i>Główna</div>
+        <div class="nav-item"><i class="fas fa-users nav-icon"></i>Znajomi</div>
+        <div class="nav-add" onclick="openModal()">+</div>
+        <div class="nav-item"><i class="fas fa-comment-dots nav-icon"></i>Wiadomości</div>
+        <div class="nav-item"><i class="fas fa-user nav-icon"></i>Profil</div>
+    </nav>
 
-</body>
-</html>
+    <!-- Modal Rejestracji -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal()">&times;</span>
+            <h3 style="text-align: center; margin-bottom: 20px;">Załóż konto</h3>
+            
+            <form action="rejestracja.php" method="POST">
+                <div class="form-group">
+                    <label for="imie">Imię i nazwisko</label>
+                    <input type="text" id="imie" name="imie" placeholder="np. Jan Kowalski" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Adres e-mail</label>
+                    <input type="email" id="email" name="ema
